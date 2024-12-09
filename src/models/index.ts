@@ -1,0 +1,154 @@
+import { sequelize } from "./config/sequelize";
+import { Sequelize } from "sequelize";
+
+import { ConsoleLogger } from "../core/utils";
+import { PatientModel } from "./patientsModel";
+import { InstitusionModel } from "./institutionModel";
+import { VisitModel } from "./visitModel";
+import { PrescriptionModel } from "./prescriptionPaperModel";
+import { PreExaminationModel } from "./preExaminationModel";
+import { ExaminationModel } from "./examinationModel";
+import { LaboratoryOrderModel } from "./laboratoryOrderModel";
+import { LaboratoryResultModel } from "./laboratoryResultModel";
+import { PatientHistoryModel } from "./patientHistory";
+
+export class DB{
+ static _instance: DB;
+
+ constructor(private db: any ={}) {
+  this.db.sequelize = sequelize;
+  this.db.Sequelize = Sequelize;
+
+  //  include database models
+  this.db.patient = PatientModel;
+  this.db.institutions = InstitusionModel;
+  this.db.visit = VisitModel;
+  this.db.examination = ExaminationModel;
+  this.db.preExamination = PreExaminationModel;
+  this.db.laboratoryOrder = LaboratoryOrderModel;
+  this.db.preExamination = LaboratoryResultModel;
+  this.db.patientHistory = PatientHistoryModel;
+
+
+
+
+  // relation between institutions and patients
+  // the have many to one to many relation 
+  InstitusionModel.hasMany(PatientModel, {
+    foreignKey: 'institutionId'
+  });
+  PatientModel.belongsTo(InstitusionModel);
+
+  // relation between patient and view
+  //  have one to many relation
+  PatientModel.hasMany(VisitModel, {
+    foreignKey: 'patientId'
+  })
+  VisitModel.belongsTo(PatientModel)
+
+  // Relation between visit and pre examination
+  // have one to one relation
+  VisitModel.hasOne(PreExaminationModel, {
+    foreignKey: 'visitId'
+  })
+  PreExaminationModel.belongsTo(VisitModel);
+
+
+  // Relation between view and Examination 
+  // have one to one relation
+  VisitModel.hasOne(ExaminationModel, {
+    foreignKey: 'visitId'
+  })
+  ExaminationModel.belongsTo(VisitModel);
+
+  // Relation between  Laboratory order and laboratory
+  // has one to one relation
+  LaboratoryOrderModel.hasOne(LaboratoryResultModel, {
+    foreignKey: 'laboratoryOrder'
+  });
+  LaboratoryResultModel.belongsTo(LaboratoryOrderModel);
+
+
+  // Relation between view and LaboratoryOrder
+  VisitModel.hasOne(LaboratoryOrderModel, {
+    foreignKey: 'laboratoryOrder'
+  });
+  LaboratoryOrderModel.belongsTo(VisitModel);
+  
+
+
+
+  // Relation between view and Prescription
+  VisitModel.hasOne(PrescriptionModel, {
+    foreignKey: 'prescription'
+  });
+  PrescriptionModel.belongsTo(VisitModel);
+  
+
+  //  Relation between patient history and view
+  //  has one to many relation
+  PatientHistoryModel.hasMany(VisitModel, {
+    foreignKey: 'prescription'
+  });
+  VisitModel.belongsTo(PatientHistoryModel);
+
+  // one Patient has one history
+    
+  PatientModel.hasOne(PatientHistoryModel, {
+    foreignKey: 'prescription'
+  });
+  PatientHistoryModel.belongsTo(PatientModel);
+
+ }
+
+
+ public static get instance(): DB {
+  if (!DB._instance) {
+    DB._instance = new DB();
+  }
+
+  return DB._instance;
+}
+
+public async migrate(): Promise<string> {
+  let message = '';
+  try {
+    await DB.instance.db.sequelize.sync();
+    message = 'Database Migrated Successfully';
+    ConsoleLogger.log(message);
+  } catch (reason) {
+    message = `\nCould Not Migrate Database Successfully',
+=================================================================================\n
+${reason} \n
+=================================================================================`;
+
+    ConsoleLogger.error(message);
+  }
+  return message;
+}
+
+public async migrateForce(): Promise<string> {
+  let message = '';
+  try {
+    // ConsoleLogger.info('Disabling FOREIGN_KEY_CHECKS flag ');
+    // await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
+    ConsoleLogger.info('Dropping all tables ');
+    await DB.instance.db.sequelize.drop();
+    // ConsoleLogger.info('Enabling FOREIGN_KEY_CHECKS flag');
+    // await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+
+    await DB.instance.db.sequelize.sync({ force: true });
+
+    message = 'Database Force Migrated Successfully';
+    ConsoleLogger.log(message);
+  } catch (reason) {
+    message = `\nCould Not Force Migrate Database Successfully',
+=================================================================================\n
+${reason} \n
+=================================================================================`;
+    ConsoleLogger.error(message);
+  }
+
+  return message;
+}
+}

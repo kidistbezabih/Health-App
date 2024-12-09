@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: user_kidist
+      POSTGRES_PASSWORD: test12
+      POSTGRES_DB: my_database
+
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  redis:
+      image: redis:latest
+      container_name: redis_container
+      restart: always
+      ports:
+        - "6379:6379"
+      volumes:
+        - redis_data:/data
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_DEV= development
+  
+  # RedisInsight Service
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: redisinsight_container
+    restart: always
+    ports:
+      - "8001:5540"
+    depends_on:
+      - redis
+    volumes:
+      - redisinsight_data:/db
+
+  
+  # pgAdmin Service (for managing your PostgreSQL database)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_container
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  redis_data:
+  redisinsight_data:
+  pgadmin_data:
