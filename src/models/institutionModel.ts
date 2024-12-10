@@ -1,13 +1,13 @@
 import { CreationOptional, DataTypes, Model } from 'sequelize';
 import {sequelize} from './config/sequelize'
 
-export interface ExaminationMoldeRow{
+export interface InstitusionModelRow{
   id: number;
   name: string;
   adress: string;
 }
 
-export class InstitusionModel extends Model<ExaminationMoldeRow, Omit<ExaminationMoldeRow, 'id'>> {
+export class InstitusionModel extends Model<InstitusionModelRow, Omit<InstitusionModelRow, 'id'>> {
   declare id: number;
   declare name: string;
   declare adress: string;
@@ -27,4 +27,10 @@ InstitusionModel.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-}, { sequelize, modelName: 'Institution' });
+}, { 
+  sequelize,
+  timestamps: true,
+  tableName: 'institutions',
+  paranoid: true,
+  deletedAt: true
+});

@@ -1,16 +1,14 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import {sequelize} from './config/sequelize'
 
 export interface VisitModelRow{
   id: number;
-  date: Date;
-  patientId: number;
+  patientId: string;
 }
 
 export class VisitModel extends Model<VisitModelRow, Omit<VisitModelRow, 'id'>> {
   declare id: CreationOptional<number>;
-  declare date: Date;
-  declare patientId: number;
+  declare patientId: ForeignKey<number>;
   // association mixin
 }
 
@@ -20,12 +18,14 @@ VisitModel.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  date: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
   patientId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.NUMBER,
     allowNull: false,
   },
-}, { sequelize, modelName: 'Visit' });
+}, {
+  sequelize,
+  timestamps: true,
+  tableName: 'visits',
+  paranoid: true,
+  deletedAt: true
+});

@@ -1,43 +1,39 @@
-import { CreationOptional, DataType, DataTypes, Model } from "sequelize";
+import { CreationOptional, DataType, DataTypes, ForeignKey, Model } from "sequelize";
 import {sequelize} from './config/sequelize'
 
 
 export interface ExaminationMoldeRow{
-  id: number;
-  symptomes: string;
-  bloodPreasure: string;
-  bodyTemtrature: string;
-  respiratoryRate: string;
-  oxygenSaturation: string;
-  weight: string;
-  height: string;
+  symptoms?: string;
+  bloodPressure?: string;
+  bodyTemtrature?: string;
+  respirationRate?: string;
+  oxygenSaturation?: string;
+  weight?: string;
+  height?: string;
 }
 
-export class ExaminationModel extends Model<ExaminationMoldeRow, Omit<ExaminationMoldeRow, 'id'>>{
-  declare id: CreationOptional<number>;
-  declare symptomes: string;
-  declare bloodPreasure: string;
-  declare bodyTemtrature: string;
-  declare respiratoryRate: string;
-  declare oxygenSaturation: string;
-  declare weight: number;
-  declare height: number;
+export class ExaminationModel extends Model<ExaminationMoldeRow>{
+  declare symptoms: CreationOptional<string>;
+  declare bloodPressure: CreationOptional<string>;
+  declare bodyTemtrature: CreationOptional<string>;
+  declare respirationRate: CreationOptional<string>;
+  declare oxygenSaturation: CreationOptional<string>;
+  declare weight: CreationOptional<number>;
+  declare height: CreationOptional<number>;
 }
 
 ExaminationModel.init({
-  id:{
-    type: DataTypes.INTEGER,
-    autoIncrement: true
-  },
-  symptomes: {type: DataTypes.STRING},
-  bloodPreasure: {type: DataTypes.STRING},
+  symptoms: {type: DataTypes.STRING},
+  bloodPressure: {type: DataTypes.STRING},
   bodyTemtrature: {type: DataTypes.STRING},
-  respiratoryRate: {type: DataTypes.STRING},
+  respirationRate: {type: DataTypes.STRING},
   oxygenSaturation: {type: DataTypes.STRING},
   weight: {type: DataTypes.INTEGER},
   height: {type: DataTypes.INTEGER},
 }, {
   sequelize,
-  tableName: "preExamination",
   timestamps: true,
+  tableName: 'examination',
+  paranoid: true,
+  deletedAt: true
 });

@@ -2,9 +2,8 @@ import { CreationOptional, DataTypes, Model } from 'sequelize';
 import {sequelize} from './config/sequelize'
 
 export interface PatientModelRow{
-  id: CreationOptional<number>;
+  id?: number;
 	cardNumber: string;
-  date: Date;
   name: string;
   age: number;
   sex: string;
@@ -17,7 +16,6 @@ export interface PatientModelRow{
 export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, 'id'>> {
   declare id: CreationOptional<number>;
 	declare cardNumber: string;
-  declare date: Date;
   declare name: string;
   declare age: number;
   declare sex: string;
@@ -31,17 +29,13 @@ export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, '
 
 PatientModel.init({
   id: {
-		type: DataTypes.INTEGER,
-		autoIncrement: true
+    type: DataTypes.NUMBER,
+    autoIncrement: true,
+    primaryKey: true
 	},
 	cardNumber: {
-    type: DataTypes.INTEGER,
-		primaryKey: true,
-		autoIncrement: true
-  },
-  date: {
-    type: DataTypes.DATE,
-    allowNull: false
+    type: DataTypes.STRING,
+    // auto generate
   },
   name: {
     type: DataTypes.STRING,
@@ -73,8 +67,10 @@ PatientModel.init({
   }}, 
   {
     sequelize,
-    tableName: 'card',
-    timestamps: true
+  timestamps: true,
+  tableName: 'patients',
+  paranoid: true,
+  deletedAt: true
   });
 
 

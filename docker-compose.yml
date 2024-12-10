@@ -2,13 +2,13 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:14-alpine
     container_name: postgres_container
     restart: always
     environment:
-      POSTGRES_USER: user_kidist
-      POSTGRES_PASSWORD: test12
-      POSTGRES_DB: my_database
+      POSTGRES_USER: admin_user
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: pg_database
 
     ports:
       - 5432:5432
@@ -17,8 +17,8 @@ services:
 
 
   redis:
-      image: redis:latest
-      container_name: redis_container
+      image: redis:alpine
+      container_name: redis-alpine
       restart: always
       ports:
         - "6379:6379"
@@ -27,9 +27,12 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - "4000:4000"
     environment:
-      - NODE_DEV= development
+      - NODE_ENV= development
+    depends_on:
+      - redis
+      - postgres
   
   # RedisInsight Service
   redisinsight:
@@ -37,7 +40,7 @@ services:
     container_name: redisinsight_container
     restart: always
     ports:
-      - "8001:5540"
+      - "8001:8001"
     depends_on:
       - redis
     volumes:

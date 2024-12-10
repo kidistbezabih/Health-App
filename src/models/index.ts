@@ -5,12 +5,13 @@ import { ConsoleLogger } from "../core/utils";
 import { PatientModel } from "./patientsModel";
 import { InstitusionModel } from "./institutionModel";
 import { VisitModel } from "./visitModel";
-import { PrescriptionModel } from "./prescriptionPaperModel";
+import { PrescriptionModel } from "./prescriptionModel";
 import { PreExaminationModel } from "./preExaminationModel";
 import { ExaminationModel } from "./examinationModel";
 import { LaboratoryOrderModel } from "./laboratoryOrderModel";
 import { LaboratoryResultModel } from "./laboratoryResultModel";
-import { PatientHistoryModel } from "./patientHistory";
+import { XrayModel } from "./xrayModel";
+import { UltrasoundModel } from "./UltrasoundModel";
 
 export class DB{
  static _instance: DB;
@@ -26,11 +27,9 @@ export class DB{
   this.db.examination = ExaminationModel;
   this.db.preExamination = PreExaminationModel;
   this.db.laboratoryOrder = LaboratoryOrderModel;
-  this.db.preExamination = LaboratoryResultModel;
-  this.db.patientHistory = PatientHistoryModel;
-
-
-
+  this.db.laboratoryResult = LaboratoryResultModel;
+  this.db.xray = XrayModel;
+  this.db.ultrasound = UltrasoundModel;
 
   // relation between institutions and patients
   // the have many to one to many relation 
@@ -39,7 +38,7 @@ export class DB{
   });
   PatientModel.belongsTo(InstitusionModel);
 
-  // relation between patient and view
+  // relation between patient and visit
   //  have one to many relation
   PatientModel.hasMany(VisitModel, {
     foreignKey: 'patientId'
@@ -54,9 +53,9 @@ export class DB{
   PreExaminationModel.belongsTo(VisitModel);
 
 
-  // Relation between view and Examination 
+  // Relation between visit and Examination 
   // have one to one relation
-  VisitModel.hasOne(ExaminationModel, {
+  VisitModel.hasMany(ExaminationModel, {
     foreignKey: 'visitId'
   })
   ExaminationModel.belongsTo(VisitModel);
@@ -69,38 +68,46 @@ export class DB{
   LaboratoryResultModel.belongsTo(LaboratoryOrderModel);
 
 
-  // Relation between view and LaboratoryOrder
-  VisitModel.hasOne(LaboratoryOrderModel, {
+  // Relation between visit and LaboratoryOrder
+  VisitModel.hasMany(LaboratoryOrderModel, {
     foreignKey: 'laboratoryOrder'
   });
   LaboratoryOrderModel.belongsTo(VisitModel);
-  
 
-
-
-  // Relation between view and Prescription
-  VisitModel.hasOne(PrescriptionModel, {
-    foreignKey: 'prescription'
+  // Relation between visit and Prescription
+  VisitModel.hasMany(PrescriptionModel, {
+    foreignKey: 'prescriptionId'
   });
   PrescriptionModel.belongsTo(VisitModel);
-  
 
-  //  Relation between patient history and view
-  //  has one to many relation
-  PatientHistoryModel.hasMany(VisitModel, {
-    foreignKey: 'prescription'
-  });
-  VisitModel.belongsTo(PatientHistoryModel);
+  //  relation between xray and laboratory order
+   LaboratoryOrderModel.hasMany(XrayModel, {
+    foreignKey: 'xrayId'
+   });
+   XrayModel.belongsTo(LaboratoryOrderModel)
 
-  // one Patient has one history
-    
-  PatientModel.hasOne(PatientHistoryModel, {
-    foreignKey: 'prescription'
-  });
-  PatientHistoryModel.belongsTo(PatientModel);
+  //  relation between xray and laboratory result
+   LaboratoryResultModel.hasMany(XrayModel,
+    {
+    foreignKey: 'xrayId'
+    }
+   );
+   XrayModel.belongsTo(LaboratoryOrderModel, {
+    foreignKey: 'laboratoryOrderId'
+   })
 
+  //  relation between ultrasound and laboratory order
+   LaboratoryOrderModel.hasMany(UltrasoundModel, {
+    foreignKey: 'ultrasoundId'
+   });
+   UltrasoundModel.belongsTo(LaboratoryOrderModel)
+
+  //  relation between ultrasound and laboratory result 
+   LaboratoryResultModel.hasMany(UltrasoundModel, {
+    foreignKey: 'ultrasoundId'
+   });
+   UltrasoundModel.belongsTo(LaboratoryResultModel)
  }
-
 
  public static get instance(): DB {
   if (!DB._instance) {
