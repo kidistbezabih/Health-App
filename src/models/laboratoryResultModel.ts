@@ -1,7 +1,7 @@
 import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface LaboratoryResultModelRow{
+export interface LaboratoryResultModelRow {
   wbc?: string;
   Hgn?: string;
   ESR?: string;
@@ -47,8 +47,8 @@ export interface LaboratoryResultModelRow{
   Diff_Count?: string;
   stoolExam?: string;
   HIV?: string;
-  xRay?: number;
-  ultraSound?: number;
+  xRay?: ForeignKey<number>;
+  ultraSound?: ForeignKey<number>;
 }
 
 export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
@@ -90,15 +90,15 @@ export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
   declare pregnancyTest: CreationOptional<string>;
   declare KOH: CreationOptional<string>;
   declare SKINSmear: CreationOptional<string>;
-  declare protein: CreationOptional<string>
-  declare gramStam: CreationOptional<string>
-  declare AFBStam: CreationOptional<string>
-  declare WBC: CreationOptional<string>
-  declare Diff_Count: CreationOptional<string>
+  declare protein: CreationOptional<string>;
+  declare gramStam: CreationOptional<string>;
+  declare AFBStam: CreationOptional<string>;
+  declare WBC: CreationOptional<string>;
+  declare Diff_Count: CreationOptional<string>;
   declare stoolExam: CreationOptional<string>;
   declare HIV: CreationOptional<string>;
-  declare xRay: ForeignKey<number>
-  declare ultrasound: ForeignKey<number>
+  declare xRay: ForeignKey<number>;
+  declare ultraSound: ForeignKey<number>;
 }
 
 LaboratoryResultModel.init({
@@ -243,11 +243,11 @@ LaboratoryResultModel.init({
   ultraSound: {
     type: DataTypes.NUMBER
   }
-}, 
-  {
-    sequelize,
-    timestamps: true,
-    tableName: 'laboratory_results',
-    paranoid: true,
-    deletedAt: true
-  });
+},
+{
+  sequelize,
+  timestamps: true,
+  tableName: 'laboratory_results',
+  paranoid: true,
+  deletedAt: true
+});

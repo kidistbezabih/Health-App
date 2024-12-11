@@ -1,7 +1,7 @@
 import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface XrayModelRow{
+export interface XrayModelRow {
   id: number;
   bodyPart?: string;
   exposureSettings?: string;
@@ -21,11 +21,11 @@ export class XrayModel extends Model<XrayModelRow> {
   declare technician: CreationOptional<string>;
 }
 
-  XrayModel.init({
+XrayModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.NUMBER,  // Corrected to NUMBER for numeric type
     primaryKey: true,
-    autoIncrement:true
+    autoIncrement: true
   },
   bodyPart: {
     type: DataTypes.STRING
@@ -45,7 +45,7 @@ export class XrayModel extends Model<XrayModelRow> {
   technician: {
     type: DataTypes.STRING
   },
-},{
+}, {
   sequelize,
   timestamps: true,
   tableName: 'xrays',

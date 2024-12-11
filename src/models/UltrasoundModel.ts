@@ -1,7 +1,7 @@
 import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface UltrasoundModelRow{
+export interface UltrasoundModelRow {
   id?: number;
   examType: string;
   notes: string;
@@ -23,9 +23,9 @@ export class UltrasoundModel extends Model<UltrasoundModelRow> {
 
 UltrasoundModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement:true
+    autoIncrement: true
   },
   examType: {
     type: DataTypes.STRING
@@ -45,7 +45,7 @@ UltrasoundModel.init({
   technician: {
     type: DataTypes.STRING
   }
-},{
+}, {
   sequelize,
   timestamps: true,
   tableName: 'ultrasounds',

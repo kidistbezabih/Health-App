@@ -1,7 +1,7 @@
 import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface VisitModelRow{
+export interface VisitModelRow {
   id: number;
   patientId: string;
 }
@@ -19,7 +19,7 @@ VisitModel.init({
     autoIncrement: true,
   },
   patientId: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.STRING, // Corrected type to STRING
     allowNull: false,
   },
 }, {
@@ -27,5 +27,5 @@ VisitModel.init({
   timestamps: true,
   tableName: 'visits',
   paranoid: true,
-  deletedAt: true
+  deletedAt: true,
 });
