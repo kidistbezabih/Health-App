@@ -1,7 +1,7 @@
 import { CreationOptional, DataTypes, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface PrescriptionModelRow{
+export interface PrescriptionModelRow {
   id?: number;
   cardNumber: string;
   status: string;
@@ -24,7 +24,7 @@ PrescriptionModel.init({
     type: DataTypes.NUMBER,
     autoIncrement: true,
     primaryKey: true
-	},
+  },
   cardNumber: {
     type: DataTypes.STRING,
   },

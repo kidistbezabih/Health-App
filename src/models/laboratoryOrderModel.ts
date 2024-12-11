@@ -1,255 +1,152 @@
-import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { sequelize } from './config/sequelize';
 
-export interface LaboratoryOrderModelRow
-{
-  wbc?: Boolean;
-  Hgn?: Boolean;
-  ESR?: Boolean;
-  BF?: Boolean;
-  bloodGroup_RHType?: Boolean;
-  bloodMorphology?: Boolean;
-  neutorophil?: Boolean; 
-  eosinophil?: Boolean; 
-  lymphocyte?: Boolean; 
-  monocyte?: Boolean; 
-  Basophil?: Boolean; 
-  FBS_RBS?: Boolean;
-  sgot?: Boolean;
-  sgpt?: Boolean;
-  totalProtien?: Boolean;
-  albumin?: Boolean;
-  glucose?: Boolean;
-  ketone?: Boolean;
-  blood?: Boolean;
-  leukocyte?: Boolean;
-  bilurubin?: Boolean;
-  urobilin?: Boolean;
-  PH?: Boolean;
-  microscopic?: Boolean;
-  widal?: Boolean;
-  wielFelix?: Boolean;
-  VDHL_EPR?: Boolean;
-  Rf?: Boolean;
-  HBsAg?: Boolean;
-  Aso?: Boolean;
-  PICT?: Boolean;
-  HCV?: Boolean;
-  wetMount?: Boolean;
-  gramStaint?: Boolean;
-  AFBStaint?: Boolean;
-  pregnancyTest?: Boolean;
-  KOH?: Boolean;
-  SKINSmear?: Boolean;
-  protein?: Boolean;
-  gramStam?: Boolean;
-  AFBStam?: Boolean;
-  WBC?: Boolean;
-  Diff_Count?: Boolean;
-  stoolExam?: Boolean;
-  HIV?: Boolean;
+export interface LaboratoryOrderModelRow {
+  wbc?: boolean;
+  Hgn?: boolean;
+  ESR?: boolean;
+  BF?: boolean;
+  bloodGroup_RHType?: boolean;
+  bloodMorphology?: boolean;
+  neutrophil?: boolean; 
+  eosinophil?: boolean; 
+  lymphocyte?: boolean; 
+  monocyte?: boolean; 
+  Basophil?: boolean; 
+  FBS_RBS?: boolean;
+  sgot?: boolean;
+  sgpt?: boolean;
+  totalProtein?: boolean;
+  albumin?: boolean;
+  glucose?: boolean;
+  ketone?: boolean;
+  blood?: boolean;
+  leukocyte?: boolean;
+  bilirubin?: boolean;
+  urobilin?: boolean;
+  PH?: boolean;
+  microscopic?: boolean;
+  widal?: boolean;
+  WeilFelix?: boolean;
+  VDHL_EPR?: boolean;
+  Rf?: boolean;
+  HBsAg?: boolean;
+  Aso?: boolean;
+  PICT?: boolean;
+  HCV?: boolean;
+  wetMount?: boolean;
+  gramStain?: boolean;
+  AFBStain?: boolean;
+  pregnancyTest?: boolean;
+  KOH?: boolean;
+  SKINSmear?: boolean;
+  protein?: boolean;
+  WBC?: boolean;
+  Diff_Count?: boolean;
+  stoolExam?: boolean;
+  HIV?: boolean;
   xRay: boolean;
   ultrasound: boolean;
 }
+
 export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
-  declare wbc: CreationOptional<Boolean>;
-  declare Hgn: CreationOptional<Boolean>;
-  declare ESR: CreationOptional<Boolean>;
-  declare BF: CreationOptional<Boolean>;
-  declare bloodGroup_RHType: CreationOptional<Boolean>;
-  declare bloodMorphology: CreationOptional<Boolean>;
-  declare neutorophil: CreationOptional<Boolean>;
-  declare eosinophil: CreationOptional<Boolean>;
-  declare lymphocyte: CreationOptional<Boolean>;
-  declare monocyte: CreationOptional<Boolean>;
-  declare Basophil: CreationOptional<Boolean>;
-  declare FBS_RBS: CreationOptional<Boolean>;
-  declare sgot: CreationOptional<Boolean>;
-  declare sgpt: CreationOptional<Boolean>;
-  declare totalProtien: CreationOptional<Boolean>;
-  declare albumin: CreationOptional<Boolean>;
-  declare glucose: CreationOptional<Boolean>;
-  declare ketone: CreationOptional<Boolean>;
-  declare blood: CreationOptional<Boolean>;
-  declare leukocyte: CreationOptional<Boolean>;
-  declare bilurubin: CreationOptional<Boolean>;
-  declare urobilin: CreationOptional<Boolean>;
-  declare PH: CreationOptional<Boolean>;
-  declare microscopic: CreationOptional<Boolean>;
-  declare widal: CreationOptional<Boolean>;
-  declare wielFelix: CreationOptional<Boolean>;
-  declare VDHL_EPR: CreationOptional<Boolean>;
-  declare Rf: CreationOptional<Boolean>;
-  declare HBsAg: CreationOptional<Boolean>;
-  declare Aso: CreationOptional<Boolean>;
-  declare PICT: CreationOptional<Boolean>;
-  declare HCV: CreationOptional<Boolean>;
-  declare wetMount: CreationOptional<Boolean>;
-  declare gramStaint: CreationOptional<Boolean>;
-  declare AFBStaint: CreationOptional<Boolean>;
-  declare pregnancyTest: CreationOptional<Boolean>;
-  declare KOH: CreationOptional<Boolean>;
-  declare SKINSmear: CreationOptional<Boolean>;
-  declare protein: CreationOptional<Boolean>;
-  declare gramStam: CreationOptional<Boolean>;
-  declare AFBStam: CreationOptional<Boolean>;
-  declare WBC: CreationOptional<Boolean>;
-  declare Diff_Count: CreationOptional<Boolean>;
-  declare stoolExam: CreationOptional<Boolean>;
-  declare HIV: CreationOptional<Boolean>;
-  declare xRay: CreationOptional<Boolean>
-  declare ultrasound:CreationOptional<Boolean>;
+  declare wbc: CreationOptional<boolean>;
+  declare Hgn: CreationOptional<boolean>;
+  declare ESR: CreationOptional<boolean>;
+  declare BF: CreationOptional<boolean>;
+  declare bloodGroup_RHType: CreationOptional<boolean>;
+  declare bloodMorphology: CreationOptional<boolean>;
+  declare neutrophil: CreationOptional<boolean>;
+  declare eosinophil: CreationOptional<boolean>;
+  declare lymphocyte: CreationOptional<boolean>;
+  declare monocyte: CreationOptional<boolean>;
+  declare Basophil: CreationOptional<boolean>;
+  declare FBS_RBS: CreationOptional<boolean>;
+  declare sgot: CreationOptional<boolean>;
+  declare sgpt: CreationOptional<boolean>;
+  declare totalProtein: CreationOptional<boolean>;
+  declare albumin: CreationOptional<boolean>;
+  declare glucose: CreationOptional<boolean>;
+  declare ketone: CreationOptional<boolean>;
+  declare blood: CreationOptional<boolean>;
+  declare leukocyte: CreationOptional<boolean>;
+  declare bilirubin: CreationOptional<boolean>;
+  declare urobilin: CreationOptional<boolean>;
+  declare PH: CreationOptional<boolean>;
+  declare microscopic: CreationOptional<boolean>;
+  declare widal: CreationOptional<boolean>;
+  declare WeilFelix: CreationOptional<boolean>;
+  declare VDHL_EPR: CreationOptional<boolean>;
+  declare Rf: CreationOptional<boolean>;
+  declare HBsAg: CreationOptional<boolean>;
+  declare Aso: CreationOptional<boolean>;
+  declare PICT: CreationOptional<boolean>;
+  declare HCV: CreationOptional<boolean>;
+  declare wetMount: CreationOptional<boolean>;
+  declare gramStain: CreationOptional<boolean>;
+  declare AFBStain: CreationOptional<boolean>;
+  declare pregnancyTest: CreationOptional<boolean>;
+  declare KOH: CreationOptional<boolean>;
+  declare SKINSmear: CreationOptional<boolean>;
+  declare protein: CreationOptional<boolean>;
+  declare WBC: CreationOptional<boolean>;
+  declare Diff_Count: CreationOptional<boolean>;
+  declare stoolExam: CreationOptional<boolean>;
+  declare HIV: CreationOptional<boolean>;
+  declare xRay: CreationOptional<boolean>;
+  declare ultrasound: CreationOptional<boolean>;
 }
 
 LaboratoryOrderModel.init({
-  wbc: {
-    type: DataTypes.BOOLEAN
-  },
-  Hgn: {
-    type: DataTypes.BOOLEAN
-  },
-  ESR: {
-    type: DataTypes.BOOLEAN
-  },
-  BF: {
-    type: DataTypes.BOOLEAN
-  },
-  bloodGroup_RHType: {
-    type: DataTypes.BOOLEAN
-  },
-  bloodMorphology: {
-    type: DataTypes.BOOLEAN
-  },
-  neutorophil: {
-    type: DataTypes.BOOLEAN
-  },
-  eosinophil: {
-    type: DataTypes.BOOLEAN
-  },
-  lymphocyte: {
-    type: DataTypes.BOOLEAN
-  },
-  monocyte: {
-    type: DataTypes.BOOLEAN
-  },
-  Basophil: {
-    type: DataTypes.BOOLEAN
-  },
-  FBS_RBS: {
-    type: DataTypes.BOOLEAN
-  },
-  sgot: {
-    type: DataTypes.BOOLEAN
-  },
-  sgpt: {
-    type: DataTypes.BOOLEAN
-  },
-  totalProtien: {
-    type: DataTypes.BOOLEAN
-  },
-  albumin: {
-    type: DataTypes.BOOLEAN
-  },
-  glucose: {
-    type: DataTypes.BOOLEAN
-  },
-  ketone: {
-    type: DataTypes.BOOLEAN
-  },
-  blood: {
-    type: DataTypes.BOOLEAN
-  },
-  leukocyte: {
-    type: DataTypes.BOOLEAN
-  },
-  bilurubin: {
-    type: DataTypes.BOOLEAN
-  },
-  urobilin: {
-    type: DataTypes.BOOLEAN
-  },
-  PH: {
-    type: DataTypes.BOOLEAN
-  },
-  microscopic: {
-    type: DataTypes.BOOLEAN
-  },
-  widal: {
-    type: DataTypes.BOOLEAN
-  },
-  wielFelix: {
-    type: DataTypes.BOOLEAN
-  },
-  VDHL_EPR: {
-    type: DataTypes.BOOLEAN
-  },
-  Rf: {
-    type: DataTypes.BOOLEAN
-  },
-  HBsAg: {
-    type: DataTypes.BOOLEAN
-  },
-  Aso: {
-    type: DataTypes.BOOLEAN
-  },
-  PICT: {
-    type: DataTypes.BOOLEAN
-  },
-  HCV: {
-    type: DataTypes.BOOLEAN
-  },
-  wetMount: {
-    type: DataTypes.BOOLEAN
-  },
-  gramStaint: {
-    type: DataTypes.BOOLEAN
-  },
-  AFBStaint: {
-    type: DataTypes.BOOLEAN
-  },
-  pregnancyTest: {
-    type: DataTypes.BOOLEAN
-  },
-  KOH: {
-    type: DataTypes.BOOLEAN
-  },
-  SKINSmear: {
-    type: DataTypes.BOOLEAN
-  },
-  protein: {
-    type: DataTypes.BOOLEAN
-  },
-  gramStam: {
-    type: DataTypes.BOOLEAN
-  },
-  AFBStam: {
-    type: DataTypes.BOOLEAN
-  },
-  WBC: {
-    type: DataTypes.BOOLEAN
-  },
-  Diff_Count: {
-    type: DataTypes.BOOLEAN
-  },
-  stoolExam: {
-    type: DataTypes.BOOLEAN
-  },
-  HIV: {
-    type: DataTypes.BOOLEAN
-  },
-  xRay: {
-    type: DataTypes.BOOLEAN
-  },  
-  ultrasound: {
-    type: DataTypes.BOOLEAN
-  },
-  }, {
-    sequelize,
-    timestamps: true,
-    tableName: 'laboratory_orders',
-    paranoid: true,
-    deletedAt: true
+  wbc: { type: DataTypes.BOOLEAN },
+  Hgn: { type: DataTypes.BOOLEAN },
+  ESR: { type: DataTypes.BOOLEAN },
+  BF: { type: DataTypes.BOOLEAN },
+  bloodGroup_RHType: { type: DataTypes.BOOLEAN },
+  bloodMorphology: { type: DataTypes.BOOLEAN },
+  neutrophil: { type: DataTypes.BOOLEAN },
+  eosinophil: { type: DataTypes.BOOLEAN },
+  lymphocyte: { type: DataTypes.BOOLEAN },
+  monocyte: { type: DataTypes.BOOLEAN },
+  Basophil: { type: DataTypes.BOOLEAN },
+  FBS_RBS: { type: DataTypes.BOOLEAN },
+  sgot: { type: DataTypes.BOOLEAN },
+  sgpt: { type: DataTypes.BOOLEAN },
+  totalProtein: { type: DataTypes.BOOLEAN },
+  albumin: { type: DataTypes.BOOLEAN },
+  glucose: { type: DataTypes.BOOLEAN },
+  ketone: { type: DataTypes.BOOLEAN },
+  blood: { type: DataTypes.BOOLEAN },
+  leukocyte: { type: DataTypes.BOOLEAN },
+  bilirubin: { type: DataTypes.BOOLEAN },
+  urobilin: { type: DataTypes.BOOLEAN },
+  PH: { type: DataTypes.BOOLEAN },
+  microscopic: { type: DataTypes.BOOLEAN },
+  widal: { type: DataTypes.BOOLEAN },
+  WeilFelix: { type: DataTypes.BOOLEAN },
+  VDHL_EPR: { type: DataTypes.BOOLEAN },
+  Rf: { type: DataTypes.BOOLEAN },
+  HBsAg: { type: DataTypes.BOOLEAN },
+  Aso: { type: DataTypes.BOOLEAN },
+  PICT: { type: DataTypes.BOOLEAN },
+  HCV: { type: DataTypes.BOOLEAN },
+  wetMount: { type: DataTypes.BOOLEAN },
+  gramStain: { type: DataTypes.BOOLEAN },
+  AFBStain: { type: DataTypes.BOOLEAN },
+  pregnancyTest: { type: DataTypes.BOOLEAN },
+  KOH: { type: DataTypes.BOOLEAN },
+  SKINSmear: { type: DataTypes.BOOLEAN },
+  protein: { type: DataTypes.BOOLEAN },
+  WBC: { type: DataTypes.BOOLEAN },
+  Diff_Count: { type: DataTypes.BOOLEAN },
+  stoolExam: { type: DataTypes.BOOLEAN },
+  HIV: { type: DataTypes.BOOLEAN },
+  xRay: { type: DataTypes.BOOLEAN },
+  ultrasound: { type: DataTypes.BOOLEAN },
+}, {
+  sequelize,
+  timestamps: true,
+  tableName: 'laboratory_orders',
+  paranoid: true,
+  deletedAt: true,
 });
-
-
-  

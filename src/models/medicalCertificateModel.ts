@@ -1,7 +1,7 @@
 import { CreationOptional, DataTypes, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface MedicalCertificateModelRow{
+export interface MedicalCertificateModelRow {
   dateOfExamination: Date;
   diagnosis: string;
   treatmentGiven: string;
@@ -38,11 +38,10 @@ MedicalCertificateModel.init({
     type: DataTypes.DATE,
     allowNull: false
   },
-}, 
-  {
-    sequelize,
-    timestamps: true,
-    tableName: 'cards',
-    paranoid: true,
-    deletedAt: true
-  });
+}, {
+  sequelize,
+  timestamps: true,
+  tableName: 'cards',
+  paranoid: true,
+  deletedAt: true
+});

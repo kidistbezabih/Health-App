@@ -1,19 +1,19 @@
 import { CreationOptional, DataTypes, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface InstitusionModelRow{
+export interface InstitutionModelRow {
   id: number;
   name: string;
-  adress: string;
+  address: string;
 }
 
-export class InstitusionModel extends Model<InstitusionModelRow, Omit<InstitusionModelRow, 'id'>> {
-  declare id: number;
+export class InstitutionModel extends Model<InstitutionModelRow, Omit<InstitutionModelRow, 'id'>> {
+  declare id: CreationOptional<number>; // Ensure 'id' is optional and auto-incremented
   declare name: string;
-  declare adress: string;
+  declare address: string;
 }
 
-InstitusionModel.init({
+InstitutionModel.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -23,14 +23,14 @@ InstitusionModel.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-  adress: {
+  address: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-}, { 
+}, {
   sequelize,
   timestamps: true,
   tableName: 'institutions',
   paranoid: true,
-  deletedAt: true
+  deletedAt: true // Correcting 'adress' to 'address' in the type definition
 });
