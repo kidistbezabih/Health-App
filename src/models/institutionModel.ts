@@ -32,5 +32,5 @@ InstitutionModel.init({
   timestamps: true,
   tableName: 'institutions',
   paranoid: true,
-  deletedAt: true // Correcting 'adress' to 'address' in the type definition
+  deletedAt: true // Correcting 'address' to 'address' in the type definition
 });

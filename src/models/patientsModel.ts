@@ -3,6 +3,7 @@ import { sequelize } from './config/sequelize';
 
 export interface PatientModelRow {
   id?: number;
+  institutionId: number;
   cardNumber: string;
   name: string;
   age: number;
@@ -15,6 +16,7 @@ export interface PatientModelRow {
 
 export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, 'id'>> {
   declare id: CreationOptional<number>;
+  declare institutionId: number;
   declare cardNumber: string;
   declare name: string;
   declare age: number;
@@ -29,6 +31,10 @@ export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, '
 
 PatientModel.init({
   id: {
+    type: DataTypes.NUMBER,
+    autoIncrement: true,
+    primaryKey: true
+  },institutionId: {
     type: DataTypes.NUMBER,
     autoIncrement: true,
     primaryKey: true
