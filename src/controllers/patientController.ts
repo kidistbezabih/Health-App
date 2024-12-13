@@ -1,7 +1,6 @@
 import Redis from 'ioredis';
 import { NextFunction, type Request, type Response } from 'express';
 import { PatientModel } from '../models/patientsModel';
-import { json } from 'sequelize';
 import { error } from 'console';
 
 interface GetAllRequestQuery {
