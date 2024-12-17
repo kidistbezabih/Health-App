@@ -1,5 +1,4 @@
 // src\core\errors\custom.error.ts
-
 import { HttpCode } from '../constants';
 import { type ValidationType } from '../types';
 

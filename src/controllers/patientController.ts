@@ -5,6 +5,8 @@ import { error } from 'console';
 import { AppError } from '../core/errors/custom.errors';
 import { PatientEntity } from '../core/entities/patient.entities';
 import { Model } from 'sequelize';
+import { PATIENT_QUEUE } from '../core/redis';
+import { PatientService } from '../services/patientServices';
 
 interface GetAllRequestQuery {
   page:string;
@@ -38,6 +40,11 @@ const redis = new Redis();
 const REDIS_KEY = "patient_registration";
 
 export class PatientController {
+  private patientService: PatientService;
+
+  constructor() {
+    this.patientService = new PatientService();
+    }
 
   // To register patient
   public async RegistePatient(req: Request<unknown, unknown,CreatePatientRequestBody>, res: Response, next: NextFunction): Promise<void>{
@@ -88,25 +95,21 @@ export class PatientController {
   }
 
   // Find patient by their cardNumber
-  public async GetPatientByCardNumber(req: Request<{cardNumber: string}, unknown, unknown>, res: Response<PatientEntity>, next: NextFunction): Promise<Response<PatientEntity>>{
-      const { cardNumber } = req.params; // Extract cardNumber from URL params
+  public async GetPatientByCardNumber(req: Request<{cardNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<Response<PatientEntity> | void> {
+      try{
+        const { cardNumber } = req.params; // Extract cardNumber from URL params
   
       if (!cardNumber) {
         throw AppError.notFound("can't find any patient by this card number")
       }
   
       // Find patient by card number
-      const patient = await PatientModel.findOne({
-        where: {cardNumber}, 
-        attributes: ['cardNumber', 'name', 'age','sex', 'address', 'zone', 'kebele', 'phoneNumber']
-      });
-  
-      if (!patient) {
-        throw AppError.notFound("can't find any patient by this cardd numberfi")
+      const patient = await this.patientService.getPatientByCardNumber(cardNumber);
+      
+      return res.json(patient);
+    }catch(err){
+      next(err);
       }
-  
-      // Return  patient found 
-      return res.json(PatientEntity.fromDatabase(patient));
   }
   
   public async UpdatePatientInfo(req: Request<{cardNumber: string}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<Response<PatientEntity>>{
@@ -144,6 +147,14 @@ export class PatientController {
 
     return res.json(
       PatientEntity.fromDatabase(patient)
-  );
-}};
+    );
+  }
+
+  public async AddToPreExaminationQueue(cardNumber: string): Promise<void>{
+    await redis.lpush(PATIENT_QUEUE, cardNumber)
+  }
+
+
+ 
+};
 
