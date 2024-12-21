@@ -34,7 +34,7 @@ export class AppError extends Error {
 	static validationError(validationErrors: any, message?: string): AppError {
 		return new AppError({
 			name: 'ValidationError',
-			message: 'ValidationError',
+			message: message || 'ValidationError',
 			statusCode: HttpCode.UNPROCESSABLE_CONTENT,
 			validationErrors
 		});

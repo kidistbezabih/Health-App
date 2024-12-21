@@ -47,7 +47,7 @@ export class PatientController {
   }
 
   // To register patient
-  public async registePatient(req: Request<unknown, unknown,CreatePatientRequestBody>, res: Response, next: NextFunction): Promise<void>{
+  public async registePatient(req: Request<CreatePatientRequestBody>, res: Response, next: NextFunction): Promise<void>{
     try{
       const { institutionId,name, age, sex, address, zone, kebele, phoneNumber } = req.body;
       const today = new Date().toISOString().split("T")[0];
