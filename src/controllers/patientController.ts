@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
 import { NextFunction, type Request, type Response } from 'express';
-import { PatientModel } from '../models/patientsModel';
+import { PatientModel } from '../models/patientModel'; 
 import { error } from 'console';
 import { AppError } from '../core/errors/custom.errors';
 import { PatientEntity } from '../core/entities/patient.entities';
@@ -44,10 +44,10 @@ export class PatientController {
 
   constructor() {
     this.patientService = new PatientService();
-    }
+  }
 
   // To register patient
-  public async RegistePatient(req: Request<unknown, unknown,CreatePatientRequestBody>, res: Response, next: NextFunction): Promise<void>{
+  public async registePatient(req: Request<unknown, unknown,CreatePatientRequestBody>, res: Response, next: NextFunction): Promise<void>{
     try{
       const { institutionId,name, age, sex, address, zone, kebele, phoneNumber } = req.body;
       const today = new Date().toISOString().split("T")[0];
@@ -65,7 +65,6 @@ export class PatientController {
       // append todays  entry to reddis array
       const newEntry = { instId: institutionId, date: today}
 
-      
       // generate card number 
       const count = await redis.llen(REDIS_KEY);
       const cardNumber = `${institutionId}/${today}/${count}`;
@@ -95,7 +94,7 @@ export class PatientController {
   }
 
   // Find patient by their cardNumber
-  public async GetPatientByCardNumber(req: Request<{cardNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<Response<PatientEntity> | void> {
+  public async getPatientByCardNumber(req: Request<{cardNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
       try{
         const { cardNumber } = req.params; // Extract cardNumber from URL params
   
@@ -106,13 +105,47 @@ export class PatientController {
       // Find patient by card number
       const patient = await this.patientService.getPatientByCardNumber(cardNumber);
       
-      return res.json(patient);
+      res.json(patient);
     }catch(err){
       next(err);
       }
   }
+
+  public async getPatientByPhoneNumber(req: Request<{phoneNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<void> {
+    try{
+      const { phoneNumber } = req.params; // Extract phoneNumber from URL params
+
+    if (!phoneNumber) {
+      throw AppError.notFound("can't find any patient by this card number")
+    }
+
+    // Find patient by card number
+    const patient = await this.patientService.getPatientByPhoneNumber(phoneNumber);
+    
+    res.json(patient);
+    }catch(err){
+    next(err);
+    }
+  }
+
+  public async getPatientByName(req: Request<{name: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<void> {
+    try{
+      const { name } = req.params; // Extract Name from URL params
+
+    if (!name) {
+      throw AppError.notFound("can't find any patient by this card number")
+    }
+
+    // Find patient by card number
+    const patient = await this.patientService.getPatientByname(name);
+    
+    res.json(patient);
+    }catch(err){
+    next(err);
+    }
+  }
   
-  public async UpdatePatientInfo(req: Request<{cardNumber: string}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<Response<PatientEntity>>{
+  public async updatePatientInfo(req: Request<{cardNumber: string}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
     const cardNumber = req.params;
     
     if (!cardNumber){
@@ -145,16 +178,13 @@ export class PatientController {
 
     await patient.save();
 
-    return res.json(
+    res.json(
       PatientEntity.fromDatabase(patient)
     );
   }
 
-  public async AddToPreExaminationQueue(cardNumber: string): Promise<void>{
+  public async addToPreExaminationQueue(cardNumber: string): Promise<void>{
     await redis.lpush(PATIENT_QUEUE, cardNumber)
   }
-
-
- 
 };
 

@@ -1,4 +1,4 @@
-import { PatientModel } from '../../models/patientsModel';
+import { PatientModel } from "../../models/patientModel"; 
 
 
 export class PatientEntity {

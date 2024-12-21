@@ -2,7 +2,7 @@ import { sequelize } from "./config/sequelize";
 import { Sequelize } from "sequelize";
 
 import { ConsoleLogger } from "../core/utils";
-import { PatientModel } from "./patientsModel";
+import { PatientModel } from "./patientModel"; 
 import { InstitutionModel } from "./institutionModel";
 import { VisitModel } from "./visitModel";
 import { PrescriptionModel } from "./prescriptionModel";
@@ -11,7 +11,7 @@ import { ExaminationModel } from "./examinationModel";
 import { LaboratoryOrderModel } from "./laboratoryOrderModel";
 import { LaboratoryResultModel } from "./laboratoryResultModel";
 import { XrayModel } from "./xrayModel";
-import { UltrasoundModel } from "./UltrasoundModel";
+import { UltrasoundModel } from "./ultrasoundModel";
 
 export class DB {
   static _instance: DB;
