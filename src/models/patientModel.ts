@@ -1,4 +1,4 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface PatientModelRow {
@@ -16,7 +16,7 @@ export interface PatientModelRow {
 
 export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, 'id'>> {
   declare id: CreationOptional<number>;
-  declare institutionId: number;
+  declare institutionId: ForeignKey<number>; 
   declare cardNumber: string;
   declare name: string;
   declare age: number;

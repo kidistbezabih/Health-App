@@ -2,6 +2,8 @@ import { CreationOptional, DataTypes, ForeignKey, Model } from "sequelize";
 import { sequelize } from './config/sequelize';
 
 export interface PreExaminationModelRow {
+  id: number; 
+  patientId: number;
   chiefComplaint?: string;
   hpi?: string;
   pastHx?: string;
@@ -24,6 +26,8 @@ export interface PreExaminationModelRow {
 }
 
 export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreExaminationModelRow, 'id'>> {
+  declare id: number;
+  declare patientId: ForeignKey<number>;
   declare chiefComplaint: CreationOptional<string>;
   declare hpi: CreationOptional<string>;
   declare pastHx: CreationOptional<string>;
@@ -46,6 +50,14 @@ export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreE
 }
 
 PreExaminationModel.init({
+  id: { 
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  patientId: { 
+    type: DataTypes.NUMBER,
+  },
   chiefComplaint: { 
     type: DataTypes.STRING,
   },
