@@ -1,9 +1,10 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
+import { sequelize } from './config/sequelize';
 
-export interface PatientModelRow{
+export interface PatientModelRow {
   id?: number;
-	cardNumber: string;
+  institutionId: number;
+  cardNumber: string;
   name: string;
   age: number;
   sex: string;
@@ -15,7 +16,8 @@ export interface PatientModelRow{
 
 export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, 'id'>> {
   declare id: CreationOptional<number>;
-	declare cardNumber: string;
+  declare institutionId: ForeignKey<number>; 
+  declare cardNumber: string;
   declare name: string;
   declare age: number;
   declare sex: string;
@@ -32,8 +34,12 @@ PatientModel.init({
     type: DataTypes.NUMBER,
     autoIncrement: true,
     primaryKey: true
-	},
-	cardNumber: {
+  },institutionId: {
+    type: DataTypes.NUMBER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  cardNumber: {
     type: DataTypes.STRING,
     // auto generate
   },
@@ -64,14 +70,12 @@ PatientModel.init({
   phoneNumber: {
     type: DataTypes.STRING,
     allowNull: true
-  }}, 
-  {
-    sequelize,
+  }
+}, 
+{
+  sequelize,
   timestamps: true,
   tableName: 'patients',
   paranoid: true,
   deletedAt: true
-  });
-
-
-  
+});

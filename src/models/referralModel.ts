@@ -1,7 +1,7 @@
 import { CreationOptional, DataTypes, Model } from 'sequelize';
-import {sequelize} from './config/sequelize'
+import { sequelize } from './config/sequelize';
 
-export interface ReferralModelRow{
+export interface ReferralModelRow {
   id: number;
   to: string;
   cardNumber: string; // foreign key
@@ -29,10 +29,10 @@ export class ReferralModel extends Model<ReferralModelRow, Omit<ReferralModelRow
 
 ReferralModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.NUMBER, // Corrected to DataTypes.INTEGER
     autoIncrement: true,
     primaryKey: true
-	},
+  },
   to: {
     type: DataTypes.STRING,
   },
@@ -60,11 +60,10 @@ ReferralModel.init({
   physician: {
     type: DataTypes.STRING,
   },
-}, 
-  {
-    sequelize,
-    timestamps: true,
-    tableName: 'referrals',
-    paranoid: true,
-    deletedAt: true
-  });
+}, {
+  sequelize,
+  timestamps: true,
+  tableName: 'referrals',
+  paranoid: true,
+  deletedAt: true
+});

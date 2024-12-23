@@ -1,8 +1,9 @@
-import { CreationOptional, DataType, DataTypes, ForeignKey, Model } from "sequelize";
-import {sequelize} from './config/sequelize'
+import { CreationOptional, DataTypes, ForeignKey, Model } from "sequelize";
+import { sequelize } from './config/sequelize';
 
-
-export interface PreExaminationModelRow{
+export interface PreExaminationModelRow {
+  id: number; 
+  patientId: number;
   chiefComplaint?: string;
   hpi?: string;
   pastHx?: string;
@@ -22,10 +23,11 @@ export interface PreExaminationModelRow{
   meskal?: string;
   nervous?: string;
   examinedBy?: string;
-
 }
 
-export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreExaminationModelRow, 'id'>>{
+export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreExaminationModelRow, 'id'>> {
+  declare id: number;
+  declare patientId: ForeignKey<number>;
   declare chiefComplaint: CreationOptional<string>;
   declare hpi: CreationOptional<string>;
   declare pastHx: CreationOptional<string>;
@@ -48,6 +50,14 @@ export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreE
 }
 
 PreExaminationModel.init({
+  id: { 
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  patientId: { 
+    type: DataTypes.NUMBER,
+  },
   chiefComplaint: { 
     type: DataTypes.STRING,
   },
@@ -106,10 +116,9 @@ PreExaminationModel.init({
     type: DataTypes.STRING,
   },
 }, {
-    sequelize,
+  sequelize,
   timestamps: true,
   tableName: 'pre_examinations',
   paranoid: true,
   deletedAt: true
-})
-
+});
