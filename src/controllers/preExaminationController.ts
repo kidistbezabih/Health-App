@@ -101,6 +101,9 @@ export class PreExaminationController{
   }
 
   // 
+  public async getPreExaminationRecord(req: Request, res: Response, next: NextFunction){
+    
+  }
 
 }
   

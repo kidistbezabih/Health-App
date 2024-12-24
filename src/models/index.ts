@@ -61,11 +61,11 @@ export class DB {
     });
     LaboratoryResultModel.belongsTo(LaboratoryOrderModel);
 
-    // Relation between visit and LaboratoryOrder
-    VisitModel.hasMany(LaboratoryOrderModel, {
-      foreignKey: 'laboratoryOrderId'
+    // Relation between visit and LaboratoryResult
+    VisitModel.hasMany(LaboratoryResultModel, {
+      foreignKey: 'visitId'
     });
-    LaboratoryOrderModel.belongsTo(VisitModel);
+    LaboratoryResultModel.belongsTo(VisitModel);
 
     // Relation between visit and Prescription
     VisitModel.hasMany(PrescriptionModel, {
@@ -98,7 +98,15 @@ export class DB {
       foreignKey: 'ultrasoundModelId' // corrected foreign key name
     });
     UltrasoundModel.belongsTo(LaboratoryResultModel);
+    
+    // relation beetween patient and examination
+    // PatientModel.hasMany(ExaminationModel, {
+    //   foreignKey: 'patientId' // corrected foreign key name
+    // });
+    // ExaminationModel.belongsTo(PatientModel);
   }
+
+
 
   public static get instance(): DB {
     if (!DB._instance) {
