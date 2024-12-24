@@ -34,10 +34,10 @@ PatientModel.init({
     type: DataTypes.NUMBER,
     autoIncrement: true,
     primaryKey: true
-  },institutionId: {
+  },
+  institutionId: {
     type: DataTypes.NUMBER,
-    autoIncrement: true,
-    primaryKey: true
+    allowNull: false
   },
   cardNumber: {
     type: DataTypes.STRING,
