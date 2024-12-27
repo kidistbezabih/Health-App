@@ -8,17 +8,17 @@ export class VisitEntity{
   ){
   }
 
-    public static fromDatabase(obj: VisitModel) :VisitEntity{
-     const{
-      examinationId,
-      labResultId,
-      prescriptionId
-     } = obj
+    // public static fromDatabase(obj: VisitModel) :VisitEntity{
+    //  const{
+    //   examinationId,
+    //   labResultId,
+    //   prescriptionId
+    //  } = obj
 
-     return new VisitEntity(
-      examinationId as number,
-      labResultId as number,
-      prescriptionId as number
-     )
-    }
+    //  return new VisitEntity(
+    //   examinationId as number,
+    //   labResultId as number,
+    //   prescriptionId as number
+    //  )
+    // }
   }

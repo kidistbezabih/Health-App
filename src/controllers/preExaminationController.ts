@@ -5,8 +5,13 @@ import { AppError } from "../core/errors/custom.errors";
 import { PatientEntity } from "../core/entities/patient.entities";
 import { PreExaminationModel } from "../models/preExaminationModel";
 import { Request, Response, NextFunction } from "express";
+require('dotenv').config();
 
-const redis = new Redis();
+
+const redis = new Redis({
+  host: process.env.REDIS_HOST,  // Uses the Redis host defined in .env
+  port: parseInt(process.env.REDIS_PORT || '6379'),
+});
 
 export class PreExaminationController{
   private patientService : PatientService;

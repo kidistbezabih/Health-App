@@ -86,19 +86,19 @@ export class ExaminationController{
   }}
 
 
-  public async getPatientVisitHistory(req: Request<{patientId: number}>, res: Response, next: NextFunction): Promise<void>{
-    try{
-      const {patientId} = req.params;
+  // public async getPatientVisitHistory(req: Request<{patientId: number}>, res: Response, next: NextFunction): Promise<void>{
+  //   try{
+  //     const {patientId} = req.params;
 
-      const visits = await this.visitService.getPatientVistsById(patientId);
+  //     const visits = await this.visitService.getPatientVistsById(patientId);
 
-      if (!visits){
-        throw AppError.notFound("No history with this recorded")
-      }
-      res.json(visits)
-    }catch(err){
-      next(err)
-    }}
+  //     if (!visits){
+  //       throw AppError.notFound("No history with this recorded")
+  //     }
+  //     res.json(visits)
+  //   }catch(err){
+  //     next(err)
+  //   }}
 
     public async deletePatientExamination(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
       try{

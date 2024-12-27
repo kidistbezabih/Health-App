@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { VisitService } from "../services/visitServices";
-import { PatientService } from "../services/patientServices";
-import { promises } from "dns";
 import { AppError } from "../core/errors/custom.errors";
 
 export class VisitController{

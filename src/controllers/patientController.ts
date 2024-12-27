@@ -4,7 +4,6 @@ import { PatientModel } from '../models/patientModel';
 import { error } from 'console';
 import { AppError } from '../core/errors/custom.errors';
 import { PatientEntity } from '../core/entities/patient.entities';
-import { Model } from 'sequelize';
 import { PATIENT_QUEUE } from '../core/redis';
 import { PatientService } from '../services/patientServices';
 
@@ -36,7 +35,12 @@ interface UpdatePatientRequestBody{
 
 }
 
-const redis = new Redis();
+const redis = new Redis({
+  host:process.env.REDIS_HOST,
+  port:parseInt(process.env.REDIS_PORT || '6379') 
+
+}
+);
 const REDIS_KEY = "patient_registration";
 
 export class PatientController {
@@ -69,7 +73,7 @@ export class PatientController {
       const count = await redis.llen(REDIS_KEY);
       const cardNumber = `${institutionId}/${today}/${count}`;
       
-      await redis.set(REDIS_KEY, JSON.stringify(newEntry));
+      await redis.rpush(REDIS_KEY, JSON.stringify(newEntry));
       
       const patient = await PatientModel.create({
         institutionId,
@@ -85,11 +89,10 @@ export class PatientController {
       if (patient){
         res.status(201).json({message: "Patient registered successfully", cardNumber});
       }else{
-        throw error("Failed to Register patient")
+        throw AppError.badRequest("Failed to Register patient")
       }
     } catch(err){
-      console.error(err)
-      res.status(500).json({ message: 'Internal server error', error: err });
+      next(err)
     }
   }
 

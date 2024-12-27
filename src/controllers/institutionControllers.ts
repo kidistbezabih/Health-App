@@ -2,7 +2,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { InstitutionModel } from "../models/institutionModel";
-import { where } from "sequelize";
 
 
 interface institutionEntity{

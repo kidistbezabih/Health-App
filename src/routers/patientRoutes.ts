@@ -2,7 +2,7 @@ import { Router } from "express";
 import { PatientController } from "../controllers/patientController";
 import { PatientValidator } from "../validators/patientValidators";
 
-export class PatientRoute {
+export default class PatientRoute {
   static get routes(): Router {
     const router = Router();
     const patientController = new PatientController();

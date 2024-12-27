@@ -9,8 +9,7 @@ export interface VisitModelRow {
 export class VisitModel extends Model<VisitModelRow, Omit<VisitModelRow, 'id'>> {
   declare id: CreationOptional<number>;
   declare patientId: ForeignKey<number>;
-
-
+  
   // association mixin
 
   // patient examination results, lab result and prescription
