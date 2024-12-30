@@ -1,7 +1,8 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface LaboratoryOrderModelRow {
+  visitId: number;
   wbc?: boolean;
   Hgn?: boolean;
   ESR?: boolean;
@@ -50,6 +51,7 @@ export interface LaboratoryOrderModelRow {
 }
 
 export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
+  declare visitId: ForeignKey<number>;
   declare wbc: CreationOptional<boolean>;
   declare Hgn: CreationOptional<boolean>;
   declare ESR: CreationOptional<boolean>;
@@ -98,6 +100,7 @@ export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
 }
 
 LaboratoryOrderModel.init({
+  visitId: {type: DataTypes.INTEGER},
   wbc: { type: DataTypes.BOOLEAN },
   Hgn: { type: DataTypes.BOOLEAN },
   ESR: { type: DataTypes.BOOLEAN },

@@ -42,6 +42,8 @@ services:
     depends_on:
       - redis
       - postgres
+    networks:
+      - my_network
 
   redisinsight:
     image: redislabs/redisinsight:latest
