@@ -11,7 +11,7 @@ export interface ReferralModelRow {
   diagnosis: string;
   treatmentGiven: string;
   reasonForReferral: string;
-  physician: string; 
+  physician: string;
 }
 
 export class ReferralModel extends Model<ReferralModelRow, Omit<ReferralModelRow, 'id'>> {
@@ -24,12 +24,12 @@ export class ReferralModel extends Model<ReferralModelRow, Omit<ReferralModelRow
   declare diagnosis: string;
   declare treatmentGiven: string;
   declare reasonForReferral: string;
-  declare physician: string; 
+  declare physician: string;
 }
 
 ReferralModel.init({
   id: {
-    type: DataTypes.NUMBER, // Corrected to DataTypes.INTEGER
+    type: DataTypes.INTEGER, // Corrected to DataTypes.INTEGER
     autoIncrement: true,
     primaryKey: true
   },

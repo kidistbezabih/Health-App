@@ -23,7 +23,7 @@ export class XrayModel extends Model<XrayModelRow> {
 
 XrayModel.init({
   id: {
-    type: DataTypes.NUMBER,  // Corrected to NUMBER for numeric type
+    type: DataTypes.INTEGER,  // Corrected to NUMBER for numeric type
     primaryKey: true,
     autoIncrement: true
   },

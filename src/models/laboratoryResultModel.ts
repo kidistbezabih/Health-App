@@ -8,11 +8,11 @@ export interface LaboratoryResultModelRow {
   BF?: string;
   bloodGroup_RHType?: string;
   bloodMorphology?: string;
-  neutorophil?: string; 
-  eosinophil?: string; 
-  lymphocyte?: string; 
-  monocyte?: string; 
-  Basophil?: string; 
+  neutorophil?: string;
+  eosinophil?: string;
+  lymphocyte?: string;
+  monocyte?: string;
+  Basophil?: string;
   FBS_RBS?: string;
   sgot?: string;
   sgpt?: string;
@@ -58,11 +58,11 @@ export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
   declare BF: CreationOptional<string>;
   declare bloodGroup_RHType: CreationOptional<string>;
   declare bloodMorphology: CreationOptional<string>;
-  declare neutorophil: CreationOptional<string>; 
-  declare eosinophil: CreationOptional<string>; 
-  declare lymphocyte: CreationOptional<string>; 
-  declare monocyte: CreationOptional<string>; 
-  declare Basophil: CreationOptional<string>; 
+  declare neutorophil: CreationOptional<string>;
+  declare eosinophil: CreationOptional<string>;
+  declare lymphocyte: CreationOptional<string>;
+  declare monocyte: CreationOptional<string>;
+  declare Basophil: CreationOptional<string>;
   declare FBS_RBS: CreationOptional<string>;
   declare sgot: CreationOptional<string>;
   declare sgpt: CreationOptional<string>;
@@ -238,10 +238,10 @@ LaboratoryResultModel.init({
     type: DataTypes.STRING,
   },
   xRay: {
-    type: DataTypes.NUMBER
+    type: DataTypes.INTEGER
   },
   ultraSound: {
-    type: DataTypes.NUMBER
+    type: DataTypes.INTEGER
   }
 },
 {

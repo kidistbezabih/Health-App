@@ -21,7 +21,7 @@ export class PrescriptionModel extends Model<PrescriptionModelRow, Omit<Prescrip
 
 PrescriptionModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
@@ -40,7 +40,7 @@ PrescriptionModel.init({
   prescribersName: {
     type: DataTypes.STRING,
   },
-}, 
+},
   {
     sequelize,
     timestamps: true,

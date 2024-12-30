@@ -16,7 +16,7 @@ export interface PatientModelRow {
 
 export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, 'id'>> {
   declare id: CreationOptional<number>;
-  declare institutionId: ForeignKey<number>; 
+  declare institutionId: ForeignKey<number>;
   declare cardNumber: string;
   declare name: string;
   declare age: number;
@@ -31,12 +31,12 @@ export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, '
 
 PatientModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   institutionId: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   cardNumber: {
@@ -48,7 +48,7 @@ PatientModel.init({
     allowNull: false
   },
   age: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   sex: {
@@ -71,7 +71,7 @@ PatientModel.init({
     type: DataTypes.STRING,
     allowNull: true
   }
-}, 
+},
 {
   sequelize,
   timestamps: true,
