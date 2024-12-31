@@ -56,15 +56,19 @@ export class PatientController {
       const { institutionId,name, age, sex, address, zone, kebele, phoneNumber } = req.body;
       const today = new Date().toISOString().split("T")[0];
 
-      const latestEntry = await redis.lindex(REDIS_KEY, -1);
+        console.log("before fetching from redis")
+        const latestEntry = await redis.lindex(REDIS_KEY, -1);
+        console.log("Data from Redis:", latestEntry);
 
-      if (latestEntry){
-        const {date} = JSON.parse(latestEntry);
-
-        if (date !== today){
-          await redis.del(REDIS_KEY);
+        if (latestEntry) {
+          try {
+            const { date } = JSON.parse(latestEntry);
+          } catch (parseError) {
+            console.error("Invalid Redis data:", latestEntry, parseError);
+            throw AppError.internalServer("Invalid data in Redis");
+          }
         }
-      }
+     
 
       // append todays  entry to reddis array
       const newEntry = { instId: institutionId, date: today}
@@ -97,55 +101,21 @@ export class PatientController {
   }
 
   // Find patient by their cardNumber
-  public async getPatientByCardNumber(req: Request<{cardNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
+  public async getPatient(req: Request<{searchKey: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
       try{
-        const { cardNumber } = req.params; // Extract cardNumber from URL params
+        const { searchKey } = req.params; // Extract cardNumber from URL params
   
-      if (!cardNumber) {
+      if (!searchKey) {
         throw AppError.notFound("can't find any patient by this card number")
       }
   
       // Find patient by card number
-      const patient = await this.patientService.getPatientByCardNumber(cardNumber);
+      const patient = await this.patientService.getPatient(searchKey);
       
       res.json(patient);
     }catch(err){
       next(err);
       }
-  }
-
-  public async getPatientByPhoneNumber(req: Request<{phoneNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<void> {
-    try{
-      const { phoneNumber } = req.params; // Extract phoneNumber from URL params
-
-    if (!phoneNumber) {
-      throw AppError.notFound("can't find any patient by this card number")
-    }
-
-    // Find patient by card number
-    const patient = await this.patientService.getPatientByPhoneNumber(phoneNumber);
-    
-    res.json(patient);
-    }catch(err){
-    next(err);
-    }
-  }
-
-  public async getPatientByName(req: Request<{name: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<void> {
-    try{
-      const { name } = req.params; // Extract Name from URL params
-
-    if (!name) {
-      throw AppError.notFound("can't find any patient by this card number")
-    }
-
-    // Find patient by card number
-    const patient = await this.patientService.getPatientByname(name);
-    
-    res.json(patient);
-    }catch(err){
-    next(err);
-    }
   }
   
   public async updatePatientInfo(req: Request<{cardNumber: string}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
@@ -189,5 +159,20 @@ export class PatientController {
   public async addToPreExaminationQueue(cardNumber: string): Promise<void>{
     await redis.lpush(PATIENT_QUEUE, cardNumber)
   }
+
+  public async deletePatientInfo(req: Request<{cardNumber: number}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
+    const {cardNumber} = (req.params);
+    
+    if (!cardNumber){
+      throw AppError.notFound("Please isert the card number!")
+    };
+    const patient = await this.patientService.deletePatien(cardNumber);
+
+    if (!patient){
+      throw AppError.notFound("There is no patient with this card number");
+    }
+
+    res.json(`Patient with card number ${cardNumber} deleted successfully `);
+  }  
 };
 

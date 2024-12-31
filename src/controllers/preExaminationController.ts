@@ -28,7 +28,7 @@ export class PreExaminationController{
       throw AppError.notFound("No patient")
     }
 
-    const patientDetail = await this.patientService.getPatientByCardNumber(patientCardNumber);
+    const patientDetail = await this.patientService.getPatient(patientCardNumber);
     res.status(201).json(patientDetail);
   }catch(err){
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';

@@ -1,16 +1,28 @@
 import { PatientModel } from "../models/patientModel"; 
 import { PatientEntity } from "../core/entities/patient.entities";
 import { AppError } from "../core/errors/custom.errors";
+import { Op } from "sequelize";
 
 export class PatientService {
-  // Fetch patient details by card number
-  public async getPatientByCardNumber(cardNumber: string): Promise<PatientEntity> {
-    if (!cardNumber) {
+  public async getPatient(searchKey: string): Promise<PatientEntity> {
+    if (!searchKey) {
       throw AppError.notFound("Card number is required");
     }
 
     const patient = await PatientModel.findOne({
-      where: { cardNumber },
+      where: { 
+        [Op.and]: {
+          name: {
+              [Op.iLike]: `%${searchKey}%`
+          },
+          phoneNumber: {
+              [Op.iLike]: `%${searchKey}%`
+          },
+          cardNumber: {
+              [Op.iLike]: `%${searchKey}%`
+          }
+        }
+       },
       attributes: ["cardNumber", "name", "age", "sex", "address", "zone", "kebele", "phoneNumber"],
     });
 
@@ -21,37 +33,10 @@ export class PatientService {
     return PatientEntity.fromDatabase(patient);
   }
 
-  public async getPatientByPhoneNumber(phoneNumber: string): Promise<PatientEntity> {
-    if (!phoneNumber) {
-      throw AppError.notFound("Card number is required");
-    }
-
-    const patient = await PatientModel.findOne({
-      where: { phoneNumber },
-      attributes: ["cardNumber", "name", "age", "sex", "address", "zone", "kebele", "phoneNumber"],
-    });
-
-    if (!patient) {
-      throw AppError.notFound("Can't find any patient with this card number");
-    }
-
-    return PatientEntity.fromDatabase(patient);
-  }
-
-  public async getPatientByname(name: string): Promise<PatientEntity> {
-    if (!name) {
-      throw AppError.notFound("Card number is required");
-    }
-
-    const patient = await PatientModel.findOne({
-      where: { name },
-      attributes: ["cardNumber", "name", "age", "sex", "address", "zone", "kebele", "phoneNumber"],
-    });
-
-    if (!patient) {
-      throw AppError.notFound("Can't find any patient with this card number");
-    }
-
-    return PatientEntity.fromDatabase(patient);
-  }
+  public async deletePatien(cardNumber: number):Promise<Boolean>{
+      const deleteCount = await PatientModel.destroy({where: {cardNumber: cardNumber}})
+  
+      return deleteCount > 0
+  
+    }  
 }

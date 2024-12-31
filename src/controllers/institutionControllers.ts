@@ -54,8 +54,8 @@ export class InstutitionController{
       const institution = await InstitutionModel.findOne({where: {id}});
 
       if (institution){
-        institution.name = name||null
-        institution.address = adress || null
+        institution.name = name||institution.name
+        institution.address = adress || institution.address
         await institution.save()
       }else{
         AppError.badRequest("No institution with this id!");

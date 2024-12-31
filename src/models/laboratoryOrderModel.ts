@@ -2,6 +2,7 @@ import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface LaboratoryOrderModelRow {
+  id?: number,
   visitId: number;
   wbc?: boolean;
   Hgn?: boolean;
@@ -43,7 +44,7 @@ export interface LaboratoryOrderModelRow {
   SKINSmear?: boolean;
   protein?: boolean;
   WBC?: boolean;
-  Diff_Count?: boolean;
+  DiffCount?: boolean;
   stoolExam?: boolean;
   HIV?: boolean;
   xRay: boolean;
@@ -51,6 +52,7 @@ export interface LaboratoryOrderModelRow {
 }
 
 export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
+  declare id: ForeignKey<number>;
   declare visitId: ForeignKey<number>;
   declare wbc: CreationOptional<boolean>;
   declare Hgn: CreationOptional<boolean>;
@@ -92,7 +94,7 @@ export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
   declare SKINSmear: CreationOptional<boolean>;
   declare protein: CreationOptional<boolean>;
   declare WBC: CreationOptional<boolean>;
-  declare Diff_Count: CreationOptional<boolean>;
+  declare DiffCount: CreationOptional<boolean>;
   declare stoolExam: CreationOptional<boolean>;
   declare HIV: CreationOptional<boolean>;
   declare xRay: CreationOptional<boolean>;
@@ -100,6 +102,11 @@ export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
 }
 
 LaboratoryOrderModel.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
   visitId: {type: DataTypes.INTEGER},
   wbc: { type: DataTypes.BOOLEAN },
   Hgn: { type: DataTypes.BOOLEAN },
@@ -141,7 +148,7 @@ LaboratoryOrderModel.init({
   SKINSmear: { type: DataTypes.BOOLEAN },
   protein: { type: DataTypes.BOOLEAN },
   WBC: { type: DataTypes.BOOLEAN },
-  Diff_Count: { type: DataTypes.BOOLEAN },
+  DiffCount: { type: DataTypes.BOOLEAN },
   stoolExam: { type: DataTypes.BOOLEAN },
   HIV: { type: DataTypes.BOOLEAN },
   xRay: { type: DataTypes.BOOLEAN },

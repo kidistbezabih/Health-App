@@ -8,10 +8,9 @@ export default class PatientRoute {
     const patientController = new PatientController();
 
     router.post('/register-patient' , PatientValidator.onCreate(), patientController.registePatient);
-    router.get('/patient-by-card-number/:cardNumber', patientController.getPatientByCardNumber);
-    router.get('/patient-by-phone-number/:phoneNumber', patientController.getPatientByPhoneNumber);
-    router.get('/patient-by-name/:name', patientController.getPatientByName);
-    router.put('/patient-update/', PatientValidator.onUpdate(), patientController.updatePatientInfo);
+    router.get('/get-patient/:searchkey', patientController.getPatient);
+    router.put('/update-patient/', PatientValidator.onUpdate(), patientController.updatePatientInfo);
+    router.put('/delete-patient/', PatientValidator.onUpdate(), patientController.deletePatientInfo);
 
     return router;
   }

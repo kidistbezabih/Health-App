@@ -23,6 +23,21 @@ export class VisitController{
     }
   }
 
+    // public async getPatientVisitHistory(req: Request<{patientId: number}>, res: Response, next: NextFunction): Promise<void>{
+    // try{
+
+    //   const {patientId} = req.params;
+
+    //   const visits = await this.visitService.getPatientVistsById(patientId);
+
+    //   if (!visits){
+    //     throw AppError.notFound("No history with this recorded")
+    //   }
+    //   res.json(visits)
+    // }catch(err){
+    //   next(err)
+    // }}
+
   public async deleteVisit(req: Request<{id: number}>, res: Response, next: NextFunction):Promise<void>{
     try
       {const {id} = req.params;

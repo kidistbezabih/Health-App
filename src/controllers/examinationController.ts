@@ -85,33 +85,18 @@ export class ExaminationController{
     next(err)
   }}
 
+  public async deletePatientExamination(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
+    try{
+      const {id} = req.params;
 
-  // public async getPatientVisitHistory(req: Request<{patientId: number}>, res: Response, next: NextFunction): Promise<void>{
-  //   try{
-  //     const {patientId} = req.params;
+      const examinationResult = this.examinationService.deleteExamination(id);
 
-  //     const visits = await this.visitService.getPatientVistsById(patientId);
-
-  //     if (!visits){
-  //       throw AppError.notFound("No history with this recorded")
-  //     }
-  //     res.json(visits)
-  //   }catch(err){
-  //     next(err)
-  //   }}
-
-    public async deletePatientExamination(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
-      try{
-        const {id} = req.params;
-  
-        const examinationResult = this.examinationService.deleteExamination(id);
-  
-        if (!examinationResult){
-          throw AppError.notFound("No examination reuslt with this id!")
-        }
-        res.status(200).json({message: "Deleted successfully!"})
-      }catch(err){
-        next(err)
+      if (!examinationResult){
+        throw AppError.notFound("No examination reuslt with this id!")
       }
+      res.status(200).json({message: "Deleted successfully!"})
+    }catch(err){
+      next(err)
     }
+  }
   }

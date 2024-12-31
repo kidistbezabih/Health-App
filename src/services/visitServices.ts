@@ -15,23 +15,25 @@ export class VisitService {
     return patientVisit
   }
 
-  // public async getPatientVistsById(patientId: number): Promise<VisitEntity[]> {
+  public async getPatientVistsById(patientId: number): Promise<VisitEntity[]> {
 
-  //   const patientVisits = await VisitModel.findAll({
-  //     where: { patientId },
-  //     attributes: [
-  //       'examinationId' ,
-  //       'labResultId',
-  //       'prescriptionId'
-  //     ],
-  //   });
+    const patientVisits = await VisitModel.findAll({
+      where: { patientId },
+      attributes: [
+        'visitId'
+      ],
+    });
 
-  //   if (patientVisits.length == 0) {
-  //     throw AppError.notFound("Patient have no history");
-  //   }
+    if (patientVisits.length == 0) {
+      throw AppError.notFound("Patient has no visit history");
+    }
+    // for all the visit id prepare some kind of onbject to store the information 
+    // that we get from examination room,  laboratory result, doctor prescription.
 
-  //   return patientVisits
-  // }
+
+    // then lis the objects
+    return patientVisits
+  }
 
   public async deleteVisitById(id: number): Promise<boolean>{
 

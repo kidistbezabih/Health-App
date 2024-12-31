@@ -44,7 +44,7 @@ export interface LaboratoryResultModelRow {
   gramStam?: string;
   AFBStam?: string;
   WBC?: string;
-  Diff_Count?: string;
+  DiffCount?: string;
   stoolExam?: string;
   HIV?: string;
   xRay?: ForeignKey<number>;
@@ -94,7 +94,7 @@ export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
   declare gramStam: CreationOptional<string>;
   declare AFBStam: CreationOptional<string>;
   declare WBC: CreationOptional<string>;
-  declare Diff_Count: CreationOptional<string>;
+  declare DiffCount: CreationOptional<string>;
   declare stoolExam: CreationOptional<string>;
   declare HIV: CreationOptional<string>;
   declare xRay: ForeignKey<number>;
@@ -228,7 +228,7 @@ LaboratoryResultModel.init({
   WBC: {
     type: DataTypes.STRING,
   },
-  Diff_Count: {
+  DiffCount: {
     type: DataTypes.STRING,
   },
   stoolExam: {
