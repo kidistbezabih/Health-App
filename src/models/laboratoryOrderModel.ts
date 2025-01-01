@@ -18,7 +18,7 @@ export interface LaboratoryOrderModelRow {
   FBS_RBS?: boolean;
   sgot?: boolean;
   sgpt?: boolean;
-  totalProtein?: boolean;
+  totalProtien?: boolean;
   albumin?: boolean;
   glucose?: boolean;
   ketone?: boolean;
@@ -29,7 +29,7 @@ export interface LaboratoryOrderModelRow {
   PH?: boolean;
   microscopic?: boolean;
   widal?: boolean;
-  WeilFelix?: boolean;
+  weilFelix?: boolean;
   VDHL_EPR?: boolean;
   Rf?: boolean;
   HBsAg?: boolean;
@@ -48,7 +48,7 @@ export interface LaboratoryOrderModelRow {
   stoolExam?: boolean;
   HIV?: boolean;
   xRay: boolean;
-  ultrasound: boolean;
+  ultraSound: boolean;
 }
 
 export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
@@ -68,7 +68,7 @@ export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
   declare FBS_RBS: CreationOptional<boolean>;
   declare sgot: CreationOptional<boolean>;
   declare sgpt: CreationOptional<boolean>;
-  declare totalProtein: CreationOptional<boolean>;
+  declare totalProtien: CreationOptional<boolean>;
   declare albumin: CreationOptional<boolean>;
   declare glucose: CreationOptional<boolean>;
   declare ketone: CreationOptional<boolean>;
@@ -79,7 +79,7 @@ export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
   declare PH: CreationOptional<boolean>;
   declare microscopic: CreationOptional<boolean>;
   declare widal: CreationOptional<boolean>;
-  declare WeilFelix: CreationOptional<boolean>;
+  declare weilFelix: CreationOptional<boolean>;
   declare VDHL_EPR: CreationOptional<boolean>;
   declare Rf: CreationOptional<boolean>;
   declare HBsAg: CreationOptional<boolean>;
@@ -98,7 +98,7 @@ export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
   declare stoolExam: CreationOptional<boolean>;
   declare HIV: CreationOptional<boolean>;
   declare xRay: CreationOptional<boolean>;
-  declare ultrasound: CreationOptional<boolean>;
+  declare ultraSound: CreationOptional<boolean>;
 }
 
 LaboratoryOrderModel.init({
@@ -122,7 +122,7 @@ LaboratoryOrderModel.init({
   FBS_RBS: { type: DataTypes.BOOLEAN },
   sgot: { type: DataTypes.BOOLEAN },
   sgpt: { type: DataTypes.BOOLEAN },
-  totalProtein: { type: DataTypes.BOOLEAN },
+  totalProtien: { type: DataTypes.BOOLEAN },
   albumin: { type: DataTypes.BOOLEAN },
   glucose: { type: DataTypes.BOOLEAN },
   ketone: { type: DataTypes.BOOLEAN },
@@ -133,7 +133,7 @@ LaboratoryOrderModel.init({
   PH: { type: DataTypes.BOOLEAN },
   microscopic: { type: DataTypes.BOOLEAN },
   widal: { type: DataTypes.BOOLEAN },
-  WeilFelix: { type: DataTypes.BOOLEAN },
+  weilFelix: { type: DataTypes.BOOLEAN },
   VDHL_EPR: { type: DataTypes.BOOLEAN },
   Rf: { type: DataTypes.BOOLEAN },
   HBsAg: { type: DataTypes.BOOLEAN },
@@ -152,7 +152,7 @@ LaboratoryOrderModel.init({
   stoolExam: { type: DataTypes.BOOLEAN },
   HIV: { type: DataTypes.BOOLEAN },
   xRay: { type: DataTypes.BOOLEAN },
-  ultrasound: { type: DataTypes.BOOLEAN },
+  ultraSound: { type: DataTypes.BOOLEAN },
 }, {
   sequelize,
   timestamps: true,

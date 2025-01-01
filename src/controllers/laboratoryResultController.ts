@@ -1,18 +1,18 @@
 
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
-import { LaboratoryOrderService } from "../services/laboratoryOrderService";
-import { LaboratoryOrderEntity } from "../core/entities/laboratoryOrder.entities";
+import { LaboratoryResultService } from "../services/laboratoryResultServices";
+import { LaboratoryResultEntity } from "../core/entities/laboratoryResult.entities";
 
-export class LaboratoryOrderController{
-  private labOrderServices : LaboratoryOrderService;
+export class LaboratoryResultController{
+  private labResultServices : LaboratoryResultService;
 
   constructor(){
-    this.labOrderServices = new LaboratoryOrderService();
+    this.labResultServices = new LaboratoryResultService();
   }
 
   //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
-  public async createLaboratoryOrder(req: Request<LaboratoryOrderEntity>, res: Response, next: NextFunction): Promise<void>{
+  public async createLaboratoryResult(req: Request<LaboratoryResultEntity>, res: Response, next: NextFunction): Promise<void>{
     try{
       const {
         visitId,
@@ -64,7 +64,7 @@ export class LaboratoryOrderController{
         
       } = req.body;
 
-      const order = this.labOrderServices.createLaboratoryOrder(
+      const result = this.labResultServices.createLaboratoryResult(
         visitId,
         wbc,
         Hgn,
@@ -113,79 +113,79 @@ export class LaboratoryOrderController{
         ultraSound,
       );
 
-      if(!order){
-        AppError.badRequest("un able to create anlab order!");
+      if(!result){
+        AppError.badRequest("un able to create anlab result!");
       }
 
-      res.status(201).json("Laboratory order is successfully created!")
+      res.status(201).json("Laboratory result is successfully created!")
     }catch(err){
     next(err);
     }
   }
 
 
-  public async getLaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
+  public async getLaboratoryResult(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
       const {id} = req.params;
 
-      const order = this.labOrderServices.getLabOrder(id);
+      const result = this.labResultServices.getlabResult(id);
 
-      if (!order){
-        AppError.badRequest("No laboratory order with this id!")
+      if (!result){
+        AppError.badRequest("No laboratory Result with this id!")
       }
-      res.status(201).json({lab_order: {order}})
+      res.status(201).json({lab_Result: {result}})
   }catch(err){
     next(err)
   }}
 
 
-public async updateLaboratoryOrder(req: Request<{
+public async updateLaboratoryResult(req: Request<{
   id: number,
-  wbc: boolean,
-  Hgn: boolean,
-  ESR: boolean,
-  BF: boolean,
-  bloodGroup_RHType: boolean,
-  bloodMorphology: boolean,
-  neutrophil: boolean,
-  eosinophil: boolean,
-  lymphocyte: boolean,
-  monocyte: boolean,
-  Basophil: boolean,
-  FBS_RBS: boolean,
-  sgot: boolean,
-  sgpt: boolean,
-  totalProtien: boolean,
-  albumin: boolean,
-  glucose: boolean,
-  ketone: boolean,
-  blood: boolean,
-  leukocyte: boolean,
-  bilirubin: boolean,
-  urobilin: boolean,
-  PH: boolean,
-  microscopic: boolean,
-  widal: boolean,
-  weilFelix: boolean,
-  VDHL_EPR: boolean,
-  Rf: boolean,
-  HBsAg: boolean,
-  Aso: boolean,
-  PICT: boolean,
-  HCV: boolean,
-  wetMount: boolean,
-  gramStain: boolean,
-  AFBStain: boolean,
-  pregnancyTest: boolean,
-  KOH: boolean,
-  SKINSmear: boolean,
-  protein: boolean,
-  WBC: boolean,
-  DiffCount: boolean,
-  stoolExam: boolean,
-  HIV: boolean,
-  xRay: boolean,
-  ultraSound: boolean,
+  wbc: string,
+  Hgn: string,
+  ESR: string,
+  BF: string,
+  bloodGroup_RHType: string,
+  bloodMorphology: string,
+  neutrophil: string,
+  eosinophil: string,
+  lymphocyte: string,
+  monocyte: string,
+  Basophil: string,
+  FBS_RBS: string,
+  sgot: string,
+  sgpt: string,
+  totalProtien: string,
+  albumin: string,
+  glucose: string,
+  ketone: string,
+  blood: string,
+  leukocyte: string,
+  bilirubin: string,
+  urobilin: string,
+  PH: string,
+  microscopic: string,
+  widal: string,
+  weilFelix: string,
+  VDHL_EPR: string,
+  Rf: string,
+  HBsAg: string,
+  Aso: string,
+  PICT: string,
+  HCV: string,
+  wetMount: string,
+  gramStain: string,
+  AFBStain: string,
+  pregnancyTest: string,
+  KOH: string,
+  SKINSmear: string,
+  protein: string,
+  WBC: string,
+  DiffCount: string,
+  stoolExam: string,
+  HIV: string,
+  xRay: number,
+  ultraSound: number,
 
 }>, res: Response, next: NextFunction): Promise<void>{
     try{
@@ -238,7 +238,7 @@ public async updateLaboratoryOrder(req: Request<{
         ultraSound,
       } = req.params;
 
-      const order = this.labOrderServices.updateLabOrder(
+      const Result = this.labResultServices.updatelabResult(
         id,
         wbc,
         Hgn,
@@ -287,25 +287,25 @@ public async updateLaboratoryOrder(req: Request<{
         ultraSound,
       );
 
-      if (!order){
-        AppError.badRequest("No laboratory order with this id!")
+      if (!Result){
+        AppError.badRequest("No laboratory result with this id!")
       }
-      res.status(201).json("Laboratory order is updated successfully!")
+      res.status(201).json("Laboratory result is updated successfully!")
   }catch(err){
     next(err)
   }}
 
 
-  public async deleteaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
+  public async deleteaboratoryResult(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
       const {id} = req.params;
 
-      const order = this.labOrderServices.deleteLabOrder(id);
+      const Result = this.labResultServices.deletelabResult(id);
 
-      if (!order){
-        AppError.badRequest("No laboratory order with this id!")
+      if (!Result){
+        AppError.badRequest("No laboratory result with this id!")
       }
-      res.status(201).json("Laboratory order is deleted successfully")
+      res.status(201).json("Laboratory result is deleted successfully")
   }catch(err){
     next(err)
   }}

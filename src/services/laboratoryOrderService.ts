@@ -1,3 +1,4 @@
+import { LaboratoryOrderEntity } from "../core/entities/laboratoryOrder.entities";
 import { AppError } from "../core/errors/custom.errors";
 import { LaboratoryOrderModel } from "../models/laboratoryOrderModel";
 
@@ -19,7 +20,7 @@ export class LaboratoryOrderService {
     FBS_RBS: boolean,
     sgot: boolean,
     sgpt: boolean,
-    totalProtein: boolean,
+    totalProtien: boolean,
     albumin: boolean,
     glucose: boolean,
     ketone: boolean,
@@ -30,7 +31,7 @@ export class LaboratoryOrderService {
     PH: boolean,
     microscopic: boolean,
     widal: boolean,
-    WeilFelix: boolean,
+    weilFelix: boolean,
     VDHL_EPR: boolean,
     Rf: boolean,
     HBsAg: boolean,
@@ -49,8 +50,8 @@ export class LaboratoryOrderService {
     stoolExam: boolean,
     HIV: boolean,
     xRay: boolean,
-    ultrasound: boolean,
-   ): Promise<laboratoryOrderEntity> {
+    ultraSound: boolean,
+   ): Promise<LaboratoryOrderEntity> {
    const labOrder = await LaboratoryOrderModel.create({
     visitId,
     wbc,
@@ -67,7 +68,7 @@ export class LaboratoryOrderService {
     FBS_RBS,
     sgot,
     sgpt,
-    totalProtein,
+    totalProtien,
     albumin,
     glucose,
     ketone,
@@ -78,7 +79,7 @@ export class LaboratoryOrderService {
     PH,
     microscopic,
     widal,
-    WeilFelix,
+    weilFelix,
     VDHL_EPR,
     Rf,
     HBsAg,
@@ -97,13 +98,14 @@ export class LaboratoryOrderService {
     stoolExam,
     HIV,
     xRay,
-    ultrasound
+    ultraSound
   });
 
-  return labOrder 
+  return LaboratoryOrderEntity.fromDatabase(labOrder); 
 }
 
   public async updateLabOrder(
+    id: number, 
     wbc: boolean,
     Hgn: boolean,
     ESR: boolean,
@@ -118,7 +120,7 @@ export class LaboratoryOrderService {
     FBS_RBS: boolean,
     sgot: boolean,
     sgpt: boolean,
-    totalProtein: boolean,
+    totalProtien: boolean,
     albumin: boolean,
     glucose: boolean,
     ketone: boolean,
@@ -129,7 +131,7 @@ export class LaboratoryOrderService {
     PH: boolean,
     microscopic: boolean,
     widal: boolean,
-    WeilFelix: boolean,
+    weilFelix: boolean,
     VDHL_EPR: boolean,
     Rf: boolean,
     HBsAg: boolean,
@@ -148,8 +150,8 @@ export class LaboratoryOrderService {
     stoolExam: boolean,
     HIV: boolean,
     xRay: boolean,
-    ultrasound: boolean,
-  ):Promise<laboratoryOrderEntity>{
+    ultraSound: boolean,
+  ):Promise<LaboratoryOrderEntity>{
       const labOrder = await LaboratoryOrderModel.findOne(
         {
           where:{id},
@@ -168,7 +170,7 @@ export class LaboratoryOrderService {
         "FBS_RBS",
         "sgot",
         "sgpt",
-        "totalProtein",
+        "totalProtien",
         "albumin",
         "glucose",
         "ketone",
@@ -179,7 +181,7 @@ export class LaboratoryOrderService {
         "PH",
         "microscopic",
         "widal",
-        "WeilFelix",
+        "weilFelix",
         "VDHL_EPR",
         "Rf",
         "HBsAg",
@@ -198,7 +200,7 @@ export class LaboratoryOrderService {
         "stoolExam",
         "HIV",
         "xRay",
-        "ultrasound"
+        "ultraSound"
       ]
       },
       );
@@ -220,7 +222,7 @@ export class LaboratoryOrderService {
         labOrder.FBS_RBS = FBS_RBS || labOrder.FBS_RBS
         labOrder.sgot = sgot || labOrder.sgot
         labOrder.sgpt = sgpt || labOrder.sgpt
-        labOrder.totalProtein = totalProtein || labOrder.totalProtein
+        labOrder.totalProtien = totalProtien || labOrder.totalProtien
         labOrder.albumin = albumin || labOrder.albumin
         labOrder.glucose = glucose || labOrder.glucose
         labOrder.ketone = ketone || labOrder.ketone
@@ -231,7 +233,7 @@ export class LaboratoryOrderService {
         labOrder.PH = PH || labOrder.PH
         labOrder.microscopic = microscopic || labOrder.microscopic
         labOrder.widal = widal || labOrder.widal
-        labOrder.WeilFelix = WeilFelix || labOrder.WeilFelix
+        labOrder.weilFelix = weilFelix || labOrder.weilFelix
         labOrder.VDHL_EPR = VDHL_EPR || labOrder.VDHL_EPR
         labOrder.Rf = Rf || labOrder.Rf
         labOrder.HBsAg = HBsAg || labOrder.HBsAg
@@ -250,22 +252,22 @@ export class LaboratoryOrderService {
         labOrder.stoolExam = stoolExam || labOrder.stoolExam
         labOrder.HIV = HIV || labOrder.HIV
         labOrder.xRay = xRay || labOrder.xRay
-        labOrder.ultrasound = ultrasound || labOrder.ultrasound
+        labOrder.ultraSound = ultraSound || labOrder.ultraSound
       
       await labOrder.save();
 
-      return labOrder;
+      return LaboratoryOrderEntity.fromDatabase(labOrder);
     }  
 
-    public async getLabOrder(id: number): Promise<laboratoryOrderEntity>{
+    public async getLabOrder(id: number): Promise<LaboratoryOrderEntity>{
     
         const order = await LaboratoryOrderModel.findOne({
           where: {id}
         })
         if(!order){
-          throw AppError.notFound("No lab order with thid id")
+          throw AppError.notFound("No lab order with this id")
         }
-        return order
+        return LaboratoryOrderEntity.fromDatabase(order)
       }
 
     public async deleteLabOrder(id: number): Promise<boolean>{

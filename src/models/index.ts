@@ -11,7 +11,7 @@ import {ExaminationModel} from "./examinationModel";
 import {LaboratoryOrderModel} from "./laboratoryOrderModel";
 import {LaboratoryResultModel} from "./laboratoryResultModel";
 import {XrayModel} from "./xrayModel";
-import {UltrasoundModel} from "./ultrasoundModel";
+import { UltraSoundModel } from "./ultraSoundModel";
 
 export class DB {
     static _instance: DB;
@@ -29,7 +29,7 @@ export class DB {
         this.db.laboratoryOrder = LaboratoryOrderModel;
         this.db.laboratoryResult = LaboratoryResultModel;
         this.db.xray = XrayModel;
-        this.db.ultrasound = UltrasoundModel;
+        this.db.ultraSound = UltraSoundModel;
 
         // relation between institutions and patients
         InstitutionModel.hasMany(PatientModel, {
@@ -87,17 +87,17 @@ export class DB {
             foreignKey: 'laboratoryOrderId' // corrected foreign key name
         });
 
-        // relation between ultrasound and laboratory order
-        LaboratoryOrderModel.hasMany(UltrasoundModel, {
-            foreignKey: 'ultrasoundModelId' // corrected foreign key name
+        // relation between ultraSound and laboratory order
+        LaboratoryOrderModel.hasMany(UltraSoundModel, {
+            foreignKey: 'UltraSoundModelId' // corrected foreign key name
         });
-        UltrasoundModel.belongsTo(LaboratoryOrderModel);
+        UltraSoundModel.belongsTo(LaboratoryOrderModel);
 
-        // relation between ultrasound and laboratory result
-        LaboratoryResultModel.hasMany(UltrasoundModel, {
-            foreignKey: 'ultrasoundModelId' // corrected foreign key name
+        // relation between ultraSound and laboratory result
+        LaboratoryResultModel.hasMany(UltraSoundModel, {
+            foreignKey: 'UltraSoundModelId' // corrected foreign key name
         });
-        UltrasoundModel.belongsTo(LaboratoryResultModel);
+        UltraSoundModel.belongsTo(LaboratoryResultModel);
 
         // relation beetween patient and examination
         // PatientModel.hasMany(ExaminationModel, {

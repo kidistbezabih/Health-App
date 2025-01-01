@@ -2,13 +2,15 @@ import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface LaboratoryResultModelRow {
+  id?: number;
+  visitId?: number;
   wbc?: string;
   Hgn?: string;
   ESR?: string;
   BF?: string;
   bloodGroup_RHType?: string;
   bloodMorphology?: string;
-  neutorophil?: string;
+  neutrophil?: string;
   eosinophil?: string;
   lymphocyte?: string;
   monocyte?: string;
@@ -22,12 +24,12 @@ export interface LaboratoryResultModelRow {
   ketone?: string;
   blood?: string;
   leukocyte?: string;
-  bilurubin?: string;
+  bilirubin?: string;
   urobilin?: string;
   PH?: string;
   microscopic?: string;
   widal?: string;
-  wielFelix?: string;
+  weilFelix?: string;
   VDHL_EPR?: string;
   Rf?: string;
   HBsAg?: string;
@@ -35,8 +37,8 @@ export interface LaboratoryResultModelRow {
   PICT?: string;
   HCV?: string;
   wetMount?: string;
-  gramStaint?: string;
-  AFBStaint?: string;
+  gramStain?: string;
+  AFBStain?: string;
   pregnancyTest?: string;
   KOH?: string;
   SKINSmear?: string;
@@ -52,13 +54,15 @@ export interface LaboratoryResultModelRow {
 }
 
 export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
+  declare id: number;
+  declare visitId: ForeignKey<number>;
   declare wbc: CreationOptional<string>;
   declare Hgn: CreationOptional<string>;
   declare ESR: CreationOptional<string>;
   declare BF: CreationOptional<string>;
   declare bloodGroup_RHType: CreationOptional<string>;
   declare bloodMorphology: CreationOptional<string>;
-  declare neutorophil: CreationOptional<string>;
+  declare neutrophil: CreationOptional<string>;
   declare eosinophil: CreationOptional<string>;
   declare lymphocyte: CreationOptional<string>;
   declare monocyte: CreationOptional<string>;
@@ -72,12 +76,12 @@ export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
   declare ketone: CreationOptional<string>;
   declare blood: CreationOptional<string>;
   declare leukocyte: CreationOptional<string>;
-  declare bilurubin: CreationOptional<string>;
+  declare bilirubin: CreationOptional<string>;
   declare urobilin: CreationOptional<string>;
   declare PH: CreationOptional<string>;
   declare microscopic: CreationOptional<string>;
   declare widal: CreationOptional<string>;
-  declare wielFelix: CreationOptional<string>;
+  declare weilFelix: CreationOptional<string>;
   declare VDHL_EPR: CreationOptional<string>;
   declare Rf: CreationOptional<string>;
   declare HBsAg: CreationOptional<string>;
@@ -85,8 +89,8 @@ export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
   declare PICT: CreationOptional<string>;
   declare HCV: CreationOptional<string>;
   declare wetMount: CreationOptional<string>;
-  declare gramStaint: CreationOptional<string>;
-  declare AFBStaint: CreationOptional<string>;
+  declare gramStain: CreationOptional<string>;
+  declare AFBStain: CreationOptional<string>;
   declare pregnancyTest: CreationOptional<string>;
   declare KOH: CreationOptional<string>;
   declare SKINSmear: CreationOptional<string>;
@@ -102,6 +106,14 @@ export class LaboratoryResultModel extends Model<LaboratoryResultModelRow> {
 }
 
 LaboratoryResultModel.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  visitId: {
+    type: DataTypes.INTEGER
+  },
   wbc: {
     type: DataTypes.STRING,
   },
@@ -120,7 +132,7 @@ LaboratoryResultModel.init({
   bloodMorphology: {
     type: DataTypes.STRING,
   },
-  neutorophil: {
+  neutrophil: {
     type: DataTypes.STRING,
   },
   eosinophil: {
@@ -162,7 +174,7 @@ LaboratoryResultModel.init({
   leukocyte: {
     type: DataTypes.STRING,
   },
-  bilurubin: {
+  bilirubin: {
     type: DataTypes.STRING,
   },
   urobilin: {
@@ -177,7 +189,7 @@ LaboratoryResultModel.init({
   widal: {
     type: DataTypes.STRING,
   },
-  wielFelix: {
+  weilFelix: {
     type: DataTypes.STRING,
   },
   VDHL_EPR: {
@@ -201,10 +213,10 @@ LaboratoryResultModel.init({
   wetMount: {
     type: DataTypes.STRING,
   },
-  gramStaint: {
+  gramStain: {
     type: DataTypes.STRING,
   },
-  AFBStaint: {
+  AFBStain: {
     type: DataTypes.STRING,
   },
   pregnancyTest: {

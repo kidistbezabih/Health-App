@@ -15,4 +15,3 @@ export class LaboratoryOrderRoute {
     return router;
   }
 }
-  
