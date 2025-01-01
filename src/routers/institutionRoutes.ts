@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { InstutitionController } from "../controllers/institutionControllers";
 
-export class VisitRoute {
+export class InstitutionRoute {
   static get routes(): Router {
     const router = Router();
     const institutionController = new InstutitionController;

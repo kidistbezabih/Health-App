@@ -49,7 +49,7 @@ export class PrescriptionService {
       prescription.prescribersName = prescribersName || prescription.prescribersName
       await prescription.save()
     }
-    }
+  }
 
   public async deletePrescription(id: number):Promise<Boolean>{
       const deleteCount = await PrescriptionModel.destroy({where: {id}})
