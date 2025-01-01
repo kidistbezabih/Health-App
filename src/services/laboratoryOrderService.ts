@@ -104,7 +104,6 @@ export class LaboratoryOrderService {
 }
 
   public async updateLabOrder(
-    id: number, 
     wbc: boolean,
     Hgn: boolean,
     ESR: boolean,

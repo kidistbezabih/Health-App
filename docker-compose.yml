@@ -28,35 +28,37 @@ services:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
-
-  app:
-    build: .
-    ports:
-      - "${APP_PORT:-4000}:4000"
-    env_file:
-      - .env
-    volumes:
-      - .:/app 
-    # environment:
-    #   - NODE_ENV=production 
-    depends_on:
-      - redis
-      - postgres
     networks:
       - my_network
 
-  redisinsight:
-    image: redislabs/redisinsight:latest
-    container_name: redisinsight_container
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "${REDISINSIGHT_PORT:-8001}:8001"
-    depends_on:
-      - redis
-    volumes:
-      - redisinsight_data:/db
+  # app:
+  #   build: .
+  #   ports:
+  #     - "${APP_PORT:-4000}:4000"
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/app 
+  #   # environment:
+  #   #   - NODE_ENV=production 
+  #   depends_on:
+  #     - redis
+  #     - postgres
+  #   networks:
+  #     - my_network
+
+  # redisinsight:
+  #   image: redislabs/redisinsight:latest
+  #   container_name: redisinsight_container
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "${REDISINSIGHT_PORT:-8001}:8001"
+  #   depends_on:
+  #     - redis
+  #   volumes:
+  #     - redisinsight_data:/db
 
   pgadmin:
     image: dpage/pgadmin4:latest

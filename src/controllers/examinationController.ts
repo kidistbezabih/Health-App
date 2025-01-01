@@ -1,11 +1,9 @@
-
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { ExaminationModel } from "../models/examinationModel";
 import { PreExaminationService } from "../services/preExaminationServices";
 import { VisitService } from "../services/visitServices";
 import { ExaminationService } from "../services/examinationServices";
-
 
 interface examinationRecord{
   visitId: number
