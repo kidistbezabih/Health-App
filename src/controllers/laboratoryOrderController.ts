@@ -1,14 +1,14 @@
 
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
-import { LaboratoryOrderService } from "../services/laboratoryOrderService";
+import { LaboratoryOrderService } from "../services/laboratoryOrderServices";
 import { LaboratoryOrderEntity } from "../core/entities/laboratoryOrder.entities";
 
 export class LaboratoryOrderController{
-  private labOrderServices : LaboratoryOrderService;
+  private labOrderService : LaboratoryOrderService;
 
   constructor(){
-    this.labOrderServices = new LaboratoryOrderService();
+    this.labOrderService = new LaboratoryOrderService();
   }
 
   //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
@@ -64,7 +64,7 @@ export class LaboratoryOrderController{
         
       } = req.body;
 
-      const order = this.labOrderServices.createLaboratoryOrder(
+      const order = this.labOrderService.createLaboratoryOrder(
         visitId,
         wbc,
         Hgn,
@@ -128,7 +128,7 @@ export class LaboratoryOrderController{
     try{
       const {id} = req.params;
 
-      const order = this.labOrderServices.getLabOrder(id);
+      const order = this.labOrderService.getLabOrder(id);
 
       if (!order){
         AppError.badRequest("No laboratory order with this id!")
@@ -238,7 +238,7 @@ public async updateLaboratoryOrder(req: Request<{
         ultraSound,
       } = req.params;
 
-      const order = this.labOrderServices.updateLabOrder(
+      const order = this.labOrderService.updateLabOrder(
         id,
         wbc,
         Hgn,
@@ -300,7 +300,7 @@ public async updateLaboratoryOrder(req: Request<{
     try{
       const {id} = req.params;
 
-      const order = this.labOrderServices.deleteLabOrder(id);
+      const order = this.labOrderService.deleteLabOrder(id);
 
       if (!order){
         AppError.badRequest("No laboratory order with this id!")

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { ExaminationController } from "../controllers/examinationController";
 import { LaboratoryOrderController } from "../controllers/laboratoryOrderController";
 
 export class LaboratoryOrderRoute {
