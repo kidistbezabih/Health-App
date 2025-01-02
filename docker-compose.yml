@@ -31,21 +31,21 @@ services:
     networks:
       - my_network
 
-  # app:
-  #   build: .
-  #   ports:
-  #     - "${APP_PORT:-4000}:4000"
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - .:/app 
-  #   # environment:
-  #   #   - NODE_ENV=production 
-  #   depends_on:
-  #     - redis
-  #     - postgres
-  #   networks:
-  #     - my_network
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-4000}:4000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app 
+    # environment:
+    #   - NODE_ENV=production 
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - my_network
 
   # redisinsight:
   #   image: redislabs/redisinsight:latest

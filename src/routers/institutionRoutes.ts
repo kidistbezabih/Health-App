@@ -7,9 +7,10 @@ export class InstitutionRoute {
     const institutionController = new InstutitionController;
 
     router.post('/register-institution', institutionController.registerInstitution);
-    router.get('/get-institution-by-id', institutionController.getInstitutionById);
-    router.get('/update-institution', institutionController.updateInstitutionById);
-    router.get('/delete-institution', institutionController.deleteInstitution);
+    router.get('/get-institutions', institutionController.getInstitutions);
+    router.get('/get-institution-by-id/:id', institutionController.getInstitutionById);
+    router.put('/update-institution/:id', institutionController.updateInstitutionById);
+    router.delete('/delete-institution/:id', institutionController.deleteInstitution);
     return router;
   }
 }

@@ -11,6 +11,12 @@ export class DevRoutes {
             res.json({message: message});
         });
 
+        router.get('/force-migrate', async (req: Request, res: Response, next: NextFunction) => {
+            const message = await DB.instance.migrateForce();
+            console.log(message);
+            res.json({message: message});
+        });
+
         return router;
     }
 }

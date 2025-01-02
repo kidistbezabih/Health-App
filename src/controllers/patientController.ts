@@ -1,7 +1,6 @@
-import Redis from 'ioredis';
+const Redis = require('ioredis')
 import { NextFunction, type Request, type Response } from 'express';
 import { PatientModel } from '../models/patientModel'; 
-import { error } from 'console';
 import { AppError } from '../core/errors/custom.errors';
 import { PatientEntity } from '../core/entities/patient.entities';
 import { PATIENT_QUEUE } from '../core/redis';
@@ -37,8 +36,9 @@ interface UpdatePatientRequestBody{
 
 const redis = new Redis({
   host:process.env.REDIS_HOST,
-  port:parseInt(process.env.REDIS_PORT || '6379') 
-
+  port:parseInt(process.env.REDIS_PORT || '6379') ,
+  showFriendlyErrorStack: true,
+  maxRetriesPerRequest: 50, // Increase the retry limit
 }
 );
 const REDIS_KEY = "patient_registration";
@@ -51,7 +51,7 @@ export class PatientController {
   }
 
   // To register patient
-  public async registePatient(req: Request<CreatePatientRequestBody>, res: Response, next: NextFunction): Promise<void>{
+  public async registePatient(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
       const { institutionId,name, age, sex, address, zone, kebele, phoneNumber } = req.body;
       const today = new Date().toISOString().split("T")[0];

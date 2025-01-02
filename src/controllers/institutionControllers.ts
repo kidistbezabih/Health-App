@@ -2,26 +2,39 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { InstitutionModel } from "../models/institutionModel";
+import { InstitutionService } from "../services/institutionServices";
 
 
 interface institutionEntity{
   name: string;
   adress: string;
+  phone: string;
+  email: string;
+  googleMapsLocation: string;
 }
 
 export class InstutitionController{
+  private institutionService: InstitutionService; 
+
+  
 
   constructor(){
+    this.institutionService = new InstitutionService();
+    this.getInstitutions = this.getInstitutions.bind(this);
+
   }
 
-  public async registerInstitution(req: Request<institutionEntity>, res: Response, next: NextFunction):Promise<void>{
+  public async registerInstitution(req: Request, res: Response, next: NextFunction):Promise<void>{
     try{
-      const {name, adress} = req.body;
+      const {name, address, phone, email, googleMapsLocation}  = req.body;
 
-      const institution = InstitutionModel.create(
+      const institution = InstitutionModel.create({
         name,
-        adress
-      );
+        address,
+        phone,
+        email,
+        googleMapsLocation
+      });
 
       if (!institution){
         AppError.badRequest("Fail to register an institution!");
@@ -32,10 +45,27 @@ export class InstutitionController{
     }
   }
 
-  public async getInstitutionById(req: Request<{id: number}>, res: Response, next: NextFunction):Promise<void>{
+  public async getInstitutions(req: Request, res: Response, next: NextFunction):Promise<void>{
+    try{
+      const institutions = await this.institutionService.getInstitutions();
+      console.log("here is the list of institutions registered!")
+      console.log(institutions)
+
+      if (institutions.length === 0){
+        res.status(400).json({message: "No institution found!"})
+        return;
+      }
+      res.json(institutions);
+    }catch(err){
+      next(err);
+    }
+  }
+
+  public async getInstitutionById(req: Request, res: Response, next: NextFunction):Promise<void>{
     try{
       const {id} = req.params;
-      const institution = await InstitutionModel.findOne({where: {id}});
+      const institution = await InstitutionModel.findOne({ where: { id: parseInt(id, 10)} });
+      console.log(institution)
 
       if (!institution){
         AppError.badRequest("No institution with this id!");
