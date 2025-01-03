@@ -1,5 +1,5 @@
 import { PatientModel } from "../models/patientModel"; 
-import { PatientEntity } from "../core/entities/patient.entities";
+import { PatientEntity } from "../models/entities/patient.entities";
 import { AppError } from "../core/errors/custom.errors";
 import { Op } from "sequelize";
 

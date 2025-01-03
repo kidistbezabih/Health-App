@@ -1,4 +1,4 @@
-import { LaboratoryOrderModel } from "../../models/laboratoryOrderModel"
+import { LaboratoryOrderModel } from "../laboratoryOrderModel"
 
 export class LaboratoryOrderEntity {
 	constructor(

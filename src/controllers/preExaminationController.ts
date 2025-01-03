@@ -2,7 +2,7 @@ import Redis from "ioredis"
 import { PATIENT_QUEUE } from "../core/redis";
 import { PatientService } from "../services/patientServices";
 import { AppError } from "../core/errors/custom.errors";
-import { PatientEntity } from "../core/entities/patient.entities";
+import { PatientEntity } from "../models/entities/patient.entities";
 import { PreExaminationModel } from "../models/preExaminationModel";
 import { Request, Response, NextFunction } from "express";
 require('dotenv').config();
@@ -113,9 +113,137 @@ export class PreExaminationController{
 }
 
   // 
-  public async getPreExaminationRecord(req: Request, res: Response, next: NextFunction){
-    
+  public async getPreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const visitId = Number(req.params.visitId);
+        
+        if (!visitId) {
+            throw AppError.notFound("Visit ID is required");
+        }
+
+        const patientRecord = await PreExaminationModel.findOne({
+            where: { visitId }
+        });
+
+        if (!patientRecord) {
+            throw AppError.notFound("No pre-examination record found for this visit ID");
+        }
+        res.status(200).json({
+            data: patientRecord
+        });
+    } catch (err) {
+        console.error(err); // Optional: log the error for debugging
+        next(err); // Pass error to the error-handling middleware
+    }
+}
+
+public async updatePreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+      const visitId = Number(req.params.visitId);
+      if (!visitId) {
+          throw AppError.notFound("Visit ID is required");
+      }
+
+      const {
+          chiefComplaint,
+          hpi,
+          pastHx,
+          currentHealthStatus,
+          familyHx,
+          psychologicalAndPersonalHx,
+          general,
+          skin,
+          head,
+          eyes,
+          ear,
+          mouth,
+          breast,
+          respiratory,
+          gastro,
+          guneto,
+          meskal,
+          nervous,
+          examinedBy
+      } = req.body;
+
+      const patientRecord = await PreExaminationModel.findOne({
+          where: { visitId }
+      });
+
+      if (!patientRecord) {
+          throw AppError.notFound("No pre-examination record found for this visit ID");
+      }
+
+      const updatedRecord = await patientRecord.update({
+          chiefComplaint,
+          hpi,
+          pastHx,
+          currentHealthStatus,
+          familyHx,
+          psychologicalAndPersonalHx,
+          general,
+          skin,
+          head,
+          eyes,
+          ear,
+          mouth,
+          breast,
+          respiratory,
+          gastro,
+          guneto,
+          meskal,
+          nervous,
+          examinedBy
+      });
+
+      res.status(200).json({
+          data: updatedRecord
+      });
+  } catch (err) {
+      next(err); 
   }
+}
+
+public async deleteRecord(req: Request<{ visitId: number }>, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { visitId } = req.params; 
+
+    if (!visitId) {
+      throw AppError.notFound("No pre-examination record found for the provided visit ID");
+    }
+
+    const deletedRecord = await PreExaminationModel.destroy({
+      where: { visitId },
+    });
+
+    if (!deletedRecord) {
+      throw AppError.badRequest("Failed to delete pre-examination record. Record not found.");
+    }
+    res.status(200).json({ message: "Pre-examination record deleted successfully" });
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+public async getAllPreExaminationRecords(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const preExaminationRecords = await PreExaminationModel.findAll();
+
+    if (preExaminationRecords.length === 0) {
+      res.status(404).json({ message: "No pre-examination records found" });
+    }
+
+    res.status(200).json(preExaminationRecords);
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+
+
+
 
 }
   

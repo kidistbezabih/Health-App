@@ -1,4 +1,4 @@
-import { InstitutionModel } from "../../models/institutionModel";
+import { InstitutionModel } from "../institutionModel";
 
 
 export class InstitutionEntity {

@@ -8,7 +8,11 @@ export class PreExaminationRoute {
     const preExaminationController = new PreExaminationController();
 
     router.post('/record-patient-symptomes/:visitId', PreExaminationValidator.onCreate(), preExaminationController.recordPatientSymptoms);
-    router.get('/next-patient' ,preExaminationController.ProceedToNextPateient);
+    router.get('/get-patient-record/:visitId', preExaminationController.getPreExaminationRecord);
+    router.get('/get-all-patient-record', preExaminationController.getAllPreExaminationRecords);
+    router.put('/update-patient-record/:visitId', preExaminationController.updatePreExaminationRecord);
+    router.delete('/delete-patient-record/:visitId', preExaminationController.deleteRecord);
+    router.get('/next-patient', preExaminationController.ProceedToNextPateient);
     return router;
   }
 }

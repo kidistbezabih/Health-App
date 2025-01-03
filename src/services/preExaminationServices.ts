@@ -1,6 +1,6 @@
 import { AppError } from "../core/errors/custom.errors";
 import { PreExaminationModel } from "../models/preExaminationModel";
-import { PreExaminationEntity } from "../core/entities/preExamination.entities";
+import { PreExaminationEntity } from "../models/entities/preExamination.entities";
 
 
 export class PreExaminationService {

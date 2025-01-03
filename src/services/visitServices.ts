@@ -1,6 +1,6 @@
 import { AppError } from "../core/errors/custom.errors";
 import { VisitModel } from "../models/visitModel";
-import { VisitEntity } from "../core/entities/visit.entities";
+import { VisitEntity } from "../models/entities/visit.entities";
 
 
 interface visit{

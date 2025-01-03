@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { PrescriptionService } from "../services/prescriptionServices";
-import { PrescriptionEntity } from "../core/entities/prescriptioin.entities";
+import { PrescriptionEntity } from "../models/entities/prescriptioin.entities";
 
 export class PrescriptionController{
   private prescriptionService : PrescriptionService;

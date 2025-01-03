@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { LaboratoryResultService } from "../services/laboratoryResultServices";
-import { LaboratoryResultEntity } from "../core/entities/laboratoryResult.entities";
+import { LaboratoryResultEntity } from "../models/entities/laboratoryResult.entities";
 
 export class LaboratoryResultController{
   private labResultServices : LaboratoryResultService;

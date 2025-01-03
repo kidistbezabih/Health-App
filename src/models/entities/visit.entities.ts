@@ -1,4 +1,4 @@
-import { VisitModel } from "../../models/visitModel";
+import { VisitModel } from "../visitModel";
 
 export class VisitEntity{
  constructor( 
