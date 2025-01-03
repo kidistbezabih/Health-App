@@ -7,7 +7,7 @@ import { InstitutionService } from "../services/institutionServices";
 
 interface institutionEntity{
   name: string;
-  adress: string;
+  address: string;
   phone: string;
   email: string;
   googleMapsLocation: string;
@@ -80,12 +80,12 @@ export class InstutitionController{
     try{
       const {id} = req.params;
 
-      const {name, adress} = req.body;
+      const {name, address} = req.body;
       const institution = await InstitutionModel.findOne({where: {id}});
 
       if (institution){
         institution.name = name||institution.name
-        institution.address = adress || institution.address
+        institution.address = address || institution.address
         await institution.save()
       }else{
         AppError.badRequest("No institution with this id!");

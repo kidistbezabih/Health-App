@@ -40,70 +40,77 @@ export class PreExaminationController{
   }
   };
 
-
   // Recording symtomes
-  public async recordPatientSymptoms(req: Request<{patientId: number }, PreExaminationModel>,  res: Response, next: NextFunction):Promise<void>{
-    // get all patient information and then send to the database
-    try{
-      const {
-      chiefComplaint,
-      hpi,
-      pastHx,
-      currentHealthStatus,
-      familyHx,
-      psychologicalAndPersonalHx,
-      general,
-      skin,
-      head,
-      eyes,
-      ear,
-      mouth,
-      breast,
-      respiratory,
-      gastro,
-      guneto,
-      meskal,
-      nervous,
-      examinedBy
-    } = req.body;
-    const {patientId} = req.params;
+  public async recordPatientSymptoms(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        // Destructure patient symptom data from the request body
+        const {
+            chiefComplaint,
+            hpi,
+            pastHx,
+            currentHealthStatus,
+            familyHx,
+            psychologicalAndPersonalHx,
+            general,
+            skin,
+            head,
+            eyes,
+            ear,
+            mouth,
+            breast,
+            respiratory,
+            gastro,
+            guneto,
+            meskal,
+            nervous,
+            examinedBy
+        } = req.body;
 
-    if (!patientId){
-      throw AppError.notFound("No patient with this id");
-    }
+        // Parse visitId from request params
+        const visitId = Number(req.params.visitId);
+        
+        // Validate visitId
+        if (!visitId) {
+            throw AppError.notFound("No patient with this visit id");
+        }
 
-    const patientSymptome = await PreExaminationModel.create({
-      patientId,
-      chiefComplaint,
-      hpi,
-      pastHx,
-      currentHealthStatus,
-      familyHx,
-      psychologicalAndPersonalHx,
-      general,
-      skin,
-      head,
-      eyes,
-      ear,
-      mouth,
-      breast,
-      respiratory,
-      gastro,
-      guneto,
-      meskal,
-      nervous,
-      examinedBy
-    });
+        // Create a new patient symptom record in the database
+        const patientSymptom = await PreExaminationModel.create({
+            visitId,
+            chiefComplaint,
+            hpi,
+            pastHx,
+            currentHealthStatus,
+            familyHx,
+            psychologicalAndPersonalHx,
+            general,
+            skin,
+            head,
+            eyes,
+            ear,
+            mouth,
+            breast,
+            respiratory,
+            gastro,
+            guneto,
+            meskal,
+            nervous,
+            examinedBy
+        });
 
-    if (patientSymptome){
-      res.status(201).json({message: "Patient symptome successfully added"})
-    }else{
-      throw AppError.badRequest("Fail to create patient symptome");
+        // Respond with success or failure message
+        if (patientSymptom) {
+            res.status(201).json({ message: "Patient symptoms successfully recorded" });
+        } else {
+            throw AppError.badRequest("Failed to create patient symptoms");
+        }
+
+    } catch (err) {
+        // Log the error and send an internal server error response
+        console.error(err); // Optional: for better error visibility during debugging
+        res.status(500).json({ message: 'Internal server error', error: err });
     }
-    }catch(err){
-      res.status(500).json({message: 'internal erver error', error: err})
-    }
-  }
+}
 
   // 
   public async getPreExaminationRecord(req: Request, res: Response, next: NextFunction){

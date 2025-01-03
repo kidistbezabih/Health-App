@@ -18,11 +18,7 @@ export class VisitService {
   public async getPatientVistsById(patientId: number): Promise<VisitEntity[]> {
 
     const patientVisits = await VisitModel.findAll({
-      where: { patientId },
-      attributes: [
-        'visitId'
-      ],
-    });
+      where: { patientId }});
 
     if (patientVisits.length == 0) {
       throw AppError.notFound("Patient has no visit history");

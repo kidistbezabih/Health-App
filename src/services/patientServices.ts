@@ -4,34 +4,49 @@ import { AppError } from "../core/errors/custom.errors";
 import { Op } from "sequelize";
 
 export class PatientService {
-  public async getPatient(searchKey: string): Promise<PatientEntity> {
-    if (!searchKey) {
-      throw AppError.notFound("Card number is required");
-    }
+  public async getPatient(searchkey: string): Promise<PatientEntity[]> {
+    console.log("Search Key:", searchkey);
 
-    const patient = await PatientModel.findOne({
-      where: { 
-        [Op.and]: {
-          name: {
-              [Op.iLike]: `%${searchKey}%`
-          },
-          phoneNumber: {
-              [Op.iLike]: `%${searchKey}%`
-          },
-          cardNumber: {
-              [Op.iLike]: `%${searchKey}%`
-          }
-        }
-       },
-      attributes: ["cardNumber", "name", "age", "sex", "address", "zone", "kebele", "phoneNumber"],
-    });
+  const patients = await PatientModel.findAll({
+    where: {
+      [Op.or]: [
+        { name: { [Op.iLike]: `%${searchkey}%` } },
+        { phoneNumber: { [Op.iLike]: `%${searchkey}%` } },
+        { cardNumber: { [Op.iLike]: `%${searchkey}%` } },
+      ],
+    },
+    attributes: [
+      "cardNumber",
+      "name",
+      "age",
+      "sex",
+      "address",
+      "zone",
+      "kebele",
+      "phoneNumber",
+    ],
+  });
 
-    if (!patient) {
-      throw AppError.notFound("Can't find any patient with this card number");
-    }
+  console.log("Patient Found:", patients);
 
-    return PatientEntity.fromDatabase(patient);
+
+  if (!patients || patients.length === 0) {
+    throw AppError.notFound("Can't find any patient with the provided search key");
   }
+
+  return patients.map(patient =>  PatientEntity.fromDatabase(patient));
+  }
+
+
+  public async getAllPatients(): Promise<PatientEntity[]> {
+    const patients = await PatientModel.findAll();
+
+    if (!patients || patients.length === 0) {
+      throw AppError.notFound("No patient registered yet");
+    }
+    console.log(patients)
+        return patients.map(patient => patient.get({ plain: true }));
+   }
 
   public async deletePatien(cardNumber: number):Promise<Boolean>{
       const deleteCount = await PatientModel.destroy({where: {cardNumber: cardNumber}})

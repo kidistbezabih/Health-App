@@ -1,10 +1,11 @@
-const Redis = require('ioredis')
+import {Redis} from 'ioredis'
 import { NextFunction, type Request, type Response } from 'express';
 import { PatientModel } from '../models/patientModel'; 
 import { AppError } from '../core/errors/custom.errors';
 import { PatientEntity } from '../core/entities/patient.entities';
 import { PATIENT_QUEUE } from '../core/redis';
 import { PatientService } from '../services/patientServices';
+require('dotenv').config();
 
 interface GetAllRequestQuery {
   page:string;
@@ -38,7 +39,6 @@ const redis = new Redis({
   host:process.env.REDIS_HOST,
   port:parseInt(process.env.REDIS_PORT || '6379') ,
   showFriendlyErrorStack: true,
-  maxRetriesPerRequest: 50, // Increase the retry limit
 }
 );
 const REDIS_KEY = "patient_registration";
@@ -48,6 +48,8 @@ export class PatientController {
 
   constructor() {
     this.patientService = new PatientService();
+    this.getPatient = this.getPatient.bind(this); 
+    this.getAllPatients = this.getAllPatients.bind(this); 
   }
 
   // To register patient
@@ -56,26 +58,24 @@ export class PatientController {
       const { institutionId,name, age, sex, address, zone, kebele, phoneNumber } = req.body;
       const today = new Date().toISOString().split("T")[0];
 
-        console.log("before fetching from redis")
         const latestEntry = await redis.lindex(REDIS_KEY, -1);
-        console.log("Data from Redis:", latestEntry);
 
         if (latestEntry) {
           try {
             const { date } = JSON.parse(latestEntry);
           } catch (parseError) {
-            console.error("Invalid Redis data:", latestEntry, parseError);
             throw AppError.internalServer("Invalid data in Redis");
           }
         }
      
-
       // append todays  entry to reddis array
       const newEntry = { instId: institutionId, date: today}
 
       // generate card number 
       const count = await redis.llen(REDIS_KEY);
-      const cardNumber = `${institutionId}/${today}/${count}`;
+      console.log("count", count)
+      const cardNumber = `${institutionId}-${today}-${count}`;
+      console.log("card Number", cardNumber )
       
       await redis.rpush(REDIS_KEY, JSON.stringify(newEntry));
       
@@ -101,28 +101,39 @@ export class PatientController {
   }
 
   // Find patient by their cardNumber
-  public async getPatient(req: Request<{searchKey: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
+  public async getPatient(req: Request<{searchkey: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
       try{
-        const { searchKey } = req.params; // Extract cardNumber from URL params
-  
-      if (!searchKey) {
-        throw AppError.notFound("can't find any patient by this card number")
+        const {searchkey} = req.params;
+        const patients = await this.patientService.getPatient(searchkey);
+
+      if (patients.length === 0) {
+        throw AppError.notFound("No patients found with the provided search key.");
       }
-  
-      // Find patient by card number
-      const patient = await this.patientService.getPatient(searchKey);
-      
-      res.json(patient);
+      res.status(201).json(patients)
     }catch(err){
       next(err);
       }
   }
+
+  public async getAllPatients(req: Request, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
+    try{
+      const patients = await this.patientService.getAllPatients();
+
+    if (!patients) {
+      throw AppError.notFound("No patient registered!");
+    }
+    res.status(200).json(patients);
+  }catch(err){
+    next(err);
+    }
+}
+
   
   public async updatePatientInfo(req: Request<{cardNumber: string}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
     const cardNumber = req.params;
     
     if (!cardNumber){
-      throw AppError.notFound("Please isert the card number!")
+      throw AppError.notFound("Please insert the card number!")
     };
 
     const {
@@ -141,13 +152,13 @@ export class PatientController {
       throw AppError.notFound("There is no patient with this card number");
     }
 
-    patient.name = name;
-    patient.age = age
-    patient.sex = sex
-    patient.address = address
-    patient.zone = zone
-    patient.kebele = kebele
-    patient.phoneNumber = phoneNumber
+    patient.name = name || patient.name;
+    patient.age = age || patient.age;
+    patient.sex = sex || patient.sex;
+    patient.address = address || patient.address;
+    patient.zone = zone || patient.zone;
+    patient.kebele = kebele || patient.kebele;
+    patient.phoneNumber = phoneNumber || patient.phoneNumber;
 
     await patient.save();
 

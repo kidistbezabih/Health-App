@@ -1,12 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import { VisitService } from "../services/visitServices";
 import { AppError } from "../core/errors/custom.errors";
+import { VisitModel } from "../models/visitModel";
 
 export class VisitController{
   private visitService: VisitService;
 
   constructor(){
     this.visitService = new VisitService();
+    this.createVisit = this.createVisit.bind(this); 
+    this.deleteVisit = this.deleteVisit.bind(this);
+    this.getPatientVisitHistory = this.getPatientVisitHistory.bind(this);
   }
 
   public async createVisit(req: Request<{patientId: number}>, res: Response, next: NextFunction):Promise<void>{
@@ -23,35 +27,54 @@ export class VisitController{
     }
   }
 
-    // public async getPatientVisitHistory(req: Request<{patientId: number}>, res: Response, next: NextFunction): Promise<void>{
-    // try{
+  public async getAllVisits(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const visits = await VisitModel.findAll(); // Replace with your ORM method (e.g., Sequelize, Mongoose, etc.)
 
-    //   const {patientId} = req.params;
+        if (visits && visits.length > 0) {
+            res.status(200).json({
+                message: 'Visits retrieved successfully',
+                data: visits,
+            });
+        } else {
+            res.status(404).json({
+                message: 'No visits found',
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: 'An error occurred while retrieving visits',
+        });
+    }
+}
 
-    //   const visits = await this.visitService.getPatientVistsById(patientId);
+    public async getPatientVisitHistory(req: Request<{patientId: number}>, res: Response, next: NextFunction): Promise<void>{
+    try{
 
-    //   if (!visits){
-    //     throw AppError.notFound("No history with this recorded")
-    //   }
-    //   res.json(visits)
-    // }catch(err){
-    //   next(err)
-    // }}
+      const {patientId} = req.params;
+
+      const visits = await this.visitService.getPatientVistsById(patientId);
+
+      if (!visits){
+        throw AppError.notFound("No patient visit history!")
+      }
+      res.json(visits)
+    }catch(err){
+      next(err)
+    }}
+
+
 
   public async deleteVisit(req: Request<{id: number}>, res: Response, next: NextFunction):Promise<void>{
     try
       {const {id} = req.params;
-
-      if (!id){
-        throw AppError.badRequest("Visit id is required!");
-      }
 
       const isDeleted = this.visitService.deleteVisitById(id);
       if(!isDeleted){
         throw AppError.badRequest("Fail to delete visit!")
       }
 
-      res.status(201).json({message: "Visit is creted successfully"})
+      res.status(201).json({message: "Visit is deleted successfully"})
     }catch(err){
       next(err);
     }

@@ -7,8 +7,8 @@ export class PreExaminationRoute {
     const router = Router();
     const preExaminationController = new PreExaminationController();
 
+    router.post('/record-patient-symptomes/:visitId', PreExaminationValidator.onCreate(), preExaminationController.recordPatientSymptoms);
     router.get('/next-patient' ,preExaminationController.ProceedToNextPateient);
-    router.post('/record-patient-symptomes', PreExaminationValidator.onCreate(), preExaminationController.recordPatientSymptoms);
     return router;
   }
 }

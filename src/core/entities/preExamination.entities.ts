@@ -28,7 +28,7 @@ export class PreExaminationEntity{
 
     public static fromDatabase(obj: PreExaminationModel) :PreExaminationEntity{
      const{
-      patientId,
+      visitId,
       chiefComplaint,
       hpi,
       pastHx,
@@ -51,7 +51,7 @@ export class PreExaminationEntity{
      } = obj
 
      return new PreExaminationEntity(
-      patientId as number,
+      visitId as number,
       chiefComplaint as string,
       hpi as string,
       pastHx as string,
