@@ -1,4 +1,4 @@
-import { LaboratoryResultEntity } from "../models/entities/laboratoryResult.entities";
+import { LaboratoryResultEntity } from "../core/entities/laboratoryResult.entities";
 import { AppError } from "../core/errors/custom.errors";
 import { LaboratoryResultModel } from "../models/laboratoryResultModel";
 

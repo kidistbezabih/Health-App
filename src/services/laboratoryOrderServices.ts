@@ -1,4 +1,4 @@
-import { LaboratoryOrderEntity } from "../models/entities/laboratoryOrder.entities";
+import { LaboratoryOrderEntity } from "../core/entities/laboratoryOrder.entities";
 import { AppError } from "../core/errors/custom.errors";
 import { LaboratoryOrderModel } from "../models/laboratoryOrderModel";
 

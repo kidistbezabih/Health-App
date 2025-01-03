@@ -8,6 +8,9 @@ import { InstitutionService } from "../services/institutionServices";
 interface institutionEntity{
   name: string;
   address: string;
+  region: string;
+  city: string;
+  subcity: string;
   phone: string;
   email: string;
   googleMapsLocation: string;
@@ -26,11 +29,14 @@ export class InstutitionController{
 
   public async registerInstitution(req: Request, res: Response, next: NextFunction):Promise<void>{
     try{
-      const {name, address, phone, email, googleMapsLocation}  = req.body;
+      const {name, address, region, city, subcity, phone, email, googleMapsLocation}  = req.body;
 
       const institution = InstitutionModel.create({
         name,
         address,
+        region,
+        city,
+        subcity,
         phone,
         email,
         googleMapsLocation
@@ -80,12 +86,17 @@ export class InstutitionController{
     try{
       const {id} = req.params;
 
-      const {name, address} = req.body;
+      const {name, address, city, subcity,region,email,googleMapsLocation} = req.body;
       const institution = await InstitutionModel.findOne({where: {id}});
 
       if (institution){
         institution.name = name||institution.name
         institution.address = address || institution.address
+        institution.city = city || institution.city
+        institution.region = region || institution.region
+        institution.subcity = subcity || institution.subcity
+        institution.email= email || institution.email
+        institution.googleMapsLocation = googleMapsLocation || institution.googleMapsLocation
         await institution.save()
       }else{
         AppError.badRequest("No institution with this id!");
@@ -95,7 +106,6 @@ export class InstutitionController{
       next(err);
     }
   }
-
 
   public async deleteInstitution(req: Request<{id: number}>, res: Response, next: NextFunction):Promise<void>{
     try{

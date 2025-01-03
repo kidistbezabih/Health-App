@@ -1,4 +1,4 @@
-import { PrescriptionModel } from "../prescriptionModel";
+import { PrescriptionModel } from "../../models/prescriptionModel";
 
 
 export class PrescriptionEntity {

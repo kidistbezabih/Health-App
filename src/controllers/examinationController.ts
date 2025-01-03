@@ -12,24 +12,25 @@ interface examinationRecord{
   bodyTemperature: string, 
   respirationRate: string, 
   oxygenSaturation: string, 
-  weight: string, 
-  height: string
+  weight: number, 
+  height: number
 }
 
 export class ExaminationController{
 
   private preExaminationService : PreExaminationService;
-  private visitService : VisitService
   private examinationService: ExaminationService
 
   constructor(){
-    this.preExaminationService = new PreExaminationService();
-    this.visitService = new VisitService();
     this.examinationService = new ExaminationService();
+    this.preExaminationService = new PreExaminationService();
+
+    this.getPatientPreExaminationRecord = this.getPatientPreExaminationRecord.bind(this);
+    this.deletePatientExamination = this.deletePatientExamination.bind(this)
   }
 
   //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
-  public async addExaminationRecord(req: Request<examinationRecord>, res: Response, next: NextFunction): Promise<void>{
+  public async addExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
       const {
         symptoms, 
@@ -41,11 +42,7 @@ export class ExaminationController{
         height
       } = req.body;
 
-      const {visitId} = req.params;
-
-      if (!visitId){
-        throw AppError.notFound("No patient with this id");
-      }
+      const visitId = Number(req.params.visitId);
 
       const patientInfo = await ExaminationModel.create({
         visitId,
@@ -58,22 +55,21 @@ export class ExaminationController{
         height
       });
 
-      if (patientInfo){
-        res.status(201).json({message: "Patient record successfully added"});
-      }else{
+      if (!patientInfo){
         throw AppError.badRequest("Fail to create patient record");
       }
+       res.status(201).json({message: "Patient record successfully added"});
     }catch(err){
     res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 
 
-  public async getPatientPreExaminationRecord(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
+  public async getPatientPreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {id} = req.params;
+      const visitId = Number(req.params.visitId);
 
-    const patientInfo = this.preExaminationService.getPreExaminationRecordById(id);
+    const patientInfo = this.preExaminationService.getPatientPreExaminationRecord(visitId);
 
     if (!patientInfo){
       res.status(200).json({message: "can't get patient pre examination info "})
@@ -82,6 +78,23 @@ export class ExaminationController{
   }catch(err){
     next(err)
   }}
+
+  public async getAllExaminations(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const examinations = await ExaminationModel.findAll(); // Adjust based on your ORM or query method
+
+      if (!examinations || examinations.length === 0) {
+        res.status(404).json({ message: "No examination records found." });
+        return;
+      }
+
+      res.status(200).json({
+        data: examinations,
+      });
+    } catch (error) {
+      res.status(500).json({message: "internal server error!"});
+    }
+  }
 
   public async deletePatientExamination(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{

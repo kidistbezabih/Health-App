@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {DevRoutes} from "./devRoutes";
 import PatientRoute from "./patientRoutes";
-import { ExaminationRoute } from "./exainationRoutes";
+import { ExaminationRoute } from "./examinationRoutes";
 import { InstitutionRoute } from "./institutionRoutes";
 import { LaboratoryOrderRoute } from "./laboratoryOrdeRoute";
 import { LaboratoryResultRoute } from "./laboratoryResultRoute";
@@ -17,13 +17,13 @@ export class AppRouter {
 
         router.use('/institution', InstitutionRoute.routes);
         router.use('/patient', PatientRoute.routes);
-        router.use('/examination', ExaminationRoute.routes);
+        router.use('/visit', VisitRoute.routes);
         router.use('/pre-examination', PreExaminationRoute.routes);
+        router.use('/examination', ExaminationRoute.routes);
         router.use('/laboratory-order', LaboratoryOrderRoute.routes);
         router.use('/laboratory-result', LaboratoryResultRoute.routes);
         router.use('/laboratory', LaboratoryOrderRoute.routes);
         router.use('/prescription', PrescriptioinRoute.routes);
-        router.use('/visit', VisitRoute.routes);
 
         return router;
     }

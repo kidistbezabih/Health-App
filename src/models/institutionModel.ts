@@ -5,15 +5,22 @@ export interface InstitutionModelRow {
   id?: number;
   name: string;
   address: string;
+  region: string;
+  city:string;
+  subcity: string;
   phone: string;
   email: string;
   googleMapsLocation: string;
+
 }
 
 export class InstitutionModel extends Model<InstitutionModelRow, Omit<InstitutionModelRow, 'id'>> {
   declare id: CreationOptional<number>; // Ensure 'id' is optional and auto-incremented
   declare name: string;
   declare address: string;
+  declare region: string;
+  declare city: string;
+  declare subcity: string;
   declare phone: string
   declare email: string
   declare googleMapsLocation: string
@@ -33,6 +40,15 @@ InstitutionModel.init({
   address: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  region: {type: DataTypes.STRING,
+    allowNull: false
+  },
+  city: {type: DataTypes.STRING,
+    allowNull: false
+  },
+  subcity: {type: DataTypes.STRING,
+    allowNull: false
   },
   phone:{type: DataTypes.STRING,  allowNull: false, },
   email:{type: DataTypes.STRING,  allowNull: false},

@@ -1,7 +1,7 @@
 import { PrescriptionModel } from "../models/prescriptionModel"; 
-import { PatientEntity } from "../models/entities/patient.entities";
+import { PatientEntity } from "../core/entities/patient.entities";
 import { AppError } from "../core/errors/custom.errors";
-import { PrescriptionEntity } from "../models/entities/prescriptioin.entities";
+import { PrescriptionEntity } from "../core/entities/prescriptioin.entities";
 
 
 interface PrescriptionUpdate {

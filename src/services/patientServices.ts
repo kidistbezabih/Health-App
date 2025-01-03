@@ -1,5 +1,5 @@
 import { PatientModel } from "../models/patientModel"; 
-import { PatientEntity } from "../models/entities/patient.entities";
+import { PatientEntity } from "../core/entities/patient.entities";
 import { AppError } from "../core/errors/custom.errors";
 import { Op } from "sequelize";
 
@@ -10,7 +10,8 @@ export class PatientService {
   const patients = await PatientModel.findAll({
     where: {
       [Op.or]: [
-        { name: { [Op.iLike]: `%${searchkey}%` } },
+        { firstName: { [Op.iLike]: `%${searchkey}%` } },
+        { lastName: { [Op.iLike]: `%${searchkey}%` } },
         { phoneNumber: { [Op.iLike]: `%${searchkey}%` } },
         { cardNumber: { [Op.iLike]: `%${searchkey}%` } },
       ],
@@ -18,7 +19,7 @@ export class PatientService {
     attributes: [
       "cardNumber",
       "name",
-      "age",
+      "birthDate",
       "sex",
       "address",
       "zone",

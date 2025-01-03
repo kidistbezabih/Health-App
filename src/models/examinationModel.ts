@@ -11,12 +11,12 @@ export interface ExaminationModelRow{
   bodyTemperature?: string;
   respirationRate?: string;
   oxygenSaturation?: string;
-  weight?: string;
-  height?: string;
+  weight?: number;
+  height?: number;
 }
 
 export class ExaminationModel extends Model<ExaminationModelRow>{
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare visitId: ForeignKey<number>;
   // declare patientId: ForeignKey<number>;
   declare symptoms: CreationOptional<string>;
@@ -35,7 +35,6 @@ ExaminationModel.init({
     primaryKey: true
   },
   visitId: {type: DataTypes.INTEGER},
-  // patientId: {type: DataTypes.INTEGER},
   symptoms: {type: DataTypes.STRING},
   bloodPressure: {type: DataTypes.STRING},
   bodyTemperature: {type: DataTypes.STRING},

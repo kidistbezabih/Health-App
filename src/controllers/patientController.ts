@@ -2,7 +2,7 @@ import {Redis} from 'ioredis'
 import { NextFunction, type Request, type Response } from 'express';
 import { PatientModel } from '../models/patientModel'; 
 import { AppError } from '../core/errors/custom.errors';
-import { PatientEntity } from '../models/entities/patient.entities';
+import { PatientEntity } from '../core/entities/patient.entities';
 import { PATIENT_QUEUE } from '../core/redis';
 import { PatientService } from '../services/patientServices';
 require('dotenv').config();
@@ -15,8 +15,9 @@ interface GetAllRequestQuery {
 interface CreatePatientRequestBody{
   institutionId: number;
   cardNumber: string;
-  name: string;
-  age: number;
+  firstName: string;
+  lastName: string;
+  birthDate: number;
   sex: string;
   address: string;
   zone: string;
@@ -25,8 +26,9 @@ interface CreatePatientRequestBody{
 }
 
 interface UpdatePatientRequestBody{
-  name: string;
-  age: number;
+  firstName: string;
+  lastName: string;
+  birthDate: number;
   sex: string;
   address: string;
   zone: string;
@@ -55,7 +57,7 @@ export class PatientController {
   // To register patient
   public async registePatient(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
-      const { institutionId,name, age, sex, address, zone, kebele, phoneNumber } = req.body;
+      const { institutionId,firstName, lastName, birthDate, sex, address, zone, kebele, phoneNumber } = req.body;
       const today = new Date().toISOString().split("T")[0];
 
         const latestEntry = await redis.lindex(REDIS_KEY, -1);
@@ -82,8 +84,9 @@ export class PatientController {
       const patient = await PatientModel.create({
         institutionId,
         cardNumber,
-        name,
-        age,
+        firstName,
+        lastName,
+        birthDate,
         sex,
         address,
         zone,
@@ -137,8 +140,9 @@ export class PatientController {
     };
 
     const {
-      name,
-      age,
+      firstName,
+      lastName,
+      birthDate,
       sex,
       address,
       zone,
@@ -152,8 +156,9 @@ export class PatientController {
       throw AppError.notFound("There is no patient with this card number");
     }
 
-    patient.name = name || patient.name;
-    patient.age = age || patient.age;
+    patient.firstName = firstName || patient.firstName;
+    patient.lastName = lastName || patient.lastName;
+    patient.birthDate = birthDate || patient.birthDate;
     patient.sex = sex || patient.sex;
     patient.address = address || patient.address;
     patient.zone = zone || patient.zone;

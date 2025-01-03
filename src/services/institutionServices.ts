@@ -1,4 +1,4 @@
-import { InstitutionEntity } from "../models/entities/institution.entities";
+import { InstitutionEntity } from "../core/entities/institution.entities";
 import { InstitutionModel } from "../models/institutionModel";
 
 export class InstitutionService {

@@ -5,8 +5,9 @@ export interface PatientModelRow {
   id?: number;
   institutionId: number;
   cardNumber: string;
-  name: string;
-  age: number;
+  firstName: string;
+  lastName: string;
+  birthDate: number;
   sex: string;
   address: string;
   zone: string;
@@ -18,8 +19,9 @@ export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, '
   declare id: CreationOptional<number>;
   declare institutionId: ForeignKey<number>;
   declare cardNumber: string;
-  declare name: string;
-  declare age: number;
+  declare firstName: string;
+  declare lastName: string;
+  declare birthDate: number;
   declare sex: string;
   declare address: string;
   declare zone: string;
@@ -43,11 +45,15 @@ PatientModel.init({
     type: DataTypes.STRING,
     // auto generate
   },
-  name: {
+  firstName: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  age: {
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  birthDate: {
     type: DataTypes.INTEGER,
     allowNull: false
   },

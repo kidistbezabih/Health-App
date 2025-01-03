@@ -1,4 +1,4 @@
-import { PreExaminationModel } from "../preExaminationModel";
+import { PreExaminationModel } from "../../models/preExaminationModel";
 
 export class PreExaminationEntity{
  constructor( 

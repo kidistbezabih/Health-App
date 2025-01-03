@@ -1,17 +1,17 @@
 import { AppError } from "../core/errors/custom.errors";
 import { PreExaminationModel } from "../models/preExaminationModel";
-import { PreExaminationEntity } from "../models/entities/preExamination.entities";
+import { PreExaminationEntity } from "../core/entities/preExamination.entities";
 
 
 export class PreExaminationService {
 
-  public async getPreExaminationRecordById(id: number): Promise<PreExaminationEntity> {
-    if (!id) {
+  public async getPatientPreExaminationRecord(visitId: number): Promise<PreExaminationEntity> {
+    if (!visitId) {
       throw AppError.notFound("Card number is required");
     }
 
     const patientInfo = await PreExaminationModel.findOne({
-      where: { id },
+      where: { visitId },
       attributes: [
         'chiefComplaint',
         'hpi',

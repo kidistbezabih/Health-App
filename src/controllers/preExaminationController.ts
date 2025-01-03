@@ -2,7 +2,7 @@ import Redis from "ioredis"
 import { PATIENT_QUEUE } from "../core/redis";
 import { PatientService } from "../services/patientServices";
 import { AppError } from "../core/errors/custom.errors";
-import { PatientEntity } from "../models/entities/patient.entities";
+import { PatientEntity } from "../core/entities/patient.entities";
 import { PreExaminationModel } from "../models/preExaminationModel";
 import { Request, Response, NextFunction } from "express";
 require('dotenv').config();

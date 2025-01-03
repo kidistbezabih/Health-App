@@ -1,11 +1,12 @@
-import { PatientModel } from "../patientModel"; 
+import { PatientModel } from "../../models/patientModel"; 
 
 
 export class PatientEntity {
 	constructor(
 	cardNumber: string,
-  name: string,
-  age: number,
+  firstName: string,
+  lastName: string,
+  birthDate: number,
   sex: string,
   address: string,
   zone: string,
@@ -17,8 +18,9 @@ export class PatientEntity {
 	public static fromDatabase(obj: PatientModel): PatientEntity {
 		const {
     cardNumber,
-    name,
-    age,
+    firstName,
+    lastName,
+    birthDate,
     sex,
     address,
     zone,
@@ -28,8 +30,9 @@ export class PatientEntity {
 
   return new PatientEntity(
     cardNumber as string, 
-    name as string,
-    age as number,
+    firstName as string,
+    lastName as string,
+    birthDate as number,
     sex as string,
     address as string,
     zone as string,

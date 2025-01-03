@@ -1,4 +1,4 @@
-import { LaboratoryResultModel } from "../laboratoryResultModel";
+import { LaboratoryResultModel } from "../../models/laboratoryResultModel";
 
 export class LaboratoryResultEntity {
 	constructor(
