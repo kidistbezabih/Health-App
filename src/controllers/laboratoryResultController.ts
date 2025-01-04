@@ -126,7 +126,7 @@ export class LaboratoryResultController{
 
   public async getLaboratoryResult(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id)
 
       const result = this.labResultServices.getlabResult(id);
 
@@ -236,7 +236,7 @@ public async updateLaboratoryResult(req: Request<{
         HIV,
         xRay,
         ultraSound,
-      } = req.params;
+      } = req.body;
 
       const Result = this.labResultServices.updatelabResult(
         id,
@@ -298,7 +298,7 @@ public async updateLaboratoryResult(req: Request<{
 
   public async deleteaboratoryResult(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id);
 
       const Result = this.labResultServices.deletelabResult(id);
 

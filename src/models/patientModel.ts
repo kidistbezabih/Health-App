@@ -7,7 +7,7 @@ export interface PatientModelRow {
   cardNumber: string;
   firstName: string;
   lastName: string;
-  birthDate: number;
+  birthDate: Date;
   sex: string;
   address: string;
   zone: string;
@@ -21,7 +21,7 @@ export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, '
   declare cardNumber: string;
   declare firstName: string;
   declare lastName: string;
-  declare birthDate: number;
+  declare birthDate: Date;
   declare sex: string;
   declare address: string;
   declare zone: string;
@@ -54,7 +54,7 @@ PatientModel.init({
     allowNull: false
   },
   birthDate: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DATE,
     allowNull: false
   },
   sex: {

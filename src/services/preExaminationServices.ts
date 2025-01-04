@@ -39,7 +39,7 @@ export class PreExaminationService {
       throw AppError.notFound("Can't find any patient with this card number");
     }
 
-    return PreExaminationEntity.fromDatabase(patientInfo);
+    return patientInfo ;
   }
 
 }

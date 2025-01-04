@@ -52,7 +52,7 @@ export interface LaboratoryOrderModelRow {
 }
 
 export class LaboratoryOrderModel extends Model<LaboratoryOrderModelRow> {
-  declare id: ForeignKey<number>;
+  declare id: number;
   declare visitId: ForeignKey<number>;
   declare wbc: CreationOptional<boolean>;
   declare Hgn: CreationOptional<boolean>;

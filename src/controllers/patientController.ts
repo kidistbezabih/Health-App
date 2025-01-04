@@ -17,7 +17,7 @@ interface CreatePatientRequestBody{
   cardNumber: string;
   firstName: string;
   lastName: string;
-  birthDate: number;
+  birthDate: Date;
   sex: string;
   address: string;
   zone: string;
@@ -28,7 +28,7 @@ interface CreatePatientRequestBody{
 interface UpdatePatientRequestBody{
   firstName: string;
   lastName: string;
-  birthDate: number;
+  birthDate: Date;
   sex: string;
   address: string;
   zone: string;
@@ -103,16 +103,17 @@ export class PatientController {
     }
   }
 
-  // Find patient by their cardNumber
+
   public async getPatient(req: Request<{searchkey: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
       try{
         const {searchkey} = req.params;
         const patients = await this.patientService.getPatient(searchkey);
 
-      if (patients.length === 0) {
+        console.log("patients", patients)
+      if (!patients || patients.length === 0) {
         throw AppError.notFound("No patients found with the provided search key.");
       }
-      res.status(201).json(patients)
+      res.status(201).json(patients);
     }catch(err){
       next(err);
       }
@@ -122,23 +123,18 @@ export class PatientController {
     try{
       const patients = await this.patientService.getAllPatients();
 
-    if (!patients) {
-      throw AppError.notFound("No patient registered!");
-    }
-    res.status(200).json(patients);
-  }catch(err){
-    next(err);
-    }
-}
+      if (!patients) {
+        throw AppError.notFound("No patient registered!");
+      }
+      res.status(200).json(patients);
+    }catch(err){
+      next(err);
+      }
+  }
 
-  
-  public async updatePatientInfo(req: Request<{cardNumber: string}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
-    const cardNumber = req.params;
+  public async updatePatientInfo(req: Request, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
+    const {cardNumber} = req.params;
     
-    if (!cardNumber){
-      throw AppError.notFound("Please insert the card number!")
-    };
-
     const {
       firstName,
       lastName,
@@ -150,7 +146,7 @@ export class PatientController {
       phoneNumber,
     } = req.body; 
   
-    const patient = await PatientModel.findOne({where: {cardNumber: cardNumber}})
+    const patient = await PatientModel.findOne({where: {cardNumber}})
 
     if (!patient){
       throw AppError.notFound("There is no patient with this card number");
@@ -166,10 +162,7 @@ export class PatientController {
     patient.phoneNumber = phoneNumber || patient.phoneNumber;
 
     await patient.save();
-
-    res.json(
-      PatientEntity.fromDatabase(patient)
-    );
+    res.json(patient);
   }
 
   public async addToPreExaminationQueue(cardNumber: string): Promise<void>{

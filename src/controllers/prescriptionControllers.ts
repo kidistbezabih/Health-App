@@ -33,7 +33,7 @@ export class PrescriptionController{
 
   public async getPrescription(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id);
 
       const prescription = this.prescriptionService.getPrescription(id);
 
@@ -48,7 +48,7 @@ export class PrescriptionController{
 
 public async updatePrescription(req: Request<{id:number, status:string, diagnosisIfNotICD:string, drugDetail:string, prescribersName:string}, PrescriptionEntity>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id);
       const { status, diagnosisIfNotICD, drugDetail, prescribersName } = req.body;
 
       const prescription = this.prescriptionService.updatePrescription(id, status, diagnosisIfNotICD, drugDetail, prescribersName
@@ -66,7 +66,7 @@ public async updatePrescription(req: Request<{id:number, status:string, diagnosi
 
   public async deletePrescrition(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id);
 
       const prescriptioin = this.prescriptionService.deletePrescription(id);
 

@@ -206,7 +206,7 @@ public async updatePreExaminationRecord(req: Request, res: Response, next: NextF
 
 public async deleteRecord(req: Request<{ visitId: number }>, res: Response, next: NextFunction): Promise<void> {
   try {
-    const { visitId } = req.params; 
+    const visitId  = Number(req.params.visitId); 
 
     if (!visitId) {
       throw AppError.notFound("No pre-examination record found for the provided visit ID");

@@ -18,7 +18,8 @@ export class PatientService {
     },
     attributes: [
       "cardNumber",
-      "name",
+      "firstName",
+      "lastName",
       "birthDate",
       "sex",
       "address",
@@ -28,15 +29,13 @@ export class PatientService {
     ],
   });
 
-  console.log("Patient Found:", patients);
-
 
   if (!patients || patients.length === 0) {
     throw AppError.notFound("Can't find any patient with the provided search key");
   }
 
-  return patients.map(patient =>  PatientEntity.fromDatabase(patient));
-  }
+  return patients.map(patient => patient.get({ plain: true })); 
+}
 
 
   public async getAllPatients(): Promise<PatientEntity[]> {
@@ -45,8 +44,7 @@ export class PatientService {
     if (!patients || patients.length === 0) {
       throw AppError.notFound("No patient registered yet");
     }
-    console.log(patients)
-        return patients.map(patient => patient.get({ plain: true }));
+    return patients.map(patient => patient.get({ plain: true }));
    }
 
   public async deletePatien(cardNumber: number):Promise<Boolean>{

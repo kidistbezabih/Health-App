@@ -7,7 +7,7 @@ export class ExaminationRoute {
     const examinationController = new ExaminationController();
 
     router.post('/add-examination-record/:visitId', examinationController.addExaminationRecord);
-    router.get('/get-patient-examination-record/:visitId', examinationController.getPatientPreExaminationRecord);
+    router.get('/get-patient-examination-record/:visitId', examinationController.getPatientExaminationRecord);
     router.get('/get-all-examination-record', examinationController.getAllExaminations);
     router.delete('/delete-examination-record/:id', examinationController.deletePatientExamination);
 

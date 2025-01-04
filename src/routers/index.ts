@@ -22,7 +22,6 @@ export class AppRouter {
         router.use('/examination', ExaminationRoute.routes);
         router.use('/laboratory-order', LaboratoryOrderRoute.routes);
         router.use('/laboratory-result', LaboratoryResultRoute.routes);
-        router.use('/laboratory', LaboratoryOrderRoute.routes);
         router.use('/prescription', PrescriptioinRoute.routes);
 
         return router;

@@ -69,8 +69,8 @@ export class InstutitionController{
 
   public async getInstitutionById(req: Request, res: Response, next: NextFunction):Promise<void>{
     try{
-      const {id} = req.params;
-      const institution = await InstitutionModel.findOne({ where: { id: parseInt(id, 10)} });
+      const id = Number(req.params.id);
+      const institution = await InstitutionModel.findOne({ where: {id}});
       console.log(institution)
 
       if (!institution){
@@ -84,7 +84,7 @@ export class InstutitionController{
 
   public async updateInstitutionById(req: Request<{id: number}>, res: Response, next: NextFunction):Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id);
 
       const {name, address, city, subcity,region,email,googleMapsLocation} = req.body;
       const institution = await InstitutionModel.findOne({where: {id}});
@@ -109,7 +109,7 @@ export class InstutitionController{
 
   public async deleteInstitution(req: Request<{id: number}>, res: Response, next: NextFunction):Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id);
       const deletCount = await InstitutionModel.destroy({where: {id}})
 
       if (!deletCount){

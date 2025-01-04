@@ -5,7 +5,6 @@ import {sequelize} from './config/sequelize'
 export interface ExaminationModelRow{
   id?: number;
   visitId: number;
-  // patientId : number,
   symptoms?: string;
   bloodPressure?: string;
   bodyTemperature?: string;
@@ -18,7 +17,6 @@ export interface ExaminationModelRow{
 export class ExaminationModel extends Model<ExaminationModelRow>{
   declare id: CreationOptional<number>;
   declare visitId: ForeignKey<number>;
-  // declare patientId: ForeignKey<number>;
   declare symptoms: CreationOptional<string>;
   declare bloodPressure: CreationOptional<string>;
   declare bodyTemperature: CreationOptional<string>;

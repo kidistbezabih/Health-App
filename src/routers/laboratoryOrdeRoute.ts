@@ -7,8 +7,9 @@ export class LaboratoryOrderRoute {
     const laboratoryOrderController = new LaboratoryOrderController();
 
     router.post('/create-lab-order/:visitId', laboratoryOrderController.createLaboratoryOrder);
-    router.get('/get-lab-order/:visitId', laboratoryOrderController.getLaboratoryOrder);
-    router.get('/upate-lab-order/:id', laboratoryOrderController.getLaboratoryOrder);
+    router.get('/get-lab-order/:id', laboratoryOrderController.getLaboratoryOrder);
+    router.get('/get-all-lab-orders', laboratoryOrderController.getAllLaboratoryOrders);
+    router.put('/update-lab-order/:id', laboratoryOrderController.updateLaboratoryOrder);
     router.delete('/delete-lab-order/:id', laboratoryOrderController.deleteaboratoryOrder);
 
     return router;

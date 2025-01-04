@@ -3,12 +3,17 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { LaboratoryOrderService } from "../services/laboratoryOrderServices";
 import { LaboratoryOrderEntity } from "../core/entities/laboratoryOrder.entities";
+import { LaboratoryOrderModel } from "../models/laboratoryOrderModel";
 
 export class LaboratoryOrderController{
   private labOrderService : LaboratoryOrderService;
 
   constructor(){
     this.labOrderService = new LaboratoryOrderService();
+    this.createLaboratoryOrder = this.createLaboratoryOrder.bind(this);
+    this.updateLaboratoryOrder = this.updateLaboratoryOrder.bind(this);
+    this.getLaboratoryOrder = this.getLaboratoryOrder.bind(this);
+    this.deleteaboratoryOrder = this.deleteaboratoryOrder.bind(this);
   }
 
   //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
@@ -128,69 +133,20 @@ export class LaboratoryOrderController{
     try{
       const {id} = req.params;
 
-      const order = this.labOrderService.getLabOrder(id);
+      const order =await this.labOrderService.getLabOrder(id);
 
       if (!order){
         AppError.badRequest("No laboratory order with this id!")
       }
-      res.status(201).json({lab_order: {order}})
+      res.status(201).json(order);
   }catch(err){
     next(err)
   }}
 
 
-public async updateLaboratoryOrder(req: Request<{
-  id: number,
-  wbc: boolean,
-  Hgn: boolean,
-  ESR: boolean,
-  BF: boolean,
-  bloodGroup_RHType: boolean,
-  bloodMorphology: boolean,
-  neutrophil: boolean,
-  eosinophil: boolean,
-  lymphocyte: boolean,
-  monocyte: boolean,
-  Basophil: boolean,
-  FBS_RBS: boolean,
-  sgot: boolean,
-  sgpt: boolean,
-  totalProtien: boolean,
-  albumin: boolean,
-  glucose: boolean,
-  ketone: boolean,
-  blood: boolean,
-  leukocyte: boolean,
-  bilirubin: boolean,
-  urobilin: boolean,
-  PH: boolean,
-  microscopic: boolean,
-  widal: boolean,
-  weilFelix: boolean,
-  VDHL_EPR: boolean,
-  Rf: boolean,
-  HBsAg: boolean,
-  Aso: boolean,
-  PICT: boolean,
-  HCV: boolean,
-  wetMount: boolean,
-  gramStain: boolean,
-  AFBStain: boolean,
-  pregnancyTest: boolean,
-  KOH: boolean,
-  SKINSmear: boolean,
-  protein: boolean,
-  WBC: boolean,
-  DiffCount: boolean,
-  stoolExam: boolean,
-  HIV: boolean,
-  xRay: boolean,
-  ultraSound: boolean,
-
-}>, res: Response, next: NextFunction): Promise<void>{
+public async updateLaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
       const {
-        id,
         wbc,
         Hgn,
         ESR,
@@ -236,7 +192,9 @@ public async updateLaboratoryOrder(req: Request<{
         HIV,
         xRay,
         ultraSound,
-      } = req.params;
+      } = req.body;
+
+      const {id} = req.params;
 
       const order = this.labOrderService.updateLabOrder(
         id,
@@ -298,7 +256,7 @@ public async updateLaboratoryOrder(req: Request<{
 
   public async deleteaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {id} = req.params;
+      const id = Number(req.params.id);
 
       const order = this.labOrderService.deleteLabOrder(id);
 
@@ -310,4 +268,22 @@ public async updateLaboratoryOrder(req: Request<{
     next(err)
   }}
 
+
+public async getAllLaboratoryOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const laboratoryOrders = await LaboratoryOrderModel.findAll();
+    
+    if (!laboratoryOrders || laboratoryOrders.length === 0) {
+      res.status(404).json({ message: 'No laboratory orders found' });
+    }
+
+    res.status(200).json({
+      data: laboratoryOrders
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal server error',
+    });
+  }
+} 
 }

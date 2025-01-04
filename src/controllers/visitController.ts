@@ -15,7 +15,7 @@ export class VisitController{
 
   public async createVisit(req: Request<{patientId: number}>, res: Response, next: NextFunction):Promise<void>{
     try
-      {const {patientId} = req.params;
+      {const patientId = Number(req.params.patientId);
 
       const visit = this.visitService.createVisit(patientId);
       if(!visit){
@@ -51,7 +51,7 @@ export class VisitController{
     public async getPatientVisitHistory(req: Request<{patientId: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
 
-      const {patientId} = req.params;
+      const patientId = Number(req.params.patientId);
 
       const visits = await this.visitService.getPatientVistsById(patientId);
 
@@ -67,7 +67,7 @@ export class VisitController{
 
   public async deleteVisit(req: Request<{id: number}>, res: Response, next: NextFunction):Promise<void>{
     try
-      {const {id} = req.params;
+      {const id = Number(req.params.id);
 
       const isDeleted = this.visitService.deleteVisitById(id);
       if(!isDeleted){

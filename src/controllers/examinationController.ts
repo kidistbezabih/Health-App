@@ -25,7 +25,7 @@ export class ExaminationController{
     this.examinationService = new ExaminationService();
     this.preExaminationService = new PreExaminationService();
 
-    this.getPatientPreExaminationRecord = this.getPatientPreExaminationRecord.bind(this);
+    this.getPatientExaminationRecord = this.getPatientExaminationRecord.bind(this);
     this.deletePatientExamination = this.deletePatientExamination.bind(this)
   }
 
@@ -65,23 +65,22 @@ export class ExaminationController{
   }
 
 
-  public async getPatientPreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void>{
+  public async getPatientExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
       const visitId = Number(req.params.visitId);
 
-    const patientInfo = this.preExaminationService.getPatientPreExaminationRecord(visitId);
-
-    if (!patientInfo){
-      res.status(200).json({message: "can't get patient pre examination info "})
-    }
-    res.json(patientInfo)  
-  }catch(err){
-    next(err)
-  }}
+      const patientInfo = this.examinationService.getPatientExaminationRecord(visitId);
+      if (!patientInfo){
+        res.status(400).json({message: "can't get patient  examination info "})
+      }
+      res.json(patientInfo)  
+    }catch(err){
+      next(err)
+    }}
 
   public async getAllExaminations(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const examinations = await ExaminationModel.findAll(); // Adjust based on your ORM or query method
+      const examinations = await ExaminationModel.findAll(); 
 
       if (!examinations || examinations.length === 0) {
         res.status(404).json({ message: "No examination records found." });
