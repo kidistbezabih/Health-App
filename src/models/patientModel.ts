@@ -55,7 +55,7 @@ PatientModel.init({
   },
   birthDate: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   },
   sex: {
     type: DataTypes.STRING,
