@@ -4,7 +4,6 @@ import { sequelize } from './config/sequelize';
 export interface PrescriptionModelRow {
   id?: number;
   visitId: number;
-  cardNumber: string;
   status: string;
   diagnosisIfNotICD?: string;
   drugDetail?: string;
@@ -14,7 +13,6 @@ export interface PrescriptionModelRow {
 export class PrescriptionModel extends Model<PrescriptionModelRow, Omit<PrescriptionModelRow, 'id'>> {
   declare id: CreationOptional<number>;
   declare visitId: ForeignKey<number>
-  declare cardNumber: string;
   declare status: string;
   declare diagnosisIfNotICD: string;
   declare drugDetail: string;
@@ -29,9 +27,6 @@ PrescriptionModel.init({
   },
   visitId: {
     type: DataTypes.INTEGER
-  },
-  cardNumber: {
-    type: DataTypes.STRING,
   },
   status: {
     type: DataTypes.STRING,

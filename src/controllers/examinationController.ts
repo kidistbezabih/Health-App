@@ -75,7 +75,7 @@ export class ExaminationController{
       }
       res.json(patientInfo)  
     }catch(err){
-      next(err)
+      res.status(500).json({messsage: "internal server error", error: err})
     }}
 
   public async getAllExaminations(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -83,7 +83,7 @@ export class ExaminationController{
       const examinations = await ExaminationModel.findAll(); 
 
       if (!examinations || examinations.length === 0) {
-        res.status(404).json({ message: "No examination records found." });
+        res.status(404).json({ message: "No examination record found." });
         return;
       }
 
@@ -91,7 +91,7 @@ export class ExaminationController{
         data: examinations,
       });
     } catch (error) {
-      res.status(500).json({message: "internal server error!"});
+      res.status(500).json({messsage: "internal server error", error})
     }
   }
 
@@ -106,7 +106,6 @@ export class ExaminationController{
       }
       res.status(200).json({message: "Deleted successfully!"})
     }catch(err){
-      next(err)
+      res.status(500).json({messsage: "internal server error", error: err})
     }
-  }
-  }
+  }}

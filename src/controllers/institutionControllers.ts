@@ -47,7 +47,7 @@ export class InstutitionController{
       }
       res.status(201).json({message: "Successfully registered"});
     }catch(err){
-      next(err);
+      res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 
@@ -63,7 +63,7 @@ export class InstutitionController{
       }
       res.json(institutions);
     }catch(err){
-      next(err);
+    res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 
@@ -78,7 +78,7 @@ export class InstutitionController{
       }
       res.json(institution)
     }catch(err){
-      next(err);
+    res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 
@@ -90,20 +90,20 @@ export class InstutitionController{
       const institution = await InstitutionModel.findOne({where: {id}});
 
       if (institution){
-        institution.name = name||institution.name
-        institution.address = address || institution.address
-        institution.city = city || institution.city
-        institution.region = region || institution.region
-        institution.subcity = subcity || institution.subcity
-        institution.email= email || institution.email
-        institution.googleMapsLocation = googleMapsLocation || institution.googleMapsLocation
+        institution.name = name?? institution.name
+        institution.address = address ?? institution.address
+        institution.city = city ?? institution.city
+        institution.region = region ?? institution.region
+        institution.subcity = subcity ?? institution.subcity
+        institution.email= email ?? institution.email
+        institution.googleMapsLocation = googleMapsLocation ?? institution.googleMapsLocation
         await institution.save()
       }else{
         AppError.badRequest("No institution with this id!");
       }
       res.json(institution)
     }catch(err){
-      next(err);
+    res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 
@@ -117,7 +117,8 @@ export class InstutitionController{
       }
       res.status(201).json({message: "Successfully deleted"})
     }catch(err){
-      next(err);
+    res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 }
+

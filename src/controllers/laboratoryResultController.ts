@@ -3,15 +3,19 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { LaboratoryResultService } from "../services/laboratoryResultServices";
 import { LaboratoryResultEntity } from "../core/entities/laboratoryResult.entities";
+import { LaboratoryResultModel } from "../models/laboratoryResultModel";
 
 export class LaboratoryResultController{
   private labResultServices : LaboratoryResultService;
 
   constructor(){
     this.labResultServices = new LaboratoryResultService();
-  }
+    this.createLaboratoryResult = this.createLaboratoryResult.bind(this);
+    this.getLaboratoryResult = this.getLaboratoryResult.bind(this);
+    this.updateLaboratoryResult = this.updateLaboratoryResult.bind(this);
+    this.deleteLaboratoryResult = this.deleteLaboratoryResult.bind(this);
+  };
 
-  //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
   public async createLaboratoryResult(req: Request<LaboratoryResultEntity>, res: Response, next: NextFunction): Promise<void>{
     try{
       const {
@@ -61,10 +65,9 @@ export class LaboratoryResultController{
         HIV,
         xRay,
         ultraSound,
-        
       } = req.body;
 
-      const result = this.labResultServices.createLaboratoryResult(
+      const result = await this.labResultServices.createLaboratoryResult(
         visitId,
         wbc,
         Hgn,
@@ -114,83 +117,47 @@ export class LaboratoryResultController{
       );
 
       if(!result){
-        AppError.badRequest("un able to create anlab result!");
+        throw AppError.badRequest("Un able to create laboratory result!");
       }
 
-      res.status(201).json("Laboratory result is successfully created!")
+      res.json({"Laboratory result is successfully created!": result})
     }catch(err){
-    next(err);
+      res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 
 
-  public async getLaboratoryResult(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
+  public async getLaboratoryResult(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
-      const id = Number(req.params.id)
+      const id = Number(req.params.id);
 
-      const result = this.labResultServices.getlabResult(id);
+      const result = await this.labResultServices.getlabResult(id);
 
       if (!result){
-        AppError.badRequest("No laboratory Result with this id!")
+        AppError.badRequest
+      } 
+      res.status(201).json(result)
+    }catch(err){
+      res.status(500).json('internal server error!')
+    }
+  }
+
+  public async getAllLaboratoryResults(req: Request, res: Response, next: NextFunction): Promise<void>{
+    try{
+
+      const result = await LaboratoryResultModel.findAll();
+
+      if (!result){
+        AppError.badRequest
       }
-      res.status(201).json({lab_Result: {result}})
+      res.status(201).json(result)
   }catch(err){
-    next(err)
+    res.status(500).json('Internal server error!')
   }}
 
-
-public async updateLaboratoryResult(req: Request<{
-  id: number,
-  wbc: string,
-  Hgn: string,
-  ESR: string,
-  BF: string,
-  bloodGroup_RHType: string,
-  bloodMorphology: string,
-  neutrophil: string,
-  eosinophil: string,
-  lymphocyte: string,
-  monocyte: string,
-  Basophil: string,
-  FBS_RBS: string,
-  sgot: string,
-  sgpt: string,
-  totalProtien: string,
-  albumin: string,
-  glucose: string,
-  ketone: string,
-  blood: string,
-  leukocyte: string,
-  bilirubin: string,
-  urobilin: string,
-  PH: string,
-  microscopic: string,
-  widal: string,
-  weilFelix: string,
-  VDHL_EPR: string,
-  Rf: string,
-  HBsAg: string,
-  Aso: string,
-  PICT: string,
-  HCV: string,
-  wetMount: string,
-  gramStain: string,
-  AFBStain: string,
-  pregnancyTest: string,
-  KOH: string,
-  SKINSmear: string,
-  protein: string,
-  WBC: string,
-  DiffCount: string,
-  stoolExam: string,
-  HIV: string,
-  xRay: number,
-  ultraSound: number,
-
-}>, res: Response, next: NextFunction): Promise<void>{
+public async updateLaboratoryResult(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
       const {
-        id,
         wbc,
         Hgn,
         ESR,
@@ -237,8 +204,9 @@ public async updateLaboratoryResult(req: Request<{
         xRay,
         ultraSound,
       } = req.body;
+      const id = Number(req.params.id)
 
-      const Result = this.labResultServices.updatelabResult(
+      const Result = await this.labResultServices.updatelabResult(
         id,
         wbc,
         Hgn,
@@ -288,26 +256,24 @@ public async updateLaboratoryResult(req: Request<{
       );
 
       if (!Result){
-        AppError.badRequest("No laboratory result with this id!")
+        AppError.badRequest;
       }
-      res.status(201).json("Laboratory result is updated successfully!")
-  }catch(err){
-    next(err)
+      res.json(Result);
+    } catch(err){
+      res.status(500).json("internal server error!")
   }}
 
-
-  public async deleteaboratoryResult(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
+  public async deleteLaboratoryResult(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
       const id = Number(req.params.id);
 
-      const Result = this.labResultServices.deletelabResult(id);
+      const Result = await this.labResultServices.deletelabResult(id);
 
       if (!Result){
         AppError.badRequest("No laboratory result with this id!")
       }
       res.status(201).json("Laboratory result is deleted successfully")
   }catch(err){
-    next(err)
-  }}
-
+    res.status(500).json('Internal server error!')
+  }};
 }

@@ -8,6 +8,10 @@ import { LaboratoryResultRoute } from "./laboratoryResultRoute";
 import { PreExaminationRoute } from "./preExaminationRoures";
 import { PrescriptioinRoute } from "./prescriptionRoutes";
 import { VisitRoute } from "./visitRoute";
+import { XrayRoute } from "./xrayRoutes";
+import { UltraSoundRoute } from "./ultraSoundRoutes";
+import { ReferralRoute } from "./referralRoute";
+import { MedicalCertificatRoute } from "./medicalCertificateRoutes";
 
 export class AppRouter {
     static get routes(): Router {
@@ -22,7 +26,12 @@ export class AppRouter {
         router.use('/examination', ExaminationRoute.routes);
         router.use('/laboratory-order', LaboratoryOrderRoute.routes);
         router.use('/laboratory-result', LaboratoryResultRoute.routes);
+        router.use('/xray', XrayRoute.routes);
+        router.use('/ultrasound', UltraSoundRoute.routes);
         router.use('/prescription', PrescriptioinRoute.routes);
+        router.use('/referral', ReferralRoute.routes);
+
+        router.use('/medical-certificate', MedicalCertificatRoute.routes);
 
         return router;
     }

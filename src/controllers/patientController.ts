@@ -39,7 +39,7 @@ interface UpdatePatientRequestBody{
 
 const redis = new Redis({
   host:process.env.REDIS_HOST,
-  port:parseInt(process.env.REDIS_PORT || '6379') ,
+  port:parseInt(process.env.REDIS_PORT ?? '6379') ,
   showFriendlyErrorStack: true,
 }
 );
@@ -66,7 +66,7 @@ export class PatientController {
           try {
             const { date } = JSON.parse(latestEntry);
           } catch (parseError) {
-            throw AppError.internalServer("Invalid data in Redis");
+            throw AppError.badRequest("Invalid data in Redis");
           }
         }
      
@@ -98,9 +98,10 @@ export class PatientController {
       }else{
         throw AppError.badRequest("Failed to Register patient")
       }
-    } catch(err){
-      next(err)
-    }
+    } 
+    catch(err){
+          res.status(500).json({messsage: "internal server error", error: err});
+      }
   }
 
 
@@ -114,9 +115,10 @@ export class PatientController {
         throw AppError.notFound("No patients found with the provided search key.");
       }
       res.status(201).json(patients);
-    }catch(err){
-      next(err);
-      }
+    }
+    catch(err){
+        res.status(500).json({messsage: "internal server error", error: err});
+    }
   }
 
   public async getAllPatients(req: Request, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
@@ -127,9 +129,10 @@ export class PatientController {
         throw AppError.notFound("No patient registered!");
       }
       res.status(200).json(patients);
-    }catch(err){
-      next(err);
-      }
+    }
+    catch(err){
+        res.status(500).json({messsage: "internal server error", error: err});
+    }
   }
 
   public async updatePatientInfo(req: Request, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
@@ -152,14 +155,14 @@ export class PatientController {
       throw AppError.notFound("There is no patient with this card number");
     }
 
-    patient.firstName = firstName || patient.firstName;
-    patient.lastName = lastName || patient.lastName;
-    patient.birthDate = birthDate || patient.birthDate;
-    patient.sex = sex || patient.sex;
-    patient.address = address || patient.address;
-    patient.zone = zone || patient.zone;
-    patient.kebele = kebele || patient.kebele;
-    patient.phoneNumber = phoneNumber || patient.phoneNumber;
+    patient.firstName = firstName ?? patient.firstName;
+    patient.lastName = lastName ?? patient.lastName;
+    patient.birthDate = birthDate ?? patient.birthDate;
+    patient.sex = sex ?? patient.sex;
+    patient.address = address ?? patient.address;
+    patient.zone = zone ?? patient.zone;
+    patient.kebele = kebele ?? patient.kebele;
+    patient.phoneNumber = phoneNumber ?? patient.phoneNumber;
 
     await patient.save();
     res.json(patient);
@@ -173,7 +176,7 @@ export class PatientController {
     const {cardNumber} = (req.params);
     
     if (!cardNumber){
-      throw AppError.notFound("Please isert the card number!")
+      throw AppError.notFound("Please insert the card number!")
     };
     const patient = await this.patientService.deletePatien(cardNumber);
 

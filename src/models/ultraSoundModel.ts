@@ -3,16 +3,16 @@ import { sequelize } from './config/sequelize';
 
 export interface UltraSoundModelRow {
   id?: number;
-  examType: string;
-  notes: string;
-  imageFilePath: string;
-  findings: string;
-  diagnosis: string;
-  technician: string;
+  examType?: CreationOptional<string>;
+  notes?: CreationOptional<string>;
+  imageFilePath?: CreationOptional<string>;
+  findings?: CreationOptional<string>;
+  diagnosis?: CreationOptional<string>;
+  technician?: CreationOptional<string>;
 }
 
 export class UltraSoundModel extends Model<UltraSoundModelRow> {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare examType: string;
   declare notes: string;
   declare imageFilePath: string;

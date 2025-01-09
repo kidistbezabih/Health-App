@@ -22,8 +22,9 @@ export class VisitController{
         res.status(200).json({message: "Unable to crete patient visit"})
       }
       res.status(201).json({message: "Visit is creted successfully"})
-    }catch(err){
-      next(err);
+    }
+    catch(err){
+         res.status(500).json({messsage: "internal server error", error: err});
     }
   }
 
@@ -59,9 +60,11 @@ export class VisitController{
         throw AppError.notFound("No patient visit history!")
       }
       res.json(visits)
-    }catch(err){
-      next(err)
-    }}
+    }
+    catch(err){
+         res.status(500).json({messsage: "internal server error", error: err});
+    }
+    }
 
 
 
@@ -75,8 +78,9 @@ export class VisitController{
       }
 
       res.status(201).json({message: "Visit is deleted successfully"})
-    }catch(err){
-      next(err);
+    }
+    catch(err){
+         res.status(500).json({messsage: "internal server error", error: err});
     }
   }
 }

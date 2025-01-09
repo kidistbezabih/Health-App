@@ -3,47 +3,68 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "../core/errors/custom.errors";
 import { PrescriptionService } from "../services/prescriptionServices";
 import { PrescriptionEntity } from "../core/entities/prescriptioin.entities";
+import { PrescriptionModel } from "../models/prescriptionModel";
 
 export class PrescriptionController{
   private prescriptionService : PrescriptionService;
 
   constructor(){
     this.prescriptionService = new PrescriptionService();
+    this.createPrescription = this.createPrescription.bind(this);
+    this.getPrescription = this.getPrescription.bind(this);
+    this.updatePrescription = this.updatePrescription.bind(this);
+    this.deletePrescrition = this.deletePrescrition.bind(this);
   }
 
   //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
   public async createPrescription(req: Request<PrescriptionEntity>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {visitId, cardNumber, status, diagnosisIfNotICD, drugDetail, prescribersName } = req.body;
+      const {visitId, status, diagnosisIfNotICD, drugDetail, prescribersName } = req.body;
 
-      const Prescription = this.prescriptionService.createPrescritpion(
-        visitId, cardNumber, status, diagnosisIfNotICD, drugDetail, prescribersName
+      const Prescription = await this.prescriptionService.createPrescription(
+        visitId, status, diagnosisIfNotICD, drugDetail, prescribersName
       );
 
       if(!Prescription){
-        AppError.badRequest("Fail to create Prescription!");
+        throw AppError.badRequest("Fail to create Prescription!");
       }
 
-      res.status(201).json("Laboratory Prescription is successfully created!")
-    }catch(err){
-    next(err);
+      res.status(201).json("Prescription is successfully created!")
     }
+    catch(err){
+         res.status(500).json({messsage: "internal server error", error: err})
+      }
   }
-
 
   public async getPrescription(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
       const id = Number(req.params.id);
 
-      const prescription = this.prescriptionService.getPrescription(id);
+      const prescription = await this.prescriptionService.getPrescription(id);
 
       if (!prescription){
         AppError.badRequest("No laboratory order with this id!")
       }
-      res.status(201).json({lab_order: {prescription}})
+      res.status(201).json(prescription)
   }catch(err){
-    next(err)
-  }}
+       res.status(500).json({messsage: "internal server error", error: err})
+    }
+  }
+
+  public async getAllPrescription(req: Request, res: Response, next: NextFunction): Promise<void>{
+    try{
+
+      const prescriptions = await PrescriptionModel.findAll();
+      console.log("prescriptions", prescriptions);
+
+      if (!prescriptions){
+        AppError.badRequest;
+      }
+      res.status(201).json(prescriptions);
+  }catch(err){
+       res.status(500).json({messsage: "internal server error", error: err})
+    }
+  }
 
 
 public async updatePrescription(req: Request<{id:number, status:string, diagnosisIfNotICD:string, drugDetail:string, prescribersName:string}, PrescriptionEntity>, res: Response, next: NextFunction): Promise<void>{
@@ -60,8 +81,9 @@ public async updatePrescription(req: Request<{id:number, status:string, diagnosi
       }
       res.status(201).json("Prescription is updated successfully!")
   }catch(err){
-    next(err)
-  }}
+       res.status(500).json({messsage: "internal server error", error: err})
+    }
+  }
 
 
   public async deletePrescrition(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
@@ -75,7 +97,8 @@ public async updatePrescription(req: Request<{id:number, status:string, diagnosi
       }
       res.status(201).json("Prescriptioin is deleted successfully")
   }catch(err){
-    next(err)
-  }}
+       res.status(500).json({messsage: "internal server error", error: err})
+    }
+  }
 
 }

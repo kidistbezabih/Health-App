@@ -124,7 +124,7 @@ export class LaboratoryOrderController{
 
       res.status(201).json("Laboratory order is successfully created!")
     }catch(err){
-    next(err);
+          res.status(500).json({messsage: "internal server error", error: err})
     }
   }
 
@@ -140,8 +140,9 @@ export class LaboratoryOrderController{
       }
       res.status(201).json(order);
   }catch(err){
-    next(err)
-  }}
+        res.status(500).json({messsage: "internal server error", error: err})
+    }
+}
 
 
 public async updateLaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
@@ -250,8 +251,9 @@ public async updateLaboratoryOrder(req: Request<{id: number}>, res: Response, ne
       }
       res.status(201).json("Laboratory order is updated successfully!")
   }catch(err){
-    next(err)
-  }}
+        res.status(500).json({messsage: "internal server error", error: err})
+    }
+  }
 
 
   public async deleteaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
@@ -264,9 +266,11 @@ public async updateLaboratoryOrder(req: Request<{id: number}>, res: Response, ne
         AppError.badRequest("No laboratory order with this id!")
       }
       res.status(201).json("Laboratory order is deleted successfully")
-  }catch(err){
-    next(err)
-  }}
+  }
+  catch(err){
+        res.status(500).json({messsage: "internal server error", error: err})
+    }
+}
 
 
 public async getAllLaboratoryOrders(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -31,12 +31,7 @@ export class PreExaminationController{
     const patientDetail = await this.patientService.getPatient(patientCardNumber);
     res.status(201).json(patientDetail);
   }catch(err){
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-    throw new AppError({
-      message: errorMessage,
-      statusCode: 500,
-    }
-    );
+    res.status(500).json({messsage: "internal server error", error: err});
   }
   };
 
@@ -106,8 +101,6 @@ export class PreExaminationController{
         }
 
     } catch (err) {
-        // Log the error and send an internal server error response
-        console.error(err); // Optional: for better error visibility during debugging
         res.status(500).json({ message: 'Internal server error', error: err });
     }
 }
@@ -131,11 +124,10 @@ export class PreExaminationController{
         res.status(200).json({
             data: patientRecord
         });
-    } catch (err) {
-        console.error(err); // Optional: log the error for debugging
-        next(err); // Pass error to the error-handling middleware
+    } catch(err){
+          res.status(500).json({messsage: "internal server error", error: err});
+      }
     }
-}
 
 public async updatePreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -199,9 +191,10 @@ public async updatePreExaminationRecord(req: Request, res: Response, next: NextF
       res.status(200).json({
           data: updatedRecord
       });
-  } catch (err) {
-      next(err); 
-  }
+  } 
+  catch(err){
+        res.status(500).json({messsage: "internal server error", error: err});
+    }
 }
 
 public async deleteRecord(req: Request<{ visitId: number }>, res: Response, next: NextFunction): Promise<void> {
@@ -221,9 +214,10 @@ public async deleteRecord(req: Request<{ visitId: number }>, res: Response, next
     }
     res.status(200).json({ message: "Pre-examination record deleted successfully" });
 
-  } catch (err) {
-    next(err);
-  }
+  } 
+  catch(err){
+        res.status(500).json({messsage: "internal server error", error: err});
+    }
 }
 
 public async getAllPreExaminationRecords(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -235,9 +229,10 @@ public async getAllPreExaminationRecords(req: Request, res: Response, next: Next
     }
 
     res.status(200).json(preExaminationRecords);
-  } catch (err) {
-    next(err);
-  }
+  } 
+  catch(err){
+        res.status(500).json({messsage: "internal server error", error: err});
+    }
 }
 
 

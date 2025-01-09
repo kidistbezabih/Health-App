@@ -1,23 +1,33 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface MedicalCertificateModelRow {
+  id?: number;
+  visitId: number
   dateOfExamination: Date;
   diagnosis: string;
   treatmentGiven: string;
   sickLeave: string;
-  date: Date;
 }
 
-export class MedicalCertificateModel extends Model<MedicalCertificateModelRow, Omit<MedicalCertificateModelRow, 'id'>> {
+export class MedicalCertificateModel extends Model<MedicalCertificateModelRow > {
+  declare id: CreationOptional<number>;
+  declare visitId: ForeignKey<number>;
   declare dateOfExamination: Date;
   declare diagnosis: string;
   declare treatmentGiven: string;
   declare sickLeave: string;
-  declare date: Date;
 }
 
 MedicalCertificateModel.init({
+ id: {
+  type: DataTypes.INTEGER,
+  autoIncrement: true,
+  primaryKey: true
+},
+  visitId: {
+    type: DataTypes.INTEGER
+  },
   dateOfExamination: {
     type: DataTypes.DATE,
     allowNull: false
@@ -33,15 +43,11 @@ MedicalCertificateModel.init({
   sickLeave: {
     type: DataTypes.STRING,
     allowNull: true
-  },
-  date: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
+  }
 }, {
   sequelize,
   timestamps: true,
-  tableName: 'cards',
+  tableName: 'medical-certificate',
   paranoid: true,
   deletedAt: true
 });

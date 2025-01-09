@@ -6,10 +6,11 @@ export class PrescriptioinRoute {
     const router = Router();
     const prescriptionController = new PrescriptionController();
 
-    router.post('/create-lprescription', prescriptionController.createPrescription);
+    router.post('/create-prescription', prescriptionController.createPrescription);
     router.get('/get-prescription/:id', prescriptionController.getPrescription);
-    router.get('/upate-prescription/:id', prescriptionController.updatePrescription);
-    router.get('/delete-prescription/:id', prescriptionController.deletePrescrition);
+    router.get('/get-all-prescriptions', prescriptionController.getAllPrescription);
+    router.put('/update-prescription/:id', prescriptionController.updatePrescription);
+    router.delete('/delete-prescription/:id', prescriptionController.deletePrescrition);
 
     return router;
   }
