@@ -12,31 +12,6 @@ interface GetAllRequestQuery {
   limit: string;
 }
 
-interface CreatePatientRequestBody{
-  institutionId: number;
-  cardNumber: string;
-  firstName: string;
-  lastName: string;
-  birthDate: Date;
-  sex: string;
-  address: string;
-  zone: string;
-  kebele: string;
-  phoneNumber: string;
-}
-
-interface UpdatePatientRequestBody{
-  firstName: string;
-  lastName: string;
-  birthDate: Date;
-  sex: string;
-  address: string;
-  zone: string;
-  kebele: string;
-  phoneNumber: string;
-
-}
-
 const redis = new Redis({
   host:process.env.REDIS_HOST,
   port:parseInt(process.env.REDIS_PORT ?? '6379') ,
@@ -93,11 +68,12 @@ export class PatientController {
         kebele,
         phoneNumber
       });
-      if (patient){
-        res.status(201).json({message: "Patient registered successfully", cardNumber});
-      }else{
+      if (!patient){
         throw AppError.badRequest("Failed to Register patient")
       }
+      
+      res.status(201).json({message: "Patient registered successfully", cardNumber});
+      
     } 
     catch(err){
           res.status(500).json({messsage: "internal server error", error: err});
@@ -105,7 +81,7 @@ export class PatientController {
   }
 
 
-  public async getPatient(req: Request<{searchkey: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
+  public async getPatient(req: Request<{searchkey: string}>, res: Response, next: NextFunction): Promise< void> {
       try{
         const {searchkey} = req.params;
         const patients = await this.patientService.getPatient(searchkey);
@@ -114,14 +90,15 @@ export class PatientController {
       if (!patients || patients.length === 0) {
         throw AppError.notFound("No patients found with the provided search key.");
       }
+      console.log("patients", patients);
       res.status(201).json(patients);
     }
     catch(err){
-        res.status(500).json({messsage: "internal server error", error: err});
+      res.status(500).json({messsage: "internal server error", error: err});
     }
   }
 
-  public async getAllPatients(req: Request, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
+  public async getAllPatients(req: Request, res: Response, next: NextFunction): Promise< void> {
     try{
       const patients = await this.patientService.getAllPatients();
 
@@ -172,19 +149,19 @@ export class PatientController {
     await redis.lpush(PATIENT_QUEUE, cardNumber)
   }
 
-  public async deletePatientInfo(req: Request<{cardNumber: number}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
-    const {cardNumber} = (req.params);
+  public async deletePatientInfo(req: Request, res: Response, next: NextFunction):Promise<void>{
+    const id = Number(req.params.id);
     
-    if (!cardNumber){
+    if (!id){
       throw AppError.notFound("Please insert the card number!")
     };
-    const patient = await this.patientService.deletePatien(cardNumber);
+    const patient = await this.patientService.deletePatien(id);
 
     if (!patient){
       throw AppError.notFound("There is no patient with this card number");
     }
 
-    res.json(`Patient with card number ${cardNumber} deleted successfully `);
+    res.json(`Patient with card number ${id} deleted successfully `);
   }  
 };
 

@@ -1,4 +1,4 @@
-import { MediacalCertificateEntity } from "../core/entities/medicalSertificate.entities";
+import { MedicalCertificateEntity } from "../core/entities/medicalCertificate.entities";
 import { AppError } from "../core/errors/custom.errors";
 import { MedicalCertificateModel } from "../models/medicalCertificateModel";
 
@@ -10,7 +10,7 @@ export class MedicalCertificateServices {
     diagnosis: string,
     treatmentGiven: string,
     sickLeave: string,
-  ): Promise<MediacalCertificateEntity> {
+  ): Promise<MedicalCertificateEntity> {
    const medicalCertificate = await MedicalCertificateModel.create({
     visitId,
     dateOfExamination,
@@ -31,7 +31,7 @@ export class MedicalCertificateServices {
       diagnosis: string,
       treatmentGiven: string,
       sickLeave: string,
-    ):Promise<MediacalCertificateEntity>{
+    ):Promise<MedicalCertificateEntity>{
         const medicalCertificate = await MedicalCertificateModel.findOne({where:{id}});
         
         if (!medicalCertificate){
@@ -47,7 +47,7 @@ export class MedicalCertificateServices {
         return medicalCertificate;
       }  
 
-    public async getMedicalCertificate(id: number): Promise<MediacalCertificateEntity>{
+    public async getMedicalCertificate(id: number): Promise<MedicalCertificateEntity>{
         const medicalCertificate = await MedicalCertificateModel.findOne({where: {id}})
 
         if(!medicalCertificate){
@@ -56,7 +56,7 @@ export class MedicalCertificateServices {
         return medicalCertificate
     }
 
-    public async getAllMedicalCertificate(): Promise<MediacalCertificateEntity>{
+    public async getAllMedicalCertificate(): Promise<MedicalCertificateEntity>{
       const medicalCertificate = await MedicalCertificateModel.findAll()
 
       if(!medicalCertificate){

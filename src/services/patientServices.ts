@@ -11,22 +11,11 @@ export class PatientService {
     where: {
       [Op.or]: [
         { firstName: { [Op.iLike]: `%${searchkey}%` } },
-        { lastName: { [Op.iLike]: `%${searchkey}%` } },
+        // { lastName: { [Op.iLike]: `%${searchkey}%` } },
         { phoneNumber: { [Op.iLike]: `%${searchkey}%` } },
         { cardNumber: { [Op.iLike]: `%${searchkey}%` } },
       ],
-    },
-    attributes: [
-      "cardNumber",
-      "firstName",
-      "lastName",
-      "birthDate",
-      "sex",
-      "address",
-      "zone",
-      "kebele",
-      "phoneNumber",
-    ],
+    }
   });
 
 
@@ -34,7 +23,7 @@ export class PatientService {
     throw AppError.notFound("Can't find any patient with the provided search key");
   }
 
-  return patients.map(patient => patient.get({ plain: true })); 
+  return patients.map(PatientEntity.fromDatabase);
 }
 
 
@@ -44,11 +33,11 @@ export class PatientService {
     if (!patients || patients.length === 0) {
       throw AppError.notFound("No patient registered yet");
     }
-    return patients.map(patient => patient.get({ plain: true }));
+    return patients.map(PatientEntity.fromDatabase);
    }
 
-  public async deletePatien(cardNumber: number):Promise<Boolean>{
-      const deleteCount = await PatientModel.destroy({where: {cardNumber: cardNumber}})
+  public async deletePatien(id: number):Promise<Boolean>{
+      const deleteCount = await PatientModel.destroy({where: {id}})
   
       return deleteCount > 0
   

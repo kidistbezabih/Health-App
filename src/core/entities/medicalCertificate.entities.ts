@@ -1,7 +1,7 @@
 import { InstitutionModel } from "../../models/institutionModel";
 import { MedicalCertificateModel } from "../../models/medicalCertificateModel";
 
-export class MediacalCertificateEntity {
+export class MedicalCertificateEntity {
   constructor( 
     dateOfExamination: Date,
     diagnosis: string,
@@ -10,7 +10,7 @@ export class MediacalCertificateEntity {
    ) {
   }
 
-  public static fromDatabase(obj: MedicalCertificateModel): MediacalCertificateEntity {
+  public static fromDatabase(obj: MedicalCertificateModel): MedicalCertificateEntity {
     const {
       dateOfExamination,
       diagnosis,
@@ -19,7 +19,7 @@ export class MediacalCertificateEntity {
   
   } = obj;
 
-  return new MediacalCertificateEntity(
+  return new MedicalCertificateEntity(
     dateOfExamination as Date,
     diagnosis as string,
     treatmentGiven as string,

@@ -2,8 +2,15 @@ import { ExaminationModel } from "../../models/examinationModel";
 import { PreExaminationModel } from "../../models/preExaminationModel";
 
 export class ExaminationEntity{
+  public symptoms: string; 
+  public bloodPressure: string; 
+  public bodyTemperature: string; 
+  public respirationRate: string; 
+  public oxygenSaturation: string; 
+  public weight: number; 
+  public height: number;
+
  constructor( 
-  visitId: number,
   symptoms: string,
   bloodPressure: string,
   bodyTemperature: string,
@@ -12,12 +19,18 @@ export class ExaminationEntity{
   weight: number,
   height: number
   ){
+    this.symptoms = symptoms, 
+    this.bloodPressure = bloodPressure, 
+    this.bodyTemperature = bodyTemperature, 
+    this.respirationRate = respirationRate, 
+    this.oxygenSaturation = oxygenSaturation, 
+    this.weight = weight, 
+    this.height = height
     
   }
 
     public static fromDatabase(obj: ExaminationModel) :ExaminationEntity{
      const{
-      visitId,
       symptoms,
       bloodPressure,
       bodyTemperature,
@@ -28,7 +41,6 @@ export class ExaminationEntity{
        } = obj
 
      return new ExaminationEntity(
-      visitId as number,
       symptoms as string,
       bloodPressure as string,
       bodyTemperature as string,

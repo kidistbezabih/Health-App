@@ -1,17 +1,17 @@
-import {sequelize} from "./config/sequelize";
+import { sequelize } from "../models/config/sequelize";
 import {Sequelize} from "sequelize";
 
 import {ConsoleLogger} from "../core/utils";
-import {PatientModel} from "./patientModel";
-import {InstitutionModel} from "./institutionModel";
-import {VisitModel} from "./visitModel";
-import {PrescriptionModel} from "./prescriptionModel";
-import {PreExaminationModel} from "./preExaminationModel";
-import {ExaminationModel} from "./examinationModel";
-import {LaboratoryOrderModel} from "./laboratoryOrderModel";
-import {LaboratoryResultModel} from "./laboratoryResultModel";
-import {XrayModel} from "./xrayModel";
-import { UltraSoundModel } from "./ultraSoundModel";
+import { PatientModel } from "../models/patientModel";
+import { InstitutionModel } from "../models/institutionModel";
+import { VisitModel } from "../models/visitModel";
+import { PrescriptionModel } from "../models/prescriptionModel";
+import { PreExaminationModel } from "../models/preExaminationModel";
+import { ExaminationModel } from "../models/examinationModel";
+import { LaboratoryOrderModel } from "../models/laboratoryOrderModel";
+import { LaboratoryResultModel } from "../models/laboratoryResultModel";
+import { XrayModel } from "../models/xrayModel";
+import { UltraSoundModel } from "../models/ultraSoundModel";
 
 export class DB {
     static _instance: DB;
