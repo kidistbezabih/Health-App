@@ -1,18 +1,18 @@
 import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
-export interface UltrasoundModelRow {
+export interface UltraSoundModelRow {
   id?: number;
-  examType: string;
-  notes: string;
-  imageFilePath: string;
-  findings: string;
-  diagnosis: string;
-  technician: string;
+  examType?: CreationOptional<string>;
+  notes?: CreationOptional<string>;
+  imageFilePath?: CreationOptional<string>;
+  findings?: CreationOptional<string>;
+  diagnosis?: CreationOptional<string>;
+  technician?: CreationOptional<string>;
 }
 
-export class UltrasoundModel extends Model<UltrasoundModelRow> {
-  declare id: number;
+export class UltraSoundModel extends Model<UltraSoundModelRow> {
+  declare id: CreationOptional<number>;
   declare examType: string;
   declare notes: string;
   declare imageFilePath: string;
@@ -21,7 +21,7 @@ export class UltrasoundModel extends Model<UltrasoundModelRow> {
   declare technician: string;
 }
 
-UltrasoundModel.init({
+UltraSoundModel.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -48,7 +48,7 @@ UltrasoundModel.init({
 }, {
   sequelize,
   timestamps: true,
-  tableName: 'ultrasounds',
+  tableName: 'ultraSounds',
   paranoid: true,
   deletedAt: true
 });

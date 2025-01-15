@@ -1,9 +1,9 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface PrescriptionModelRow {
   id?: number;
-  cardNumber: string;
+  visitId: number;
   status: string;
   diagnosisIfNotICD?: string;
   drugDetail?: string;
@@ -12,7 +12,7 @@ export interface PrescriptionModelRow {
 
 export class PrescriptionModel extends Model<PrescriptionModelRow, Omit<PrescriptionModelRow, 'id'>> {
   declare id: CreationOptional<number>;
-  declare cardNumber: string;
+  declare visitId: ForeignKey<number>
   declare status: string;
   declare diagnosisIfNotICD: string;
   declare drugDetail: string;
@@ -21,12 +21,12 @@ export class PrescriptionModel extends Model<PrescriptionModelRow, Omit<Prescrip
 
 PrescriptionModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  cardNumber: {
-    type: DataTypes.STRING,
+  visitId: {
+    type: DataTypes.INTEGER
   },
   status: {
     type: DataTypes.STRING,
@@ -40,7 +40,7 @@ PrescriptionModel.init({
   prescribersName: {
     type: DataTypes.STRING,
   },
-}, 
+},
   {
     sequelize,
     timestamps: true,

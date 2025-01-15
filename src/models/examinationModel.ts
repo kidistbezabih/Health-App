@@ -3,16 +3,20 @@ import {sequelize} from './config/sequelize'
 
 
 export interface ExaminationModelRow{
+  id?: number;
+  visitId: number;
   symptoms?: string;
   bloodPressure?: string;
   bodyTemperature?: string;
   respirationRate?: string;
   oxygenSaturation?: string;
-  weight?: string;
-  height?: string;
+  weight?: number;
+  height?: number;
 }
 
 export class ExaminationModel extends Model<ExaminationModelRow>{
+  declare id: CreationOptional<number>;
+  declare visitId: ForeignKey<number>;
   declare symptoms: CreationOptional<string>;
   declare bloodPressure: CreationOptional<string>;
   declare bodyTemperature: CreationOptional<string>;
@@ -23,6 +27,12 @@ export class ExaminationModel extends Model<ExaminationModelRow>{
 }
 
 ExaminationModel.init({
+  id: {
+    type: DataTypes.INTEGER, 
+    autoIncrement: true, 
+    primaryKey: true
+  },
+  visitId: {type: DataTypes.INTEGER},
   symptoms: {type: DataTypes.STRING},
   bloodPressure: {type: DataTypes.STRING},
   bodyTemperature: {type: DataTypes.STRING},

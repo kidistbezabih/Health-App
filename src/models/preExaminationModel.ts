@@ -2,8 +2,8 @@ import { CreationOptional, DataTypes, ForeignKey, Model } from "sequelize";
 import { sequelize } from './config/sequelize';
 
 export interface PreExaminationModelRow {
-  id: number; 
-  patientId: number;
+  id?: number;
+  visitId: number;
   chiefComplaint?: string;
   hpi?: string;
   pastHx?: string;
@@ -26,8 +26,8 @@ export interface PreExaminationModelRow {
 }
 
 export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreExaminationModelRow, 'id'>> {
-  declare id: number;
-  declare patientId: ForeignKey<number>;
+  declare id: CreationOptional<number>;
+  declare visitId: ForeignKey<number>;
   declare chiefComplaint: CreationOptional<string>;
   declare hpi: CreationOptional<string>;
   declare pastHx: CreationOptional<string>;
@@ -50,69 +50,69 @@ export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreE
 }
 
 PreExaminationModel.init({
-  id: { 
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  patientId: { 
-    type: DataTypes.NUMBER,
+  visitId: {
+    type: DataTypes.INTEGER,
   },
-  chiefComplaint: { 
+  chiefComplaint: {
     type: DataTypes.STRING,
   },
-  hpi: { 
+  hpi: {
     type: DataTypes.STRING,
   },
-  pastHx: { 
+  pastHx: {
     type: DataTypes.STRING,
   },
-  currentHealthStatus: { 
+  currentHealthStatus: {
     type: DataTypes.STRING,
   },
-  familyHx: { 
+  familyHx: {
     type: DataTypes.STRING,
   },
-  psychologicalAndPersonalHx: { 
+  psychologicalAndPersonalHx: {
     type: DataTypes.STRING,
   },
-  general: { 
+  general: {
     type: DataTypes.STRING,
   },
-  skin: { 
+  skin: {
     type: DataTypes.STRING,
   },
-  head: { 
+  head: {
     type: DataTypes.STRING,
   },
-  eyes: { 
+  eyes: {
     type: DataTypes.STRING,
   },
-  ear: { 
+  ear: {
     type: DataTypes.STRING,
   },
-  mouth: { 
+  mouth: {
     type: DataTypes.STRING,
   },
-  breast: { 
+  breast: {
     type: DataTypes.STRING,
   },
-  respiratory: { 
+  respiratory: {
     type: DataTypes.STRING,
   },
-  gastro: { 
+  gastro: {
     type: DataTypes.STRING,
   },
-  guneto: { 
+  guneto: {
     type: DataTypes.STRING,
   },
-  meskal: { 
+  meskal: {
     type: DataTypes.STRING,
   },
-  nervous: { 
+  nervous: {
     type: DataTypes.STRING,
   },
-  examinedBy: { 
+  examinedBy: {
     type: DataTypes.STRING,
   },
 }, {

@@ -2,7 +2,7 @@ import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface XrayModelRow {
-  id: number;
+  id?: number;
   bodyPart?: string;
   exposureSettings?: string;
   imageFilePath?: string;
@@ -12,7 +12,7 @@ export interface XrayModelRow {
 }
 
 export class XrayModel extends Model<XrayModelRow> {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare bodyPart: CreationOptional<string>;
   declare exposureSettings: CreationOptional<string>;
   declare imageFilePath: CreationOptional<string>;
@@ -23,7 +23,7 @@ export class XrayModel extends Model<XrayModelRow> {
 
 XrayModel.init({
   id: {
-    type: DataTypes.NUMBER,  // Corrected to NUMBER for numeric type
+    type: DataTypes.INTEGER,  // Corrected to NUMBER for numeric type
     primaryKey: true,
     autoIncrement: true
   },

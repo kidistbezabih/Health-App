@@ -1,42 +1,23 @@
-import Redis from 'ioredis';
+import {Redis} from 'ioredis'
 import { NextFunction, type Request, type Response } from 'express';
 import { PatientModel } from '../models/patientModel'; 
-import { error } from 'console';
 import { AppError } from '../core/errors/custom.errors';
 import { PatientEntity } from '../core/entities/patient.entities';
-import { Model } from 'sequelize';
 import { PATIENT_QUEUE } from '../core/redis';
 import { PatientService } from '../services/patientServices';
+require('dotenv').config();
 
 interface GetAllRequestQuery {
   page:string;
   limit: string;
 }
 
-interface CreatePatientRequestBody{
-  institutionId: number;
-  cardNumber: string;
-  name: string;
-  age: number;
-  sex: string;
-  address: string;
-  zone: string;
-  kebele: string;
-  phoneNumber: string;
+const redis = new Redis({
+  host:process.env.REDIS_HOST,
+  port:parseInt(process.env.REDIS_PORT ?? '6379') ,
+  showFriendlyErrorStack: true,
 }
-
-interface UpdatePatientRequestBody{
-  name: string;
-  age: number;
-  sex: string;
-  address: string;
-  zone: string;
-  kebele: string;
-  phoneNumber: string;
-
-}
-
-const redis = new Redis();
+);
 const REDIS_KEY = "patient_registration";
 
 export class PatientController {
@@ -44,117 +25,100 @@ export class PatientController {
 
   constructor() {
     this.patientService = new PatientService();
+    this.getPatient = this.getPatient.bind(this); 
+    this.getAllPatients = this.getAllPatients.bind(this); 
   }
 
   // To register patient
-  public async registePatient(req: Request<CreatePatientRequestBody>, res: Response, next: NextFunction): Promise<void>{
+  public async registePatient(req: Request, res: Response, next: NextFunction): Promise<void>{
     try{
-      const { institutionId,name, age, sex, address, zone, kebele, phoneNumber } = req.body;
+      const { institutionId,firstName, lastName, birthDate, sex, address, zone, kebele, phoneNumber } = req.body;
       const today = new Date().toISOString().split("T")[0];
 
-      const latestEntry = await redis.lindex(REDIS_KEY, -1);
+        const latestEntry = await redis.lindex(REDIS_KEY, -1);
 
-      if (latestEntry){
-        const {date} = JSON.parse(latestEntry);
-
-        if (date !== today){
-          await redis.del(REDIS_KEY);
+        if (latestEntry) {
+          try {
+            const { date } = JSON.parse(latestEntry);
+          } catch (parseError) {
+            throw AppError.badRequest("Invalid data in Redis");
+          }
         }
-      }
-
+     
       // append todays  entry to reddis array
       const newEntry = { instId: institutionId, date: today}
 
       // generate card number 
       const count = await redis.llen(REDIS_KEY);
-      const cardNumber = `${institutionId}/${today}/${count}`;
+      console.log("count", count)
+      const cardNumber = `${institutionId}-${today}-${count}`;
+      console.log("card Number", cardNumber )
       
-      await redis.set(REDIS_KEY, JSON.stringify(newEntry));
+      await redis.rpush(REDIS_KEY, JSON.stringify(newEntry));
       
       const patient = await PatientModel.create({
         institutionId,
         cardNumber,
-        name,
-        age,
+        firstName,
+        lastName,
+        birthDate,
         sex,
         address,
         zone,
         kebele,
         phoneNumber
       });
-      if (patient){
-        res.status(201).json({message: "Patient registered successfully", cardNumber});
-      }else{
-        throw error("Failed to Register patient")
+      if (!patient){
+        throw AppError.badRequest("Failed to Register patient")
       }
-    } catch(err){
-      console.error(err)
-      res.status(500).json({ message: 'Internal server error', error: err });
-    }
-  }
-
-  // Find patient by their cardNumber
-  public async getPatientByCardNumber(req: Request<{cardNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise< void> {
-      try{
-        const { cardNumber } = req.params; // Extract cardNumber from URL params
-  
-      if (!cardNumber) {
-        throw AppError.notFound("can't find any patient by this card number")
-      }
-  
-      // Find patient by card number
-      const patient = await this.patientService.getPatientByCardNumber(cardNumber);
       
-      res.json(patient);
-    }catch(err){
-      next(err);
+      res.status(201).json({message: "Patient registered successfully", cardNumber});
+      
+    } 
+    catch(err){
+          res.status(500).json({messsage: "internal server error", error: err});
       }
   }
 
-  public async getPatientByPhoneNumber(req: Request<{phoneNumber: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<void> {
-    try{
-      const { phoneNumber } = req.params; // Extract phoneNumber from URL params
 
-    if (!phoneNumber) {
-      throw AppError.notFound("can't find any patient by this card number")
+  public async getPatient(req: Request<{searchkey: string}>, res: Response, next: NextFunction): Promise< void> {
+      try{
+        const {searchkey} = req.params;
+        const patients = await this.patientService.getPatient(searchkey);
+
+        console.log("patients", patients)
+      if (!patients || patients.length === 0) {
+        throw AppError.notFound("No patients found with the provided search key.");
+      }
+      console.log("patients", patients);
+      res.status(201).json(patients);
     }
+    catch(err){
+      res.status(500).json({messsage: "internal server error", error: err});
+    }
+  }
 
-    // Find patient by card number
-    const patient = await this.patientService.getPatientByPhoneNumber(phoneNumber);
-    
-    res.json(patient);
-    }catch(err){
-    next(err);
+  public async getAllPatients(req: Request, res: Response, next: NextFunction): Promise< void> {
+    try{
+      const patients = await this.patientService.getAllPatients();
+
+      if (!patients) {
+        throw AppError.notFound("No patient registered!");
+      }
+      res.status(200).json(patients);
+    }
+    catch(err){
+        res.status(500).json({messsage: "internal server error", error: err});
     }
   }
 
-  public async getPatientByName(req: Request<{name: string}>, res: Response<PatientEntity>, next: NextFunction): Promise<void> {
-    try{
-      const { name } = req.params; // Extract Name from URL params
-
-    if (!name) {
-      throw AppError.notFound("can't find any patient by this card number")
-    }
-
-    // Find patient by card number
-    const patient = await this.patientService.getPatientByname(name);
+  public async updatePatientInfo(req: Request, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
+    const {cardNumber} = req.params;
     
-    res.json(patient);
-    }catch(err){
-    next(err);
-    }
-  }
-  
-  public async updatePatientInfo(req: Request<{cardNumber: string}, UpdatePatientRequestBody>, res: Response<PatientEntity>, next: NextFunction):Promise<void>{
-    const cardNumber = req.params;
-    
-    if (!cardNumber){
-      throw AppError.notFound("Please isert the card number!")
-    };
-
     const {
-      name,
-      age,
+      firstName,
+      lastName,
+      birthDate,
       sex,
       address,
       zone,
@@ -162,29 +126,42 @@ export class PatientController {
       phoneNumber,
     } = req.body; 
   
-    const patient = await PatientModel.findOne({where: {cardNumber: cardNumber}})
+    const patient = await PatientModel.findOne({where: {cardNumber}})
 
     if (!patient){
       throw AppError.notFound("There is no patient with this card number");
     }
 
-    patient.name = name;
-    patient.age = age
-    patient.sex = sex
-    patient.address = address
-    patient.zone = zone
-    patient.kebele = kebele
-    patient.phoneNumber = phoneNumber
+    patient.firstName = firstName ?? patient.firstName;
+    patient.lastName = lastName ?? patient.lastName;
+    patient.birthDate = birthDate ?? patient.birthDate;
+    patient.sex = sex ?? patient.sex;
+    patient.address = address ?? patient.address;
+    patient.zone = zone ?? patient.zone;
+    patient.kebele = kebele ?? patient.kebele;
+    patient.phoneNumber = phoneNumber ?? patient.phoneNumber;
 
     await patient.save();
-
-    res.json(
-      PatientEntity.fromDatabase(patient)
-    );
+    res.json(patient);
   }
 
   public async addToPreExaminationQueue(cardNumber: string): Promise<void>{
     await redis.lpush(PATIENT_QUEUE, cardNumber)
   }
+
+  public async deletePatientInfo(req: Request, res: Response, next: NextFunction):Promise<void>{
+    const id = Number(req.params.id);
+    
+    if (!id){
+      throw AppError.notFound("Please insert the card number!")
+    };
+    const patient = await this.patientService.deletePatien(id);
+
+    if (!patient){
+      throw AppError.notFound("There is no patient with this card number");
+    }
+
+    res.json(`Patient with card number ${id} deleted successfully `);
+  }  
 };
 

@@ -2,17 +2,18 @@ import { Router } from "express";
 import { PatientController } from "../controllers/patientController";
 import { PatientValidator } from "../validators/patientValidators";
 
-export class PatientRoute {
+export default class PatientRoute {
   static get routes(): Router {
     const router = Router();
     const patientController = new PatientController();
 
     router.post('/register-patient' , PatientValidator.onCreate(), patientController.registePatient);
-    router.get('/patient-by-card-number/:cardNumber', patientController.getPatientByCardNumber);
-    router.get('/patient-by-phone-number/:phoneNumber', patientController.getPatientByPhoneNumber);
-    router.get('/patient-by-name/:name', patientController.getPatientByName);
-    router.put('/patient-update/', PatientValidator.onUpdate(), patientController.updatePatientInfo);
+    router.get('/search/:searchkey', patientController.getPatient);
+    router.get('/get-all', patientController.getAllPatients);
+    router.put('/update/:cardNumber', PatientValidator.onUpdate(), patientController.updatePatientInfo);
+    router.delete('/delete/:id', PatientValidator.onUpdate(), patientController.deletePatientInfo);
 
     return router;
   }
 }
+  
