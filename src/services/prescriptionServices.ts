@@ -3,20 +3,14 @@ import { PatientEntity } from "../core/entities/patient.entities";
 import { AppError } from "../core/errors/custom.errors";
 import { PrescriptionEntity } from "../core/entities/prescriptioin.entities";
 
-
-interface PrescriptionUpdate {
-  status: string;
-  diagnosisIfNotICD: string;
-  drugDetail: string;
-  prescribersName: string;
-}
-
-
-
 export class PrescriptionService {
-    public async createPrescription(visitId: number, status: string, diagnosisIfNotICD: string, drugDetail: string, prescribersName: string): Promise<PrescriptionEntity> {
+    public async createPrescription(visitId: number, medicationType: string, medication: string, dosage: string, instruction: string): Promise<PrescriptionEntity> {
       const patientPrescription = await PrescriptionModel.create({
-       visitId, status, diagnosisIfNotICD, drugDetail, prescribersName
+        visitId, 
+        medicationType,
+        medication,
+        dosage,
+        instruction,
       })
       return patientPrescription
     }
@@ -25,10 +19,10 @@ export class PrescriptionService {
     const prescription = await PrescriptionModel.findOne({
       where: { id },
       attributes: [
-        "status",
-        "diagnosisIfNotICD",
-        "drugDetail",
-        "prescribersName"
+        "MedicationType",
+        "Medication",
+        "Dosage",
+        "Instruction"
       ],
     });
 
@@ -43,10 +37,10 @@ export class PrescriptionService {
     const prescription = await PrescriptionModel.findOne({where: {id}});
 
     if (prescription){
-      prescription.status = status??prescription.status,
-      prescription.diagnosisIfNotICD = diagnosisIfNotICD ?? prescription.diagnosisIfNotICD
-      prescription.drugDetail = drugDetail ?? prescription.drugDetail
-      prescription.prescribersName = prescribersName ?? prescription.prescribersName
+      prescription.medicationType = status??prescription.medicationType,
+      prescription.medication = diagnosisIfNotICD ?? prescription.medication
+      prescription.dosage = drugDetail ?? prescription.dosage
+      prescription.instruction = prescribersName ?? prescription.instruction
       await prescription.save()
     }
   }

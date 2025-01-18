@@ -17,11 +17,11 @@ export class VisitController{
     try
       {const patientId = Number(req.params.patientId);
 
-      const visit = this.visitService.createVisit(patientId);
+      const visit = await this.visitService.createVisit(patientId);
       if(!visit){
-        res.status(200).json({message: "Unable to crete patient visit"})
+        res.status(200).json({message: "Unable to create patient visit"})
       }
-      res.status(201).json({message: "Visit is creted successfully"})
+      res.status(201).json({message: "Visit is created successfully"})
     }
     catch(err){
          res.status(500).json({messsage: "internal server error", error: err});

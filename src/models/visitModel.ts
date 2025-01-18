@@ -2,7 +2,7 @@ import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface VisitModelRow {
-  id: number;
+  id?: number;
   patientId: number;
 }
 

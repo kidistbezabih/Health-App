@@ -3,26 +3,26 @@ import { PrescriptionModel } from "../../models/prescriptionModel";
 
 export class PrescriptionEntity {
   constructor(
-    status: string,
-    diagnosisIfNotICD: string,
-    drugDetail: string,
-    prescribersName: string,
+    medicationType: string,
+    medication: string,
+    dosage: string,
+    instruction: string,
   ) {
   }
 
   public static fromDatabase(obj: PrescriptionModel): PrescriptionEntity {
     const {
-      status,
-      diagnosisIfNotICD,
-      drugDetail,
-      prescribersName,
+      medicationType,
+      medication,
+      dosage,
+      instruction,
   } = obj;
 
   return new PrescriptionEntity(
-    status as string,
-    diagnosisIfNotICD as string,
-    drugDetail as string,
-    prescribersName as string,
+    medicationType as string,
+    medication as string,
+    dosage as string,
+    instruction as string,
   )
   }
 }

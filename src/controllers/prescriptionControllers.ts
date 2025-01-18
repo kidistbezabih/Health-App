@@ -19,10 +19,20 @@ export class PrescriptionController{
   //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
   public async createPrescription(req: Request<PrescriptionEntity>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {visitId, status, diagnosisIfNotICD, drugDetail, prescribersName } = req.body;
+      const {
+        visitId,
+        medicationType,
+        medication,
+        dosage,
+        instruction,
+      } = req.body;
 
       const Prescription = await this.prescriptionService.createPrescription(
-        visitId, status, diagnosisIfNotICD, drugDetail, prescribersName
+        visitId, 
+        medicationType,
+        medication,
+        dosage,
+        instruction,
       );
 
       if(!Prescription){
@@ -70,9 +80,19 @@ export class PrescriptionController{
 public async updatePrescription(req: Request<{id:number, status:string, diagnosisIfNotICD:string, drugDetail:string, prescribersName:string}, PrescriptionEntity>, res: Response, next: NextFunction): Promise<void>{
     try{
       const id = Number(req.params.id);
-      const { status, diagnosisIfNotICD, drugDetail, prescribersName } = req.body;
+      const { 
+        medicationType,
+        medication,
+        dosage,
+        instruction,
+       } = req.body;
 
-      const prescription = this.prescriptionService.updatePrescription(id, status, diagnosisIfNotICD, drugDetail, prescribersName
+      const prescription = this.prescriptionService.updatePrescription(
+        id,
+        medicationType,
+        medication,
+        dosage,
+        instruction, 
 
       );
 

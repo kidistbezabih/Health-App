@@ -23,11 +23,7 @@ export class VisitService {
     if (patientVisits.length == 0) {
       throw AppError.notFound("Patient has no visit history");
     }
-    // for all the visit id prepare some kind of onbject to store the information 
-    // that we get from examination room,  laboratory result, doctor prescription.
 
-
-    // then lis the objects
     return patientVisits
   }
 

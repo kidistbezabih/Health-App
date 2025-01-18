@@ -4,19 +4,19 @@ import { sequelize } from './config/sequelize';
 export interface PrescriptionModelRow {
   id?: number;
   visitId: number;
-  status: string;
-  diagnosisIfNotICD?: string;
-  drugDetail?: string;
-  prescribersName?: string;
+  medicationType: string;
+  medication?: string;
+  dosage?: string;
+  instruction?: string;
 }
 
 export class PrescriptionModel extends Model<PrescriptionModelRow, Omit<PrescriptionModelRow, 'id'>> {
   declare id: CreationOptional<number>;
   declare visitId: ForeignKey<number>
-  declare status: string;
-  declare diagnosisIfNotICD: string;
-  declare drugDetail: string;
-  declare prescribersName: string;
+  declare medicationType: string;
+  declare medication: string;
+  declare dosage: string;
+  declare instruction: string;
 }
 
 PrescriptionModel.init({
@@ -28,17 +28,17 @@ PrescriptionModel.init({
   visitId: {
     type: DataTypes.INTEGER
   },
-  status: {
-    type: DataTypes.STRING,
+  medicationType: {
+    type: DataTypes.STRING
   },
-  diagnosisIfNotICD: {
-    type: DataTypes.STRING,
+  medication: {
+    type: DataTypes.STRING
   },
-  drugDetail: {
-    type: DataTypes.STRING,
+  dosage: {
+    type: DataTypes.STRING
   },
-  prescribersName: {
-    type: DataTypes.STRING,
+  instruction: {
+    type: DataTypes.STRING
   },
 },
   {
