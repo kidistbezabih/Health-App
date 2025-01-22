@@ -17,7 +17,7 @@ export class PrescriptionController{
   }
 
   //  in examination room doctor can create(examination), update, get(info in the preexamination), get(all the visits) info about the patiene, 
-  public async createPrescription(req: Request<PrescriptionEntity>, res: Response, next: NextFunction): Promise<void>{
+  public async  createPrescription(req: Request<PrescriptionEntity>, res: Response, next: NextFunction): Promise<void>{
     try{
       const {
         visitId,
@@ -48,7 +48,7 @@ export class PrescriptionController{
 
   public async getPrescription(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
     try{
-      const id = Number(req.params.id);
+      const id = req.params.id;
 
       const prescription = await this.prescriptionService.getPrescription(id);
 
@@ -87,7 +87,7 @@ public async updatePrescription(req: Request<{id:number, status:string, diagnosi
         instruction,
        } = req.body;
 
-      const prescription = this.prescriptionService.updatePrescription(
+      const prescription = await this.prescriptionService.updatePrescription(
         id,
         medicationType,
         medication,

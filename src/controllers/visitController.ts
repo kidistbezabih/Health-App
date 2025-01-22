@@ -15,11 +15,12 @@ export class VisitController{
 
   public async createVisit(req: Request<{patientId: number}>, res: Response, next: NextFunction):Promise<void>{
     try
-      {const patientId = Number(req.params.patientId);
+      {
+      const patientId = Number(req.params.patientId);
 
       const visit = await this.visitService.createVisit(patientId);
       if(!visit){
-        res.status(200).json({message: "Unable to create patient visit"})
+        res.status(400).json({message: "Unable to create patient visit"})
       }
       res.status(201).json({message: "Visit is created successfully"})
     }

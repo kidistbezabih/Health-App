@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response, Router} from "express";
-import { DB } from "../core";
+import { DB } from "../models";
 
 export class DevRoutes {
     static get routes(): Router {

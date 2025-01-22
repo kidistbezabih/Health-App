@@ -1,31 +1,44 @@
 import {
+	BelongsToManyAddAssociationMixin,
+	BelongsToManyGetAssociationsMixin,
+	BelongsToManyRemoveAssociationMixin,
 	CreationOptional,
 	DataTypes,
-	Model
+	Model,
+	NonAttribute
 } from 'sequelize';
 
 import { sequelize } from './config/sequelize';
+import { RoleModel } from './roleModel';
 
 export interface UserModelRow {
 	id: number;
 	email: string;
+	emailVerified?: boolean;
 	phone: string;
 	phoneVerified?: boolean;
 	fullName: string;
 	password: string;
-  role: string;
+	googleId?: string;
 	status: boolean;
 }
 
 export class UserModel extends Model<UserModelRow, Omit<UserModelRow, 'id'>> {
 	declare id: number;
 	declare email: string;
+	declare emailVerified?: boolean;
 	declare phone: string;
 	declare phoneVerified?: boolean;
 	declare fullName: string;
 	declare password: string;
-  declare role: string;
+	declare googleId?: string;
 	declare status?: boolean;
+
+	declare addRole: BelongsToManyAddAssociationMixin<RoleModel, number>;
+	declare getRoles: BelongsToManyGetAssociationsMixin<RoleModel>;
+	declare removeRole: BelongsToManyRemoveAssociationMixin<RoleModel, number>;
+
+	declare roles?: NonAttribute<RoleModel[]>;
 }
 
 UserModel.init({
@@ -37,6 +50,11 @@ UserModel.init({
 	email: {
 		type: DataTypes.STRING,
 		allowNull: false
+	},
+	emailVerified: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false
 	},
 	phone: {
 		type: DataTypes.STRING,
@@ -55,14 +73,15 @@ UserModel.init({
 		type: DataTypes.STRING,
 		allowNull: false
 	},
-  role: {type: DataTypes.STRING, 
-    allowNull: false
-  },
 	status: {
 		type: DataTypes.BOOLEAN,
 		allowNull: false,
 		defaultValue: false
 	},
+	googleId: {
+		type: DataTypes.STRING,
+		allowNull: true
+	}
 }, {
 	sequelize,
 	timestamps: true,

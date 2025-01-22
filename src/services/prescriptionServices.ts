@@ -16,39 +16,34 @@ export class PrescriptionService {
     }
 
   public async getPrescription(id: number): Promise<PrescriptionEntity> {
-    const prescription = await PrescriptionModel.findOne({
-      where: { id },
-      attributes: [
-        "MedicationType",
-        "Medication",
-        "Dosage",
-        "Instruction"
-      ],
-    });
+    const prescription = await PrescriptionModel.findOne({ where: { id }});
 
     if (!prescription) {
-      throw AppError.notFound("Can't find any patient with this card number");
+     throw AppError.notFound("Can't find any patient with this card number");
     }
 
     return prescription
   }
 
-  public async updatePrescription(id: number, status:string, diagnosisIfNotICD:string, drugDetail:string, prescribersName:string):Promise<void>{
+  public async updatePrescription(id: number, status:string, diagnosisIfNotICD:string, drugDetail:string, prescribersName:string):Promise<PrescriptionEntity>{
     const prescription = await PrescriptionModel.findOne({where: {id}});
 
-    if (prescription){
-      prescription.medicationType = status??prescription.medicationType,
-      prescription.medication = diagnosisIfNotICD ?? prescription.medication
-      prescription.dosage = drugDetail ?? prescription.dosage
-      prescription.instruction = prescribersName ?? prescription.instruction
-      await prescription.save()
+    if (!prescription){
+      throw AppError.notFound("cant find with this id!")
     }
+    prescription.medicationType = status??prescription.medicationType,
+    prescription.medication = diagnosisIfNotICD ?? prescription.medication
+    prescription.dosage = drugDetail ?? prescription.dosage
+    prescription.instruction = prescribersName ?? prescription.instruction
+    await prescription.save()
+
+    return prescription
   }
     public async getAllReferral(): Promise<PrescriptionEntity[]>{
       const prescriptions = await PrescriptionModel.findAll()
 
       if(!prescriptions){
-        AppError.notFound
+        AppError.notFound("No data!");
       }
       return prescriptions
     }

@@ -3,14 +3,14 @@ import { AppError } from "../core/errors/custom.errors";
 import { ExaminationModel } from "../models/examinationModel";
 
 export class ExaminationService {
-  public async getPatientExaminationRecord(visitId: number): Promise<ExaminationEntity> {
-    const patientData = await ExaminationModel.findOne({where:{visitId}});
+  public async getPatientExaminationRecord(visitId: number): Promise<ExaminationEntity[]> {
+    const patientData = await ExaminationModel.findAll({where:{visitId}});
 
     if(!patientData){
-      throw AppError.notFound("No examination record!")
+      AppError.notFound("No examination record!")
     }
-    console.log("first", patientData)
-    return ExaminationEntity.fromDatabase(patientData);
+
+    return patientData.map(ExaminationEntity.fromDatabase);
   }
   
   public async getAllExaminationRecords(): Promise<ExaminationEntity[]> {
