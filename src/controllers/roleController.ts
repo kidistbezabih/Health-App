@@ -111,7 +111,7 @@ export class RoleController {
     }
   }
 
-  public async deleteUser( req: Request, res: Response, next: NextFunction ): Promise<void> {
+  public async deleteRole( req: Request, res: Response, next: NextFunction ): Promise<void> {
     try{
       const id = req.params.id;
 

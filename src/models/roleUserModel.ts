@@ -1,15 +1,17 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface RoleUserModelRow {
-	id: number;
+	id?: number;
+	userId: number;
+	roleId: number;
 }
 
 export class RoleUserModel extends Model<RoleUserModelRow, Omit<RoleUserModelRow, 'id'>> {
-	declare id: number;
-	declare createdAt: CreationOptional<Date>;
-	declare updatedAt: CreationOptional<Date>;
-	declare deletedAt: CreationOptional<Date>;
+	declare id: CreationOptional<number>;
+	declare userId: ForeignKey<number>;
+	declare roleId: ForeignKey<number>;
+
 }
 
 RoleUserModel.init({
@@ -17,6 +19,12 @@ RoleUserModel.init({
 		type: DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
+	}, 
+	userId: {
+		type: DataTypes.NUMBER,
+	}, 
+	roleId: {
+		type: DataTypes.NUMBER,
 	}
 }, {
 	sequelize,
