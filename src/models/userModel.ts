@@ -12,8 +12,9 @@ import { sequelize } from './config/sequelize';
 import { RoleModel } from './roleModel';
 
 export interface UserModelRow {
-	id: number;
+	id?: number;
 	email: string;
+	verificationToken?: string;
 	emailVerified?: boolean;
 	phone: string;
 	phoneVerified?: boolean;
@@ -23,16 +24,18 @@ export interface UserModelRow {
 	status: boolean;
 }
 
-export class UserModel extends Model<UserModelRow, Omit<UserModelRow, 'id'>> {
-	declare id: number;
-	declare email: string;
+export class UserModel extends Model<UserModelRow> {
+	declare id: CreationOptional<number>;
+	declare email: string;	
 	declare emailVerified?: boolean;
 	declare phone: string;
 	declare phoneVerified?: boolean;
 	declare fullName: string;
 	declare password: string;
 	declare googleId?: string;
-	declare status?: boolean;
+	declare status: boolean;
+	declare verificationToken: CreationOptional<string>;
+	
 
 	declare addRole: BelongsToManyAddAssociationMixin<RoleModel, number>;
 	declare getRoles: BelongsToManyGetAssociationsMixin<RoleModel>;
@@ -50,6 +53,9 @@ UserModel.init({
 	email: {
 		type: DataTypes.STRING,
 		allowNull: false
+	},	
+	verificationToken: {
+		type: DataTypes.STRING,
 	},
 	emailVerified: {
 		type: DataTypes.BOOLEAN,
@@ -82,7 +88,8 @@ UserModel.init({
 		type: DataTypes.STRING,
 		allowNull: true
 	}
-}, {
+},
+	{
 	sequelize,
 	timestamps: true,
 	tableName: 'users',
