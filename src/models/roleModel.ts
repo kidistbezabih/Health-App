@@ -18,6 +18,7 @@ export class RoleModel extends Model<RoleModelRow, Omit<RoleModelRow, 'id'>> {
 	declare id: CreationOptional<number>;
 	declare name: string;
 	declare description: string;
+
 	declare addUser: BelongsToManyAddAssociationMixin<UserModel, number>;
 	declare getUsers: BelongsToManyGetAssociationsMixin<UserModel>;
 }
@@ -30,6 +31,7 @@ RoleModel.init({
 	},
 	name: {
 		type: DataTypes.STRING,
+		unique: true,
 		allowNull: false,
 		defaultValue: 'client'
 	},

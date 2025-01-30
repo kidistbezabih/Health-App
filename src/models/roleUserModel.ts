@@ -11,7 +11,6 @@ export class RoleUserModel extends Model<RoleUserModelRow, Omit<RoleUserModelRow
 	declare id: CreationOptional<number>;
 	declare userId: ForeignKey<number>;
 	declare roleId: ForeignKey<number>;
-
 }
 
 RoleUserModel.init({
@@ -22,14 +21,24 @@ RoleUserModel.init({
 	}, 
 	userId: {
 		type: DataTypes.NUMBER,
+		allowNull: false,
+		references: {
+			model: 'users', // Assumed name of the User model table
+			key: 'id'
+		}
 	}, 
 	roleId: {
 		type: DataTypes.NUMBER,
+		allowNull: false,
+		references: {
+			model: 'roles', // Assumed name of the User model table
+			key: 'id'
+		}
 	}
 }, {
 	sequelize,
 	timestamps: true,
-	tableName: 'role_users',
+	tableName: 'users_role',
 	paranoid: true,
 	deletedAt: true
 });

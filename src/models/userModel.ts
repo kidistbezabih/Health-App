@@ -35,7 +35,6 @@ export class UserModel extends Model<UserModelRow> {
 	declare googleId?: string;
 	declare status: boolean;
 	declare verificationToken: CreationOptional<string>;
-	
 
 	declare addRole: BelongsToManyAddAssociationMixin<RoleModel, number>;
 	declare getRoles: BelongsToManyGetAssociationsMixin<RoleModel>;
@@ -53,7 +52,7 @@ UserModel.init({
 	email: {
 		type: DataTypes.STRING,
 		allowNull: false
-	},	
+	},
 	verificationToken: {
 		type: DataTypes.STRING,
 	},

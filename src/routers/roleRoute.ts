@@ -11,11 +11,11 @@ export class RoleRoutes {
         const allowedRoles = new AllowedRolesMiddleware;
         const role = new RoleController;
 
-        router.post('/add-role', auth.validateJWT, allowedRoles.check(['admin',]),  role.createRole)
-        router.get('/get-all-roles', auth.validateJWT, allowedRoles.check(['admin',]),   role.getAllRoles)
-        router.get('/get-role/:id', auth.validateJWT, allowedRoles.check(['owner', 'admin',]),   role.getRoleById)
-        router.put('/update-role/:id', auth.validateJWT, allowedRoles.check(['owner', 'admin',]),   role.updateRole)
-        router.delete('/delete-role/:id', auth.validateJWT, allowedRoles.check(['owner', 'admin',]),   role.deleteRole)
+        router.post('/add-role',  role.createRole)
+        router.get('/get-role/:id',  role.getRoleById)
+        router.get('/get-all-roles', role.getAllRoles)
+        router.put('/update-role/:id',  role.updateRole)
+        router.delete('/delete-role/:id',  role.deleteRole)
 
         return router;
     }

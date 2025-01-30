@@ -110,13 +110,13 @@ export class DB {
 
         UserModel.belongsToMany(RoleModel, {
           through:RoleUserModel,
-          as: 'role',
+          as: 'roles',
           foreignKey: 'userId'
         });
     
         RoleModel.belongsToMany(UserModel, {
           through:RoleUserModel,
-          as: 'user',
+          as: 'users',
           foreignKey: 'roleId'
         })
       }

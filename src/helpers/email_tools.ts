@@ -3,12 +3,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.example.com", 
+  host: "smtp.gmail.com", 
   port: 587, 
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS,
+    user: process.env.SMTP_EMAIL, 
+    pass: process.env.SMTP_PASSWORD,
   },
 });
 
@@ -17,7 +17,7 @@ export class EmailComfirmation{
     
     const confirmationUrl = `https://example.com/confirm-email?token=${token}`;
     const mailOptions = {
-        from: '"Your App" <your-email@example.com>',
+        from: process.env.SMTP_EMAIL,
         to: email,
         subject: "Confirm Your Email Address",
         html: `<p>Please confirm your email by clicking <a href="${confirmationUrl}">here</a>.</p>`,
@@ -31,7 +31,6 @@ export class EmailComfirmation{
         throw new Error("Email sending failed");
     }
   };
-
 } 
 
 

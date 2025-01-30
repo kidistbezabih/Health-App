@@ -57,12 +57,11 @@ export class AuthController{
   }
 
 
-  public async getUserById( req: Request, res: Response, next: NextFunction
-    ): Promise<void> {
+  public async getUserById( req: Request, res: Response, next: NextFunction ): Promise<void> {
       try{
         const id = Number(req.params.id);
   
-        const user = await UserModel.findByPk(id, {
+        const user = await UserModel.findOne({where:{id},
           attributes: ['id', 'fullName', 'email', 'phone'],
           include: [{
             model: RoleModel,
@@ -79,7 +78,7 @@ export class AuthController{
           UserEntity.fromDatabase(user)
         );
       }catch(err){
-        res.status(500).json("Internal server error!")
+        res.status(500).json(`Internal server error! ${err}`)
       }
   }
 
@@ -117,17 +116,11 @@ export class AuthController{
   public async deleteUser(req: Request,res: Response,next: NextFunction ): Promise<void> {
 
 		try{
-      const id = req.params.id;
+      const id = Number(req.params.id);
 
-      const userModel = await UserModel.findByPk(id);
+      const deleteCount = await UserModel.destroy({where: {id}});
 
-      if (!userModel) {
-        throw AppError.notFound(`User with id ${id} not found`);
-      }
-
-      const count = await UserModel.destroy();
-
-      if (count){
+      if (!deleteCount){
         throw AppError.notFound(`User with id ${id} not found`);
       }
       res.json("Succesfully deleted");
@@ -185,35 +178,28 @@ export class AuthController{
 
   public async registerUser(req:Request, res: Response, next: NextFunction): Promise<void>{
     try{
-      const errors = validationResult(req);
+      const {email, phone, fullName, password} = req.body
 
-    if (!errors.isEmpty()) {
-      res.status(400).json({errors: errors.array()});
-      return  
-    }
+      let user = await UserModel.findOne({where: {email}});
 
-    const {email, phone, fullName, password} = req.body
+      if (!(user === null)) {
+        res.status(400).json({errors: [{msg: 'User already exists'}]})
+        return
+      }
 
-    let user = await UserModel.findOne({where: {email}});
+      const salt = await bcrypt.genSalt(10);
+      const pass = await bcrypt.hash(password, salt);
+      user = await UserModel.create({email, fullName, password:pass, phone, status:false})
 
-    if (!(user === null)) {
-      res.status(400).json({errors: [{msg: 'User already exists'}]})
-      return
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const pass = await bcrypt.hash(password, salt);
-    user = await UserModel.create({email, fullName, password:pass, phone, status:false})
-
-    const payload = {user: {id: user.id}}
-
-      const token = jwt.sign(payload, jwt_secret!, { expiresIn: 360000 });
-
+      const payload = {user: {id: user.id}}
+      const token = jwt.sign(payload, jwt_secret as string, { expiresIn: '1h' });
+      
       user.verificationToken = token;
       await user.save();  
+      console.log("token___________---------------------______", token)
 
       await this.emailConfirmation.sendConfirmationEmail({ email, token });
-      res.status(201).send({ message: `Email sent to ${email}. Check email and confirm.` });
+      res.status(201).send({ message: `Email sent to ${email}. Check email and confirm. Here is the confirmation token ${token}` });
     }catch(err){
       res.status(5000).json('Internal server error!')
     }
@@ -295,31 +281,26 @@ export class AuthController{
 
   public async verifyEmail(req: Request, res: Response): Promise<void> {
     try {
-      const { token } = req.query;
+      const {token}  = req.params;
+      console.log("printed, tokekn*****************", token)
 
-      if (!token) {
-        res.status(400).json({ message: 'Token is required' });
-        return
-      }
+      const decoded = jwt.verify(token as string,jwt_secret as string ) as {token: string};
+      // const user = await UserModel.findOne({ where: { token: decoded.token } });
 
-      const decoded = jwt.verify(token as string, jwt_secret as string) as { id: string };
-      const user = await UserModel.findOne({ where: { id: decoded.id } });
+      // if (!user) {
+      //   res.status(404).json({ message: "User not found" });
+      //   return;
+      // }
 
+      // if (user.emailVerified) {
+      //   res.status(400).json({ message: "User is already verified" });
+      //   return;
+      // }
 
-      if (!user) {
-        res.status(404).json({ message: "User not found" });
-        return;
-      }
+      // user.emailVerified = true;
+      // await user.save();
 
-      if (user.emailVerified) {
-        res.status(400).json({ message: "User is already verified" });
-        return;
-      }
-
-      user.emailVerified = true;
-      await user.save();
-
-      res.status(200).json({ message: "Email verified successfully" });
+      // res.status(200).json({ message: "Email verified successfully" });
 
     } catch (err) {
       console.error(err);
@@ -333,3 +314,4 @@ export class AuthController{
     }
   }
 }
+

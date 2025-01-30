@@ -69,28 +69,48 @@ export class PreExaminationController{
             throw AppError.notFound("No patient with this visit id");
         }
 
+        const formatedchiefComplaint = Array.isArray(chiefComplaint) ? chiefComplaint: chiefComplaint?.split(',').map((s: string) => s.trim());
+        const formatedhpi = Array.isArray(hpi) ? hpi: hpi?.split(',').map((s: string) => s.trim());
+        const formatedpastHx = Array.isArray(pastHx) ? pastHx: pastHx?.split(',').map((s: string) => s.trim());
+        const formatedcurrentHealthStatus = Array.isArray(currentHealthStatus) ? currentHealthStatus: currentHealthStatus?.split(',').map((s: string) => s.trim());
+        const formatedfamilyHx = Array.isArray(familyHx) ? familyHx: familyHx?.split(',').map((s: string) => s.trim());
+        const formatedpsychologicalAndPersonalHx = Array.isArray(psychologicalAndPersonalHx) ? psychologicalAndPersonalHx: psychologicalAndPersonalHx?.split(',').map((s: string) => s.trim());
+        const formatedgeneral = Array.isArray(general) ? general: general?.split(',').map((s: string) => s.trim());
+        const formatedskin = Array.isArray(skin) ? skin: skin?.split(',').map((s: string) => s.trim());
+        const formatedhead = Array.isArray(head) ? head: head?.split(',').map((s: string) => s.trim());
+        const formatedeyes = Array.isArray(eyes) ? eyes: eyes?.split(',').map((s: string) => s.trim());
+        const formatedear = Array.isArray(ear) ? ear: ear?.split(',').map((s: string) => s.trim());
+        const formatedmouth = Array.isArray(mouth) ? mouth: mouth?.split(',').map((s: string) => s.trim());
+        const formatedbreast = Array.isArray(breast) ? breast: breast?.split(',').map((s: string) => s.trim());
+        const formatedrespiratory = Array.isArray(respiratory) ? respiratory: respiratory?.split(',').map((s: string) => s.trim());
+        const formatedgastro = Array.isArray(gastro) ? gastro: gastro?.split(',').map((s: string) => s.trim());
+        const formatedguneto = Array.isArray(guneto) ? guneto: guneto?.split(',').map((s: string) => s.trim());
+        const formatedmeskal = Array.isArray(meskal) ? meskal: meskal?.split(',').map((s: string) => s.trim());
+        const formatednervous = Array.isArray(nervous) ? nervous: nervous?.split(',').map((s: string) => s.trim());
+        const formatedexaminedBy = Array.isArray(examinedBy) ? examinedBy: examinedBy?.split(',').map((s: string) => s.trim());
+
         // Create a new patient symptom record in the database
         const patientSymptom = await PreExaminationModel.create({
             visitId,
-            chiefComplaint,
-            hpi,
-            pastHx,
-            currentHealthStatus,
-            familyHx,
-            psychologicalAndPersonalHx,
-            general,
-            skin,
-            head,
-            eyes,
-            ear,
-            mouth,
-            breast,
-            respiratory,
-            gastro,
-            guneto,
-            meskal,
-            nervous,
-            examinedBy
+            chiefComplaint: formatedchiefComplaint,
+            hpi: formatedhpi,
+            pastHx: formatedpastHx,
+            currentHealthStatus: formatedcurrentHealthStatus,
+            familyHx: formatedfamilyHx,
+            psychologicalAndPersonalHx: formatedpsychologicalAndPersonalHx,
+            general: formatedgeneral,
+            skin: formatedskin,
+            head: formatedhead,
+            eyes: formatedeyes,
+            ear: formatedear,
+            mouth: formatedmouth,
+            breast: formatedbreast,
+            respiratory: formatedrespiratory,
+            gastro: formatedgastro,
+            guneto: formatedguneto,
+            meskal: formatedmeskal,
+            nervous: formatednervous,
+            examinedBy: formatedexaminedBy
         });
 
         // Respond with success or failure message
@@ -103,9 +123,8 @@ export class PreExaminationController{
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err });
     }
-}
+  }
 
-  // 
   public async getPreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const visitId = Number(req.params.visitId);

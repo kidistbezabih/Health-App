@@ -24,9 +24,10 @@ export class RoleController {
       if (!roleModel){
         res.status(400).json({message: "Fail to create! "});  
       }
+      console.log(roleModel)
       res.status(200).json({message: "successfully created"});
     }catch(err){
-      res.status(500).json("internal server error")
+      res.status(500).json(`internal server error ${err}`)
     }
   }
 
@@ -68,15 +69,18 @@ export class RoleController {
     try{
     const id = Number(req.params.id);
 
-    const role = await RoleModel.findByPk(id, {
-      attributes: ['id', 'name', 'description'],
-      include: [{
-        model: UserModel,
-        attributes: ['id','email','phone','fullName'],
-        as: 'users'
-      }]
+    const role = await RoleModel.findOne({
+      where: {id}, 
+      
+      // attributes: ['id', 'name', 'description'],
+      // include: [{
+      //   model: UserModel,
+      //   attributes: ['id','email','phone','fullName'],
+      //   as: 'users'
+      // }]
     });
 
+    console.log("roles on console", role)
     if (!role) {
       throw AppError.notFound('Can\'t find User model with the provided id');
     }
@@ -115,17 +119,12 @@ export class RoleController {
     try{
       const id = req.params.id;
 
-      const roleModel = await RoleModel.findByPk(id);
+      const roleCount = await RoleModel.destroy({where: {id}});
 
-      if (!roleModel) {
+      if (!roleCount) {
         throw AppError.notFound(`User with id ${id} not found`);
       }
 
-      const count = await RoleModel.destroy();
-
-      if (count){
-        throw AppError.notFound(`User with id ${id} not found`);
-      }
       res.json("Succesfully deleted");
     }catch(err){
       res.status(400).json("Intenal server error!")

@@ -59,61 +59,61 @@ PreExaminationModel.init({
     type: DataTypes.INTEGER,
   },
   chiefComplaint: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   hpi: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   pastHx: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   currentHealthStatus: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   familyHx: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   psychologicalAndPersonalHx: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   general: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   skin: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   head: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   eyes: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   ear: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   mouth: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   breast: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   respiratory: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   gastro: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   guneto: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   meskal: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   nervous: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
   examinedBy: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
 }, {
   sequelize,
