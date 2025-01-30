@@ -129,18 +129,27 @@ export class LaboratoryOrderController{
   }
 
 
-  public async getLaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void>{
-    try{
-      const {id} = req.params;
+  public async getLaboratoryOrder(req: Request<{id: number}>, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const {id} = req.params;
 
-      const order =await this.labOrderService.getLabOrder(id);
+        // Retrieve the laboratory order
+        const order = await this.labOrderService.getLabOrder(id);
 
-      if (!order){
-        AppError.badRequest("No laboratory order with this id!")
-      }
-      res.status(201).json(order);
-  }catch(err){
-        res.status(500).json({messsage: "internal server error", error: err})
+        // Handle case if no order is found
+        if (!order) {
+            throw AppError.badRequest("No laboratory order with this id!");
+        }
+
+        // Filter only properties that have a true value
+        const trueValues = Object.fromEntries(
+            Object.entries(order).filter(([key, value]) => value === true)
+        );
+
+        // Respond with the filtered values
+        res.status(200).json(trueValues);
+    } catch (err) {
+        res.status(500).json({message: "Internal server error", error: err});
     }
 }
 
@@ -275,19 +284,35 @@ public async updateLaboratoryOrder(req: Request<{id: number}>, res: Response, ne
 
 public async getAllLaboratoryOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const laboratoryOrders = await LaboratoryOrderModel.findAll();
-    
-    if (!laboratoryOrders || laboratoryOrders.length === 0) {
-      res.status(404).json({ message: 'No laboratory orders found' });
-    }
+      // Fetch all laboratory orders
+      const laboratoryOrders = await LaboratoryOrderModel.findAll();
 
-    res.status(200).json({
-      data: laboratoryOrders
-    });
+      // Check if no laboratory orders are found
+      if (!laboratoryOrders || laboratoryOrders.length === 0) {
+          throw res.status(404).json({ message: 'No laboratory orders found' });
+      }
+
+      // Convert each Sequelize instance to a plain object and filter properties with true value
+      const trueValuesOrders = laboratoryOrders.map(order => {
+          // Get plain object from Sequelize instance
+          const plainOrder = order.get();
+
+          // Filter only properties that have a true value
+          const filteredOrder = Object.fromEntries(
+              Object.entries(plainOrder).filter(([key, value]) => value === true)
+          );
+
+          return filteredOrder;
+      });
+
+      // Respond with the filtered orders
+      res.status(200).json({
+          data: trueValuesOrders
+      });
   } catch (error) {
-    res.status(500).json({
-      message: 'Internal server error',
-    });
+      res.status(500).json({
+          message: 'Internal server error',
+      });
   }
-} 
+}
 }

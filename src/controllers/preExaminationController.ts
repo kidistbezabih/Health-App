@@ -123,7 +123,7 @@ export class PreExaminationController{
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err });
     }
-  }
+}
 
   public async getPreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
