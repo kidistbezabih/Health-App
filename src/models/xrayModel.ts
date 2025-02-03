@@ -13,6 +13,7 @@ export interface XrayModelRow {
 
 export class XrayModel extends Model<XrayModelRow> {
   declare id: CreationOptional<number>;
+  declare : CreationOptional<number>;
   declare bodyPart: CreationOptional<string>;
   declare exposureSettings: CreationOptional<string>;
   declare imageFilePath: CreationOptional<string>;

@@ -148,84 +148,87 @@ export class PreExaminationController{
       }
     }
 
-public async updatePreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
-  try {
-      const visitId = Number(req.params.visitId);
-      if (!visitId) {
-          throw AppError.notFound("Visit ID is required");
+    public async updatePreExaminationRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+          const id = Number(req.params.id);
+          if (!id) {
+              throw AppError.notFound("ID is required");
+          }
+  
+          const {
+              chiefComplaint,
+              hpi,
+              pastHx,
+              currentHealthStatus,
+              familyHx,
+              psychologicalAndPersonalHx,
+              general,
+              skin,
+              head,
+              eyes,
+              ear,
+              mouth,
+              breast,
+              respiratory,
+              gastro,
+              guneto,
+              meskal,
+              nervous,
+              examinedBy
+          } = req.body;
+  
+          const patientRecord = await PreExaminationModel.findOne({
+              where: { id }
+          });
+  
+          if (!patientRecord) {
+              throw AppError.notFound("No pre-examination record found for this ID");
+          }
+  
+          const formattedData = {
+              chiefComplaint: Array.isArray(chiefComplaint) ? chiefComplaint : chiefComplaint?.split(',').map((s: string) => s.trim()),
+              hpi: Array.isArray(hpi) ? hpi : hpi?.split(',').map((s: string) => s.trim()),
+              pastHx: Array.isArray(pastHx) ? pastHx : pastHx?.split(',').map((s: string) => s.trim()),
+              currentHealthStatus: Array.isArray(currentHealthStatus) ? currentHealthStatus : currentHealthStatus?.split(',').map((s: string) => s.trim()),
+              familyHx: Array.isArray(familyHx) ? familyHx : familyHx?.split(',').map((s: string) => s.trim()),
+              psychologicalAndPersonalHx: Array.isArray(psychologicalAndPersonalHx) ? psychologicalAndPersonalHx : psychologicalAndPersonalHx?.split(',').map((s: string) => s.trim()),
+              general: Array.isArray(general) ? general : general?.split(',').map((s: string) => s.trim()),
+              skin: Array.isArray(skin) ? skin : skin?.split(',').map((s: string) => s.trim()),
+              head: Array.isArray(head) ? head : head?.split(',').map((s: string) => s.trim()),
+              eyes: Array.isArray(eyes) ? eyes : eyes?.split(',').map((s: string) => s.trim()),
+              ear: Array.isArray(ear) ? ear : ear?.split(',').map((s: string) => s.trim()),
+              mouth: Array.isArray(mouth) ? mouth : mouth?.split(',').map((s: string) => s.trim()),
+              breast: Array.isArray(breast) ? breast : breast?.split(',').map((s: string) => s.trim()),
+              respiratory: Array.isArray(respiratory) ? respiratory : respiratory?.split(',').map((s: string) => s.trim()),
+              gastro: Array.isArray(gastro) ? gastro : gastro?.split(',').map((s: string) => s.trim()),
+              guneto: Array.isArray(guneto) ? guneto : guneto?.split(',').map((s: string) => s.trim()),
+              meskal: Array.isArray(meskal) ? meskal : meskal?.split(',').map((s: string) => s.trim()),
+              nervous: Array.isArray(nervous) ? nervous : nervous?.split(',').map((s: string) => s.trim()),
+              examinedBy: Array.isArray(examinedBy) ? examinedBy : examinedBy?.split(',').map((s: string) => s.trim())
+          };
+  
+          const updatedRecord = await patientRecord.update(formattedData);
+  
+          res.status(200).json({
+              message: "Pre-examination record successfully updated",
+              data: updatedRecord
+          });
+      } catch (err) {
+          res.status(500).json({ message: "Internal server error", error: err });
       }
+  }
+  
 
-      const {
-          chiefComplaint,
-          hpi,
-          pastHx,
-          currentHealthStatus,
-          familyHx,
-          psychologicalAndPersonalHx,
-          general,
-          skin,
-          head,
-          eyes,
-          ear,
-          mouth,
-          breast,
-          respiratory,
-          gastro,
-          guneto,
-          meskal,
-          nervous,
-          examinedBy
-      } = req.body;
-
-      const patientRecord = await PreExaminationModel.findOne({
-          where: { visitId }
-      });
-
-      if (!patientRecord) {
-          throw AppError.notFound("No pre-examination record found for this visit ID");
-      }
-
-      const updatedRecord = await patientRecord.update({
-          chiefComplaint,
-          hpi,
-          pastHx,
-          currentHealthStatus,
-          familyHx,
-          psychologicalAndPersonalHx,
-          general,
-          skin,
-          head,
-          eyes,
-          ear,
-          mouth,
-          breast,
-          respiratory,
-          gastro,
-          guneto,
-          meskal,
-          nervous,
-          examinedBy
-      });
-
-      res.status(200).json({
-          data: updatedRecord
-      });
-  } 
-  catch(err){
-        res.status(500).json({messsage: "internal server error", error: err});
-    }
-}
-
-public async deleteRecord(req: Request<{ visitId: number }>, res: Response, next: NextFunction): Promise<void> {
+public async deleteRecord(req: Request<{ id: number }>, res: Response, next: NextFunction): Promise<void> {
   try {
-    const visitId  = Number(req.params.visitId); 
+    const id  = Number(req.params.id); 
 
-    if (!visitId) {
+    if (!id) {
       throw AppError.notFound("No pre-examination record found for the provided visit ID");
     }
 
     const deletedRecord = await PreExaminationModel.destroy({
-      where: { visitId },
+      where: { id },
     });
 
     if (!deletedRecord) {

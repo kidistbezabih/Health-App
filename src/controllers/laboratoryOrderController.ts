@@ -66,10 +66,9 @@ export class LaboratoryOrderController{
         HIV,
         xRay,
         ultraSound,
-        
       } = req.body;
 
-      const order = this.labOrderService.createLaboratoryOrder(
+      const order = await this.labOrderService.createLaboratoryOrder(
         visitId,
         wbc,
         Hgn,

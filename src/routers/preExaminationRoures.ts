@@ -10,8 +10,8 @@ export class PreExaminationRoute {
     router.post('/record-patient-symptomes/:visitId', PreExaminationValidator.onCreate(), preExaminationController.recordPatientSymptoms);
     router.get('/get-patient-record/:visitId', preExaminationController.getPreExaminationRecord);
     router.get('/get-all-patient-record', preExaminationController.getAllPreExaminationRecords);
-    router.put('/update-patient-record/:visitId', preExaminationController.updatePreExaminationRecord);
-    router.delete('/delete-patient-record/:visitId', preExaminationController.deleteRecord);
+    router.put('/update-patient-record/:id', preExaminationController.updatePreExaminationRecord);
+    router.delete('/delete-patient-record/:id', preExaminationController.deleteRecord);
     router.get('/next-patient', preExaminationController.ProceedToNextPateient);
     return router;
   }

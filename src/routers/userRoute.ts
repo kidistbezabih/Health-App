@@ -15,7 +15,7 @@ export class UserRoutes {
 
 		// add UserValidators.onUpdate()
 		router.post('/register-user', userController.registerUser);
-		router.get('/verify-email', userController.verifyEmail );
+		router.get('/verify-email/:token', userController.verifyEmail );
 		router.post('/login', userController.login );
 		router.get('/get-all-users',userController.getAllUsers);
 		router.get('/get-user/:id', userController.getUserById );

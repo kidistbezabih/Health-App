@@ -282,31 +282,31 @@ export class AuthController{
   public async verifyEmail(req: Request, res: Response): Promise<void> {
     try {
       const {token}  = req.params;
-      console.log("printed, tokekn*****************", token)
+      console.log("printed, tokekn *****************", token)
 
-      const decoded = jwt.verify(token as string,jwt_secret as string ) as {token: string};
-      // const user = await UserModel.findOne({ where: { token: decoded.token } });
+      const decoded: any = jwt.verify(token as string, jwt_secret as string);
+        const user = await UserModel.findOne({ where: { id: decoded.id } })
 
-      // if (!user) {
-      //   res.status(404).json({ message: "User not found" });
-      //   return;
-      // }
+      if (!user) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
 
-      // if (user.emailVerified) {
-      //   res.status(400).json({ message: "User is already verified" });
-      //   return;
-      // }
+      if (user.emailVerified) {
+        res.status(400).json({ message: "User is already verified" });
+        return;
+      }
 
-      // user.emailVerified = true;
-      // await user.save();
+      user.emailVerified = true;
+      await user.save();
 
-      // res.status(200).json({ message: "Email verified successfully" });
+      res.status(200).json({ message: "Email verified successfully" });
 
     } catch (err) {
       console.error(err);
 
       if (err instanceof jwt.JsonWebTokenError) {
-        res.status(400).json({ message: "Invalid or expired token" });
+        res.status(400).json({ message: "Invalid or expired token", err });
         return;
       }
 

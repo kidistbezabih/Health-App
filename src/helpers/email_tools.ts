@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 export class EmailComfirmation{
   public async sendConfirmationEmail({ email, token }: { email: string; token: string }){
     
-    const confirmationUrl = `https://example.com/confirm-email?token=${token}`;
+    const confirmationUrl = `http://localhost:4000/api/v1/user/verify-email?token=${token}`;
     const mailOptions = {
         from: process.env.SMTP_EMAIL,
         to: email,
