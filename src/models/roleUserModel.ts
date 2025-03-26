@@ -38,7 +38,7 @@ RoleUserModel.init({
 }, {
 	sequelize,
 	timestamps: true,
-	tableName: 'users_role',
+	tableName: 'role_users',
 	paranoid: true,
 	deletedAt: true
 });

@@ -37,7 +37,7 @@ export class UserModel extends Model<UserModelRow> {
 	declare verificationToken: CreationOptional<string>;
 
 	declare addRole: BelongsToManyAddAssociationMixin<RoleModel, number>;
-	declare getRoles: BelongsToManyGetAssociationsMixin<RoleModel>;
+	declare getRole: BelongsToManyGetAssociationsMixin<RoleModel>;
 	declare removeRole: BelongsToManyRemoveAssociationMixin<RoleModel, number>;
 
 	declare roles?: NonAttribute<RoleModel[]>;

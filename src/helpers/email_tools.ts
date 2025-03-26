@@ -20,7 +20,7 @@ export class EmailComfirmation{
         from: process.env.SMTP_EMAIL,
         to: email,
         subject: "Confirm Your Email Address",
-        html: `<p>Please confirm your email by clicking <a href="${confirmationUrl}">here</a>.</p>`,
+        html: `<p>Please confirm your email by clicking ${confirmationUrl} </p>`,
     };
 
     try {
@@ -32,6 +32,5 @@ export class EmailComfirmation{
     }
   };
 } 
-
 
 export default transporter;

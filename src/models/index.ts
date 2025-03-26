@@ -132,6 +132,7 @@ export class DB {
 
     public async migrate(): Promise<string> {
         let message = '';
+        
         try {
             await DB.instance.db.sequelize.sync();
             message = 'Database Migrated Successfully';
@@ -150,25 +151,30 @@ ${reason} \n
     public async migrateForce(): Promise<string> {
         let message = '';
         try {
-            // ConsoleLogger.info('Disabling FOREIGN_KEY_CHECKS flag ');
-            // await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
-            ConsoleLogger.info('Dropping all tables ');
-            await DB.instance.db.sequelize.drop();
-            // ConsoleLogger.info('Enabling FOREIGN_KEY_CHECKS flag');
-            // await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+            const sequelize = DB.instance.db.sequelize;
+    
+            ConsoleLogger.info('Dropping dependent constraints...');
+            await sequelize.query(`
+                DO $$ DECLARE r RECORD;
+                BEGIN FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP EXECUTE 'DROP TABLE IF EXISTS ' || r.tablename || ' CASCADE';
+                END LOOP;
+                END $$;
+            `);
 
-            await DB.instance.db.sequelize.sync({force: true});
-
-            message = 'Database Force Migrated Successfully';
-            ConsoleLogger.log(message);
+          await DB.instance.db.sequelize.drop();
+    
+          await DB.instance.db.sequelize.sync({ force: true });
+    
+          message = 'Database Force Migrated Successfully';
+          ConsoleLogger.log(message);
         } catch (reason) {
-            message = `\nCould Not Force Migrate Database Successfully',
-=================================================================================\n
-${reason} \n
-=================================================================================`;
-            ConsoleLogger.error(message);
+          message = `\nCould Not Force Migrate Database Successfully',
+    =================================================================================\n
+    ${reason} \n
+    =================================================================================`;
+          ConsoleLogger.error(message);
         }
-
+    
         return message;
-    }
+      }
 }

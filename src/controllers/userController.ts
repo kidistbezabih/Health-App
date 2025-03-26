@@ -9,7 +9,7 @@ import { PaginationResponseEntity } from "../core/entities/pagination.entities";
 import { UserEntity } from "../core/entities/user.entities";
 import { RoleModel } from "../models/roleModel";
 import { AppError } from "../core/errors/custom.errors";
-
+import { RoleUserModel } from "../models/roleUserModel";
 
 dotenv.config();
 
@@ -178,9 +178,12 @@ export class AuthController{
 
   public async registerUser(req:Request, res: Response, next: NextFunction): Promise<void>{
     try{
-      const {email, phone, fullName, password} = req.body
+      const {email, phone, fullName, password, roles} = req.body;
+      const transaction = await UserModel.sequelize?.transaction();
 
-      let user = await UserModel.findOne({where: {email}});
+      let user = await UserModel.findOne({
+        where: { email }
+      });
 
       if (!(user === null)) {
         res.status(400).json({errors: [{msg: 'User already exists'}]})
@@ -189,19 +192,38 @@ export class AuthController{
 
       const salt = await bcrypt.genSalt(10);
       const pass = await bcrypt.hash(password, salt);
-      user = await UserModel.create({email, fullName, password:pass, phone, status:false})
+      user = await UserModel.create({email, fullName, password:pass, phone, status:false}, { transaction })
+
+
+      if (roles && roles.length > 0){
+        const validRoles = await RoleModel.findAll({
+          where: { id: roles}, 
+          transaction
+        })
+
+        if (validRoles.length !== roles.length){
+          throw Error("Invalid roles provided!")
+        } 
+
+        const roleUserEntries = validRoles.map((role) => ({
+          userId: user.id,
+          roleId: role.id
+      }));
+      await RoleUserModel.bulkCreate(roleUserEntries, { transaction });
+    }
 
       const payload = {user: {id: user.id}}
-      const token = jwt.sign(payload, jwt_secret as string, { expiresIn: '1h' });
-      
+      const token = jwt.sign(payload, jwt_secret as string, { expiresIn: '1w' });
+
       user.verificationToken = token;
-      await user.save();  
-      console.log("token___________---------------------______", token)
+      await user.save({ transaction });
+
+      await transaction?.commit();
 
       await this.emailConfirmation.sendConfirmationEmail({ email, token });
       res.status(201).send({ message: `Email sent to ${email}. Check email and confirm. Here is the confirmation token ${token}` });
     }catch(err){
-      res.status(5000).json('Internal server error!')
+      res.status(500).json({message: "Internal server error!", error: (err as Error).message})
     }
   }
 
@@ -218,10 +240,12 @@ export class AuthController{
       // Generate reset token with expiration
       const resetToken = jwt.sign({ id: user.id }, jwt_secret as string, { expiresIn: '1h' });
   
-      // Send email with reset token link
-      const resetLink = `https://example.com/reset-password?token=${resetToken}`;
+      // Send email with reset\\\ token link
+      console.log("token___________---------------------______", resetToken)
+
+      const resetLink = `http://localhost:4000/api/v1/user/reset-password?token=${resetToken}`;
       await transporter.sendMail({
-        from: '"Your App" <no-reply@example.com>',
+        from: '"Your App" <no-reply>@example.com',
         to: user.email,
         subject: 'Password Reset Request',
         html: `<p>Click <a href="${resetLink}">here</a> to reset your password. This link is valid for 1 hour.</p>`,
@@ -234,63 +258,76 @@ export class AuthController{
     }
   }
 
-  public async validateResetToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-  try {
-    const { token } = req.query;
-
-    if (!token) {
-      res.status(400).json({ message: 'Token is required' });
-      return
-    }
-    
-    const decoded = jwt.verify(token as string, jwt_secret as string) as { id: string };
-    req.userId = decoded.id;
-    next();
-  } catch (err: any) {
-    if (err.name === "TokenExpiredError") {
-      res.status(401).json({ message: "Token has expired. Please log in again." });
-    } else if (err.name === "JsonWebTokenError") {
-      res.status(401).json({ message: "Invalid token. Access denied." });
-    } else {
-      res.status(500).json({ message: "Internal server error." });
-    }
-  }}
-
   public async resetPassword(req: Request, res: Response): Promise<void> {
     try {
-      const { password } = req.body;
-      const userId  = req.userId;
-  
-      const user = await UserModel.findByPk(userId);
-      if (!user) {
-        res.status(400).json({ message: 'User not found' });
-        return;
-      }
-  
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-  
-      await user.save();
-  
-      res.status(200).json({ message: 'Password successfully reset' });
+        const { password } = req.body;
+        const { token } = req.query;
+        console.log(password, token)
+
+        // Check if token is provided
+        if (!token) {
+          res.status(400).json({ message: 'Token is required' });
+          return
+        }
+        console.log("twos", password, token);
+        // Decode and validate the token
+        let decoded;
+        try {
+            decoded = jwt.verify(token as string, jwt_secret as string) as { id: string };
+
+            console.log("decoded : ", decoded)
+        } catch (err: any) {
+            if (err.name === "TokenExpiredError") {
+              res.status(401).json({ message: "Token has expired. Please request a new password reset." });
+              return   
+            } else if (err.name === "JsonWebTokenError") {
+              res.status(401).json({ message: "Invalid token. Access denied." });
+              return  
+            }
+            res.status(500).json({ message: "Internal server error." });
+            return
+          }
+
+        // If token is invalid or expired, return error
+        if (!decoded || !decoded.id) {
+            res.status(400).json({ message: 'Invalid token' });
+            return
+          }
+
+        // Get the user using the decoded userId
+        console.log("decode id:", decoded.id)
+        const user = await UserModel.findOne({where: {id:decoded.id}});
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return
+        }
+
+        // Hash the new password and save it
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+        await user.save();
+
+        res.status(200).json({ message: 'Password successfully reseted' });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
     }
   }
 
+
   public async verifyEmail(req: Request, res: Response): Promise<void> {
     try {
-      const {token}  = req.params;
-      console.log("printed, tokekn *****************", token)
+      const {token}  = req.query;
 
       const decoded: any = jwt.verify(token as string, jwt_secret as string);
-        const user = await UserModel.findOne({ where: { id: decoded.id } })
+      const user = await UserModel.findOne({ where: { id: decoded.user.id } })
 
       if (!user) {
         res.status(404).json({ message: "User not found" });
         return;
       }
+
+
 
       if (user.emailVerified) {
         res.status(400).json({ message: "User is already verified" });
@@ -301,16 +338,16 @@ export class AuthController{
       await user.save();
 
       res.status(200).json({ message: "Email verified successfully" });
+      return
 
     } catch (err) {
-      console.error(err);
 
       if (err instanceof jwt.JsonWebTokenError) {
         res.status(400).json({ message: "Invalid or expired token", err });
         return;
       }
 
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal server error" , err});
     }
   }
 }
