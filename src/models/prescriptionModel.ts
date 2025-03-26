@@ -1,46 +1,46 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, Model } from 'sequelize';
 import { sequelize } from './config/sequelize';
 
 export interface PrescriptionModelRow {
   id?: number;
-  cardNumber: string;
-  status: string;
-  diagnosisIfNotICD?: string;
-  drugDetail?: string;
-  prescribersName?: string;
+  visitId: number;
+  medicationType: string;
+  medication?: string;
+  dosage?: string;
+  instruction?: string;
 }
 
 export class PrescriptionModel extends Model<PrescriptionModelRow, Omit<PrescriptionModelRow, 'id'>> {
   declare id: CreationOptional<number>;
-  declare cardNumber: string;
-  declare status: string;
-  declare diagnosisIfNotICD: string;
-  declare drugDetail: string;
-  declare prescribersName: string;
+  declare visitId: ForeignKey<number>
+  declare medicationType: string;
+  declare medication: string;
+  declare dosage: string;
+  declare instruction: string;
 }
 
 PrescriptionModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  cardNumber: {
-    type: DataTypes.STRING,
+  visitId: {
+    type: DataTypes.INTEGER
   },
-  status: {
-    type: DataTypes.STRING,
+  medicationType: {
+    type: DataTypes.STRING
   },
-  diagnosisIfNotICD: {
-    type: DataTypes.STRING,
+  medication: {
+    type: DataTypes.STRING
   },
-  drugDetail: {
-    type: DataTypes.STRING,
+  dosage: {
+    type: DataTypes.STRING
   },
-  prescribersName: {
-    type: DataTypes.STRING,
+  instruction: {
+    type: DataTypes.STRING
   },
-}, 
+},
   {
     sequelize,
     timestamps: true,

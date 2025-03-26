@@ -5,8 +5,9 @@ export interface PatientModelRow {
   id?: number;
   institutionId: number;
   cardNumber: string;
-  name: string;
-  age: number;
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
   sex: string;
   address: string;
   zone: string;
@@ -16,10 +17,11 @@ export interface PatientModelRow {
 
 export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, 'id'>> {
   declare id: CreationOptional<number>;
-  declare institutionId: ForeignKey<number>; 
+  declare institutionId: ForeignKey<number>;
   declare cardNumber: string;
-  declare name: string;
-  declare age: number;
+  declare firstName: string;
+  declare lastName: string;
+  declare birthDate: Date;
   declare sex: string;
   declare address: string;
   declare zone: string;
@@ -31,24 +33,28 @@ export class PatientModel extends Model<PatientModelRow, Omit<PatientModelRow, '
 
 PatientModel.init({
   id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
-  },institutionId: {
-    type: DataTypes.NUMBER,
-    autoIncrement: true,
-    primaryKey: true
+  },
+  institutionId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
   cardNumber: {
     type: DataTypes.STRING,
     // auto generate
   },
-  name: {
+  firstName: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  age: {
-    type: DataTypes.NUMBER,
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  birthDate: {
+    type: DataTypes.DATE,
     allowNull: false
   },
   sex: {
@@ -71,7 +77,7 @@ PatientModel.init({
     type: DataTypes.STRING,
     allowNull: true
   }
-}, 
+},
 {
   sequelize,
   timestamps: true,

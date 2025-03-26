@@ -2,8 +2,8 @@ import { CreationOptional, DataTypes, ForeignKey, Model } from "sequelize";
 import { sequelize } from './config/sequelize';
 
 export interface PreExaminationModelRow {
-  id: number; 
-  patientId: number;
+  id?: number;
+  visitId: number;
   chiefComplaint?: string;
   hpi?: string;
   pastHx?: string;
@@ -26,8 +26,8 @@ export interface PreExaminationModelRow {
 }
 
 export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreExaminationModelRow, 'id'>> {
-  declare id: number;
-  declare patientId: ForeignKey<number>;
+  declare id: CreationOptional<number>;
+  declare visitId: ForeignKey<number>;
   declare chiefComplaint: CreationOptional<string>;
   declare hpi: CreationOptional<string>;
   declare pastHx: CreationOptional<string>;
@@ -50,70 +50,70 @@ export class PreExaminationModel extends Model<PreExaminationModelRow, Omit<PreE
 }
 
 PreExaminationModel.init({
-  id: { 
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  patientId: { 
-    type: DataTypes.NUMBER,
+  visitId: {
+    type: DataTypes.INTEGER,
   },
-  chiefComplaint: { 
-    type: DataTypes.STRING,
+  chiefComplaint: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  hpi: { 
-    type: DataTypes.STRING,
+  hpi: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  pastHx: { 
-    type: DataTypes.STRING,
+  pastHx: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  currentHealthStatus: { 
-    type: DataTypes.STRING,
+  currentHealthStatus: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  familyHx: { 
-    type: DataTypes.STRING,
+  familyHx: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  psychologicalAndPersonalHx: { 
-    type: DataTypes.STRING,
+  psychologicalAndPersonalHx: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  general: { 
-    type: DataTypes.STRING,
+  general: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  skin: { 
-    type: DataTypes.STRING,
+  skin: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  head: { 
-    type: DataTypes.STRING,
+  head: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  eyes: { 
-    type: DataTypes.STRING,
+  eyes: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  ear: { 
-    type: DataTypes.STRING,
+  ear: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  mouth: { 
-    type: DataTypes.STRING,
+  mouth: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  breast: { 
-    type: DataTypes.STRING,
+  breast: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  respiratory: { 
-    type: DataTypes.STRING,
+  respiratory: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  gastro: { 
-    type: DataTypes.STRING,
+  gastro: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  guneto: { 
-    type: DataTypes.STRING,
+  guneto: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  meskal: { 
-    type: DataTypes.STRING,
+  meskal: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  nervous: { 
-    type: DataTypes.STRING,
+  nervous: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
-  examinedBy: { 
-    type: DataTypes.STRING,
+  examinedBy: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
   },
 }, {
   sequelize,
